@@ -12,7 +12,7 @@ public class Ticket {
         this.amountProducts=0;
         totalCost=0;
     }
-
+    // cambiar usando amountProd
     public void addProduct(Product product){
         int i=0;
        while(this.productsList[i]!=null){

@@ -1,5 +1,7 @@
 package upm;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class App {
@@ -7,7 +9,7 @@ public class App {
     public static void main(String[] args) {
         App app = new App();
         app.init();
-        app.run();
+        app.run(args);
         app.close();
     }
 
@@ -15,8 +17,11 @@ public class App {
         System.out.println("Welcome to the ticket module App.");
     }
 
-    private void run() {
-        Scanner scanner = new Scanner(System.in);
+    private void run(String[] args) {
+        Scanner scanner = createScanner(args);
+        if (scanner == null) {
+            return;
+        }
         System.out.println("Ticket module. Type 'help' to see commands.");
         while (true) {
             System.out.print("tUPM> ");
@@ -42,6 +47,8 @@ public class App {
                         case "list":
                             prodListCommand();
                             break;
+                        case "update":
+                            prodUpdateCommand(arrayUserInput);
                     }
             }
         }
@@ -52,7 +59,7 @@ public class App {
         System.exit(0);
     }
 
-    private void helpCommand(){
+    private void helpCommand() {
         System.out.println("Commands:\n prod add <id> \"<name>\" <category> <price>\n" +
                 " prod list\n" +
                 " prod update <id> NAME|CATEGORY|PRICE <value>\n" +
@@ -69,34 +76,75 @@ public class App {
                 "ELECTRONICS 3%.");
     }
 
-    private void prodAddCommand(String[] arrayUserInput){
-        int i=2;
+    private void prodAddCommand(String[] arrayUserInput) {
+        int i = 2;
+        char[] arrayChars;
         int id = Integer.parseInt(arrayUserInput[2]);
-        StringBuilder name = new StringBuilder(Product.getMaxCharName());
-        i++;
-        do {
-            name.append(arrayUserInput[i]);
-            name.append(" ");
+        if (Catalog.idExists(id)) {
+            System.err.println("Product with id " + id + " already exist.");
+        } else {
+            StringBuilder name = new StringBuilder(Product.getMaxCharName());
+            do {
+                i++;
+                if (i != 3)
+                    name.append(" ");
+                name.append(arrayUserInput[i]);
+                arrayChars = arrayUserInput[i].toCharArray();
+            } while (arrayChars[arrayChars.length - 1] != '\"');
             i++;
-        } while (!arrayUserInput[i].contains("\""));
-        name.append(arrayUserInput[i]);
-        i++;
-        String category=arrayUserInput[i];
-        i++;
-        int price = Integer.parseInt(arrayUserInput[i]);
-        Product product = new Product(id, name.toString(), category, price);
-        Product.addProduct(product);
-        System.out.println("ok");
+            String category = arrayUserInput[i];
+            i++;
+            int price = Integer.parseInt(arrayUserInput[i]);
+            Product product = new Product(id, name.toString(), category, price);
+            Catalog.addProduct(product);
+        }
     }
 
-    private void prodListCommand(){
-        Product[] productList = Product.getProductList();
+    private void prodListCommand() {
+        Product[] productList = Catalog.getCatalog();
         System.out.println("Catalog:");
-        for (int j = 0; j < Product.getAmountProducts(); j++) {
-            System.out.print("Id: "+productList[j].getId());
-            System.out.print(", name:"+productList[j].getName());
-            System.out.print(", Category:"+productList[j].getCategory()); // no se si lo imprime bien
-            System.out.println(", price:"+productList[j].getPrice());
+        for (int j = 0; j < Catalog.getAmountProducts(); j++) {
+            System.out.print("Id: " + productList[j].getId());
+            System.out.print(", name:" + productList[j].getName());
+            System.out.print(", Category:" + productList[j].getCategory()); // no se si lo imprime bien
+            System.out.println(", price:" + productList[j].getPrice());
         }
+    }
+
+
+    private void prodUpdateCommand(String[] arrayUserInput) {
+        int id = Integer.parseInt(arrayUserInput[2]);
+        int index = Catalog.indexOfProduct(id);
+        String value = arrayUserInput[4];
+        if (index != -1) {
+            switch (arrayUserInput[3]) {
+                case "NAME":
+                    Catalog.getCatalog()[index].setName(value);
+                    break;
+                case "PRICE":
+                    int newPrice = Integer.parseInt(value);
+                    Catalog.getCatalog()[index].setPrice(newPrice);
+                    break;
+                case "CATEGORY":
+                    Catalog.getCatalog()[index].setCategory(value);
+                    break;
+            }
+        }
+
+    }
+
+    private Scanner createScanner(String[] args) {
+        Scanner scanner = null;
+        try {
+            if (args.length == 0)
+                scanner = new Scanner(System.in);
+            else {
+                File file = new File(args[0]);
+                scanner = new Scanner(file);
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return scanner;
     }
 }

@@ -6,9 +6,6 @@ enum Category {
 
 public class Product {
     private final static int MAX_CHAR_NAME = 100;
-    private final static int MAX_DIF_PRODUCTS = 200;
-    private static Product[] productList = new Product[MAX_DIF_PRODUCTS];
-    private static int amountProducts = 0;
     private int id;
     private String name;
     private Category category;
@@ -21,16 +18,6 @@ public class Product {
         this.price=price;
     }
 
-    public static void addProduct(Product product) {
-        if (amountProducts < MAX_DIF_PRODUCTS) {
-            productList[amountProducts] = product;
-            amountProducts++;
-        }
-    }
-
-    public static Product[] getProductList(){
-        return productList;
-    }
 
     public static int getMaxCharName(){
         return MAX_CHAR_NAME;
@@ -41,8 +28,8 @@ public class Product {
         this.name = name;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategory(String category) {
+        this.category = Category.valueOf(category);
     }
 
     public void setPrice(int price) {
@@ -65,8 +52,5 @@ public class Product {
         return id;
     }
 
-    public static int getAmountProducts(){
-        return amountProducts;
-    }
 }
 
