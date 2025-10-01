@@ -40,16 +40,28 @@ public class App {
                 case "exit":
                     return;
                 case "prod":
-                    switch (arrayUserInput[1]) {
-                        case "add":
-                            prodAddCommand(arrayUserInput);
-                            break;
-                        case "list":
-                            prodListCommand();
-                            break;
-                        case "update":
-                            prodUpdateCommand(arrayUserInput);
+                    if(arrayUserInput.length>1){
+                        switch (arrayUserInput[1]) {
+                            case "add":
+                                prodAddCommand(arrayUserInput);
+                                break;
+                            case "list":
+                                prodListCommand();
+                                break;
+                            case "update":
+                                prodUpdateCommand(arrayUserInput);
+                                break;
+                        }
+                    }else{
+                        System.err.println("Command not found. Type 'help' to see the command list.");
+                        break;
                     }
+
+                case "ticket":
+                    //Completar
+                    break;
+                default:
+                    System.err.println("Command not found. Type 'help' to see the command list.");
             }
         }
     }
