@@ -90,6 +90,7 @@ public class Ticket {
 
 
     public void printCurrentTicket(){
+        sortProducts();//Antes de hacer el print, los productos deben de ir ordenados alfabeticamente con esta funcion
         for(int i=0;i<=amountProducts;i++){
             System.out.print("{class:"+this.productsList[i].getClass()
                     +", id:"+this.productsList[i].getId()+
