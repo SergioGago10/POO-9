@@ -70,21 +70,24 @@ public class Ticket {
         return new int[]{finalPriceWithoutDiscount, finalPriceWithDiscount, totalDiscount};
     }
 
-    public void addProductToTicket(int productID, int quantity){
+    public void addProductToTicket(int productID, int quantity) {
         Product productToBeAdded = Catalog.getCatalog()[productID];
-        if(productToBeAdded != null){
-            for (int i = 0; i < quantity; i++) {
+        if (productToBeAdded != null) {
+            boolean canAdd = true;
+            for (int i = 0; (i < quantity) && (canAdd); i++) {
                 if (amountProducts >= MAX_PRODUCTOS) {
                     System.err.println("You can't add more products to the ticket. Try to make a new one if needed.");
-                    break;
+                    canAdd = false;
+                } else {
+                    addProduct(productToBeAdded);
+                    amountProducts++;
                 }
-                addProduct(productToBeAdded);
-                amountProducts++;
             }
         }
         printCurrentTicket();
         System.out.println("ticket add: ok");
     }
+
 
     public void printCurrentTicket(){
         for(int i=0;i<=amountProducts;i++){
@@ -136,6 +139,7 @@ public class Ticket {
         }
         return discount;
     }
+
     public void newTicket() {
         this.productsList = new Product[MAX_PRODUCTOS];
         this.amountProducts = 0;
@@ -145,8 +149,27 @@ public class Ticket {
 
     }
 
-    public void removeProductFromTicket(){
-        //todo
+    public void removeProductFromTicket(int productID){
+       int productsToRemove = 0;
+        if(Catalog.idExists(productID)){
+            for(int i=0;i<amountProducts;i++){
+                if(this.productsList[i].getId()==productID){
+                    this.productsList[i]=null;
+                    arrayShifterToLeft(productsList);
+                    productsToRemove++;
+                }
+            }
+        }
+        amountProducts -= productsToRemove;
+    } private void arrayShifterToLeft(Product[] product){
+        for (int i = 0; i < product.length - 1; i++) {
+            if (product[i] == null) {
+                for (int j = i; j < product.length - 1; j++) {
+                    product[j] = product[j + 1];
+                }
+                product[product.length - 1] = null;
+            }
+        }
     }
 
 }
