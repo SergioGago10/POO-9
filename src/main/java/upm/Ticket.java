@@ -39,7 +39,7 @@ public class Ticket {
          Aquí dejo toda la documentación que pueda ser de utilidad
 
         https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#sort-T:A-int-int-java.util.Comparator- aquí está TODA la información sobre el mét.odo para saber su funcionamiento
-         https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?utm_source=chatgpt.com
+         https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html
          */
 
         Arrays.sort(productsList, 0, amountProducts, Comparator.comparing(Product::getName));
