@@ -136,6 +136,14 @@ public class Ticket {
         }
         return discount;
     }
+    public void newTicket() {
+        this.productsList = new Product[MAX_PRODUCTOS];
+        this.amountProducts = 0;
+        this.totalCost = 0;
+        this.discount = 0;
+        System.out.println("ticket new: ok");
+
+    }
 
     public void removeProductFromTicket(){
         //todo
