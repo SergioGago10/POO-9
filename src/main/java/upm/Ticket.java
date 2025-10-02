@@ -1,5 +1,8 @@
 package upm;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Ticket {
     private final static int MAX_PRODUCTOS=100;
     private Product[] productsList;
@@ -24,7 +27,22 @@ public class Ticket {
     }
 
     public void sortProducts(){
+        /*
+        En java existen funciones internas que permiten ordenar arrays de objetos, algo muy util en nuestro caso, ya que es lo que buscamos hacer, esta function lo que hace es ordenar
+        un array de objetos desde un punto de inicialización hasta un punto final, comparando algo que queramos ordenar, en nuestro caso el nombre, ya que interesa el orden alfabético.
 
+        Es beneficioso aplicar un algoritmo ya implementado en java, ya que realizar un algoritmo de ordenación por nuestra cuenta puede ser complicado y aplicar algo como BubbleSort o similar
+        no es nada eficiente en ningún caso, por lo que usamos el Arrays.sort(); el cual aplica TimSort, que da O(N*logN) un algoritmo bastante eficiente y mejor que un BubbleSort o similar, además
+        este algoritmo es estable, algo que es muy importante:p
+
+        También es posible realizar esto con la otra version de arrays.sort y hacer una estructura de datos auxiliar para que no compare nulls, pero esto es más directo y sencillo.
+         Aquí dejo toda la documentación que pueda ser de utilidad
+
+        https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#sort-T:A-int-int-java.util.Comparator- aquí está TODA la información sobre el mét.odo para saber su funcionamiento
+         https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html?utm_source=chatgpt.com
+         */
+
+        Arrays.sort(productsList, 0, amountProducts, Comparator.comparing(Product::getName));
     }
 
     /**
