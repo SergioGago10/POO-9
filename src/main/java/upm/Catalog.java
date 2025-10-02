@@ -1,7 +1,7 @@
 package upm;
 
 public class Catalog {
-    private final static int MAX_DIF_PRODUCTS = 20;
+    private final static int MAX_DIF_PRODUCTS = 200;
     private static Product[] catalog = new Product[MAX_DIF_PRODUCTS];
     private static int amountProducts = 0;
 
