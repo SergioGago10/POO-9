@@ -58,7 +58,25 @@ public class App {
                     }
 
                 case "ticket":
-                    //Completar
+                    if(arrayUserInput.length>1){
+                        switch (arrayUserInput[1]) {
+                            case "new":
+                                // todo
+                                break;
+                            case "add":
+                                //
+                                break;
+                            case "remove":
+                                //
+                                break;
+                            case "print":
+                                //
+                                break;
+                        }
+                    }else{
+                        System.err.println("Command not found. Type 'help' to see the command list.");
+                        break;
+                    }
                     break;
                 default:
                     System.err.println("Command not found. Type 'help' to see the command list.");
