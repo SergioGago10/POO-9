@@ -103,12 +103,12 @@ public class Ticket {
             }
         }
         printCurrentTicket();
+        this.sortProducts(); //sort the products after adding one
         System.out.println("ticket add: ok");
     }
 
 
     public void printCurrentTicket(){
-        sortProducts();//Antes de hacer el print, los productos deben de ir ordenados alfabeticamente con esta funcion
         for(int i=0;i<=amountProducts;i++){
             System.out.print("{class:"+this.productsList[i].getClass()
                     +", id:"+this.productsList[i].getId()+
@@ -174,21 +174,13 @@ public class Ticket {
             for(int i=0;i<amountProducts;i++){
                 if(this.productsList[i].getId()==productID){
                     this.productsList[i]=null;
-                    arrayShifterToLeft(productsList);
+                    Utilities.arrayShifterToLeft(productsList);
                     productsToRemove++;
                 }
             }
         }
         amountProducts -= productsToRemove;
-    } private void arrayShifterToLeft(Product[] product){
-        for (int i = 0; i < product.length - 1; i++) {
-            if (product[i] == null) {
-                for (int j = i; j < product.length - 1; j++) {
-                    product[j] = product[j + 1];
-                }
-                product[product.length - 1] = null;
-            }
-        }
+        this.sortProducts();//sort the products after the remove
     }
 
 }

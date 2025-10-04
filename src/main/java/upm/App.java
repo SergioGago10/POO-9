@@ -40,25 +40,36 @@ public class App {
                 case "exit":
                     return;
                 case "prod":
-                    if(arrayUserInput.length>1){
+                    if (arrayUserInput.length > 1) {
                         switch (arrayUserInput[1]) {
                             case "add":
-                                prodAddCommand(arrayUserInput);
+                                if (arrayUserInput.length > 5)
+                                    prodAddCommand(arrayUserInput);
+                                else
+                                    System.err.println("Lack of parameters to add the product.");
                                 break;
                             case "list":
                                 prodListCommand();
                                 break;
                             case "update":
-                                prodUpdateCommand(arrayUserInput);
+                                if (arrayUserInput.length > 4)
+                                    prodUpdateCommand(arrayUserInput);
+                                else
+                                    System.err.println("Lack of parameters to update the product.");
                                 break;
+                            case "remove":
+                                if (arrayUserInput.length == 3)
+                                    prodRemoveCommand(arrayUserInput);
+                                else
+                                    System.err.println("Number of parameters incorrect.");
                         }
-                    }else{
+                    } else {
                         System.err.println("Command not found. Type 'help' to see the command list.");
                         break;
                     }
 
                 case "ticket":
-                    if(arrayUserInput.length>1){
+                    if (arrayUserInput.length > 1) {
                         switch (arrayUserInput[1]) {
                             case "new":
                                 // todo
@@ -73,7 +84,7 @@ public class App {
                                 //
                                 break;
                         }
-                    }else{
+                    } else {
                         System.err.println("Command not found. Type 'help' to see the command list.");
                         break;
                     }
@@ -83,6 +94,7 @@ public class App {
             }
         }
     }
+
 
     private void close() {
         System.out.println("Closing application.\nGoodbye!");
@@ -143,25 +155,55 @@ public class App {
 
 
     private void prodUpdateCommand(String[] arrayUserInput) {
-        int id = Integer.parseInt(arrayUserInput[2]);
-        int index = Catalog.indexOfProduct(id);
-        String value = arrayUserInput[4];
-        if (index != -1) {
-            switch (arrayUserInput[3]) {
-                case "NAME":
-                    Catalog.getCatalog()[index].setName(value);
-                    break;
-                case "PRICE":
-                    int newPrice = Integer.parseInt(value);
-                    Catalog.getCatalog()[index].setPrice(newPrice);
-                    break;
-                case "CATEGORY":
-                    Catalog.getCatalog()[index].setCategory(value);
-                    break;
+        try {
+            Product[] catalog = Catalog.getCatalog();
+            int id = Integer.parseInt(arrayUserInput[2]);
+            int index = Catalog.indexOfProduct(id);
+            if (index != -1) {
+                switch (arrayUserInput[3]) {
+                    case "NAME":
+                        StringBuilder name = new StringBuilder(Product.getMaxCharName());
+                        char[] arrayChars;
+                        int i = 3;
+                        do {
+                            i++;
+                            if (i != 4)
+                                name.append(" ");
+                            name.append(arrayUserInput[i]);
+                            arrayChars = arrayUserInput[i].toCharArray();
+                        } while (arrayChars[arrayChars.length - 1] != '\"');
+                        catalog[index].setName(name.toString());
+                        break;
+                    case "PRICE":
+                        String price = arrayUserInput[4];
+                        int newPrice = Integer.parseInt(price);
+                        catalog[index].setPrice(newPrice);
+                        break;
+                    case "CATEGORY":
+                        String category = arrayUserInput[4];
+                        catalog[index].setCategory(category);
+                        break;
+                }
+                System.out.println("Prod update: ok");
+            } else {
+                System.err.println("Product with id " + id + " didn't found.");
             }
+        } catch (NumberFormatException exception) {
+            System.err.print("Id must be an integer number.");
+        } finally {
+            System.out.println();
         }
-
     }
+
+    private void prodRemoveCommand(String[] arrayUserInput) {
+        try {
+            int id = Integer.parseInt(arrayUserInput[2]);
+            Catalog.remove(id);
+        } catch (NumberFormatException exception) {
+            System.err.print("Id must be an integer number.");
+        }
+    }
+
 
     private Scanner createScanner(String[] args) {
         Scanner scanner = null;

@@ -23,16 +23,16 @@ public class Catalog {
         return amountProducts;
     }
 
-    //falta ordenar
     public static void remove(int id) {
         int index = indexOfProduct(id);
         System.out.print("Product with the id: " + id);
         if (index != -1) {
             catalog[index] = null;
-
-            //ordenar
-
+            Utilities.arrayShifterToLeft(catalog);
+            amountProducts--;
             System.out.println(" successfully removed.");
+        } else{
+            System.out.println("didn't found.");
         }
     }
 
@@ -52,6 +52,10 @@ public class Catalog {
     //true=exist false=doesn't exist
     public static boolean idExists(int id) {
         return indexOfProduct(id) != -1;
+    }
+
+    public static boolean isEmpty(){
+        return catalog[0]==null;
     }
 
 
