@@ -1,143 +1,161 @@
 package upm;
 
-import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Ticket {
     private final static int MAX_PRODUCTOS=100;
-    private Product[] productsList;
-    private int discount;
-    private int amountProducts;
-    private int totalCost;
+    private List<Product> productsList;
+    private Map<Category, Boolean> hasTwoProductsInTicket;
+    //poner un amountProducts es inútil, los productos que hay es el tamaño del arraylist
 
     public Ticket(){
-        productsList =new Product[MAX_PRODUCTOS];
-        this.amountProducts=0;
-        totalCost=0;
+        productsList = new ArrayList<>();
+        // El arraylist es util, ya que tenemos 100 elementos, si tuviéramos muchísimos más,
+        // una linked list sería más eficaz, ya que en la eliminación de productos tardaríamos mucho con un arraylist
+        // Ten en cuenta que la eliminación es o(n^2) en el arraylist en el peor caso y o(n) en la linked list, por lo que
+        // si el número de productos máximos es muy alto, la diferencia es muy muy notoria.
+
+        Category[] allCategories = Category.values();//Pillamos todos los enum de la clase product
+        this.hasTwoProductsInTicket = new HashMap<>();
+
+        for (int i = 0; i < allCategories.length; i++) {
+            Category currentCategory = allCategories[i];
+            hasTwoProductsInTicket.put(currentCategory, false);
+        }
+        //Esto lo hago por si se tiene pensado poner más enums, y ayudar a la complejidad de los algoritmos usados
+        //Ya que al tener un hashmap donde tenemos las categorías y si hay más de dos productos en el ticket actual es muy rápido y eficaz de consultar para
+        //poder aplicar descuentos luego
     }
 
-    // cambiar usando amountProd
-    public void addProduct(Product product){
-        int i=0;
-        //Esto da ArrayOutOfIndex tenedlo en cuenta al refactorizarlo
-       while(this.productsList[i]!=null){
-           i++;
-       }
-       this.productsList[i]=product;
-    }
-
-    public void sortProducts(){
+    public void sortProducts() {
         /*
-        En java existen funciones internas que permiten ordenar arrays de objetos, algo muy util en nuestro caso, ya que es lo que buscamos hacer, esta function lo que hace es ordenar
-        un array de objetos desde un punto de inicialización hasta un punto final, comparando algo que queramos ordenar, en nuestro caso el nombre, ya que interesa el orden alfabético.
-
-        Es beneficioso aplicar un algoritmo ya implementado en java, ya que realizar un algoritmo de ordenación por nuestra cuenta puede ser complicado y aplicar algo como BubbleSort o similar
-        no es nada eficiente en ningún caso, por lo que usamos el Arrays.sort(); el cual aplica TimSort, que da O(N*logN) un algoritmo bastante eficiente y mejor que un BubbleSort o similar, además
-        este algoritmo es estable, algo que es muy importante:p
-
-        También es posible realizar esto con la otra version de arrays.sort y hacer una estructura de datos auxiliar para que no compare nulls, pero esto es más directo y sencillo.
-         Aquí dejo toda la documentación que pueda ser de utilidad
-
-        https://docs.oracle.com/javase/8/docs/api/java/util/Arrays.html#sort-T:A-int-int-java.util.Comparator- aquí está TODA la información sobre el mét.odo para saber su funcionamiento
-         https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html
+         * En Java, las listas (como ArrayList) ya incluyen el .sort(),
+         * este sort al igual que con los arrays, usa el algoritmo TimSort,
+         * algoritmo que combina InsertionSort y MergeSort, si quieres saber más sobre el algoritmo,
+         * aquí hay un video que lo explica muy bien: https://www.youtube.com/watch?v=4lKVoX6f0m8&t
+         *
+         * Esto permite ordenar directamente por cualquier criterio usando un Comparator
+         * En nuestro caso, ordenamos por nombre alfabéticamente
+         *
+         * Complejidad: O(n log n)
+         * Documentación oficial:
+         * https://docs.oracle.com/javase/8/docs/api/java/util/List.html#sort-java.util.Comparator-
+         * https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html
          */
-
-        Arrays.sort(productsList, 0, amountProducts, Comparator.comparing(Product::getName));
+        productsList.sort(Comparator.comparing(Product::getName));
     }
 
     /**
+     * Calcula el precio total y los descuentos del ticket actual.
+     * El descuento se aplica a cada producto de forma individual
+     * (no sobre el total final del ticket).
+     *
+     * Complejidad: O(N)
      *
      * @return An array containing 3 integers: [finalPriceWithoutDiscount, finalPriceWithDiscount, totalDiscount] in that order
      */
-    public int[] getTotalPriceAndDiscounts(){// debatir si calcular el precio al pedirlo o que se vaya actualizando al añadir o quitar
-        int stationeryCounter=0, clothesCounter=0, bookCounter=0, electronicCounter=0;
-        int finalPriceWithoutDiscount;
-        int finalPriceWithDiscount = 0;
-        for(int i=0; i<amountProducts; i++){
-            finalPriceWithDiscount+=productsList[i].getPrice();
-            switch (productsList[i].getCategory()){
-                case STATIONERY:
-                    stationeryCounter++;
-                    break;
-                case CLOTHES:
-                    clothesCounter++;
-                    break;
-                case BOOK:
-                    bookCounter++;
-                    break;
-                case ELECTRONIC:
-                    electronicCounter++;
-                    break;
-                default:
-                    break;
+    public double[] getTotalPriceAndDiscounts() {
+        double finalPriceWithoutDiscount = 0;
+        double finalPriceWithDiscount = 0;
+        for (int i = 0; i < productsList.size(); i++) {
+            Product currentProduct = productsList.get(i);
+            double price = currentProduct.getPrice(); // suponemos que getPrice() devuelve int o double
+            finalPriceWithoutDiscount += price;
+            boolean applyDiscount = hasTwoProductsInTicket.get(currentProduct.getCategory());
+            double priceAfterDiscount = price;
+            if (applyDiscount) {
+                double discountFactor = whatDiscountToApply(currentProduct);
+                priceAfterDiscount = price * discountFactor;
             }
+            finalPriceWithDiscount += priceAfterDiscount;
         }
+        double totalDiscount = finalPriceWithoutDiscount - finalPriceWithDiscount;
 
-        finalPriceWithoutDiscount = finalPriceWithDiscount;
-        if(clothesCounter>1)
-            finalPriceWithDiscount= (int) (finalPriceWithDiscount*0.93);
-        if(bookCounter>1)
-            finalPriceWithDiscount= (int) (finalPriceWithDiscount*0.9);
-        if(stationeryCounter>1)
-            finalPriceWithDiscount= (int) (finalPriceWithDiscount*0.95);
-        if(electronicCounter>1)
-            finalPriceWithDiscount= (int) (finalPriceWithDiscount*0.97);
-
-        int totalDiscount = finalPriceWithoutDiscount - finalPriceWithDiscount;
-
-        return new int[]{finalPriceWithoutDiscount, finalPriceWithDiscount, totalDiscount};
+        return new double[]{finalPriceWithoutDiscount,finalPriceWithDiscount,totalDiscount};
     }
 
+
     public void addProductToTicket(int productID, int quantity) {
-        Product productToBeAdded = Catalog.getCatalog()[productID];
+        boolean productAdded = false;
+        Product productToBeAdded = Catalog.getProduct(productID);;
         if (productToBeAdded != null) {
             boolean canAdd = true;
             for (int i = 0; (i < quantity) && (canAdd); i++) {
-                if (amountProducts >= MAX_PRODUCTOS) {
+                if (productsList.size() >= MAX_PRODUCTOS) {
                     System.err.println("You can't add more products to the ticket. Try to make a new one if needed.");
                     canAdd = false;
                 } else {
-                    addProduct(productToBeAdded);
-                    amountProducts++;
+                    productsList.add(productToBeAdded);
+                    productAdded = true;
                 }
             }
+            if(productAdded){
+                updateHasTwo(); //Actualizamos nuestro hashmap para poner true a los elementos que tienen 2 prodcutos o más
+                printCurrentTicket();
+            }
         }
-        printCurrentTicket();
-        this.sortProducts(); //sort the products after adding one
-        System.out.println("ticket add: ok");
     }
 
 
-    public void printCurrentTicket(){
-        for(int i=0;i<=amountProducts;i++){
-            System.out.print("{class:"+this.productsList[i].getClass()
-                    +", id:"+this.productsList[i].getId()+
-                            ", name:"+this.productsList[i].getName()+
-                    ", category:"+this.productsList[i].getCategory()+
-                    ", price:"+this.productsList[i].getPrice()+ "}");
-            if(areThereTwoOrMoreProductsOfThisType(this.productsList[i])){
-                System.out.print("**Discount -"+(this.productsList[i].getPrice()*whatIsTheDiscountToApplyToThisProduct(this.productsList[i]))+"\n");
-            }else{
-                System.out.print("\n");
-            }
-            System.out.println("Total price: "+ getTotalPriceAndDiscounts()[0]);
-            System.out.println("Total discount: "+ getTotalPriceAndDiscounts()[2]);
-            System.out.println("Final price: "+ getTotalPriceAndDiscounts()[1]);
+    public void printCurrentTicket() {
+        if (productsList.isEmpty()) {
+            System.out.println("Ticket is empty.");
+            return;
         }
-    }
-    private boolean areThereTwoOrMoreProductsOfThisType(Product product) {
-        int counter = 0;
-        for (int i = 0; i < amountProducts; i++) {
-            if (productsList[i] != null && productsList[i].getCategory() == product.getCategory()) {
-                counter++;
-                if (counter >= 2) {
-                    return true;
-                }
+        // Ordenamos los productos por nombre antes de imprimirlos
+        sortProducts();
+        for (int i = 0; i < productsList.size(); i++) {
+            Product currentProduct = productsList.get(i);
+            System.out.print("{class:" + currentProduct.getClass().getSimpleName() +
+                    ", id:" + currentProduct.getId() +
+                    ", name:" + currentProduct.getName() +
+                    ", category:" + currentProduct.getCategory() +
+                    ", price:" + currentProduct.getPrice() + "}");
+
+            // Vemos si el producto está 2 o más veces en el ticket
+            if (hasTwoProductsInTicket.get(currentProduct.getCategory())) {
+                double priceAfterDiscount = currentProduct.getPrice() * whatDiscountToApply(currentProduct);
+                double discountAmount = currentProduct.getPrice() - priceAfterDiscount;
+                System.out.printf(" **Discount -%.2f%n", discountAmount);
+            } else {
+                System.out.println(); //Aplicamos salto de linea si no hay descuento
             }
         }
-        return false;
+        double[] priceAndDiscounts = getTotalPriceAndDiscounts();
+        System.out.printf("Total price: %.2f%n", priceAndDiscounts[0]);
+        System.out.printf("Total discount: %.2f%n", priceAndDiscounts[2]);
+        System.out.printf("Final price: %.2f%n", priceAndDiscounts[1]);
     }
-    private double whatIsTheDiscountToApplyToThisProduct(Product product) {
+
+    private void updateHasTwo() {
+        Category[] allCategories = Category.values();
+        //Creamos un HashMap donde guardamos la categoria(enum) y el numero de apariciones que tiene
+        HashMap<Category, Integer> countMap = new HashMap<>();
+
+        //Ponemos todos sus valores correspondientes, las apariciones a 0 y luego los enums existentes
+        for (int i = 0; i < allCategories.length; i++) {
+            countMap.put(allCategories[i], 0);
+        }
+
+        //Recorremos todos los productos y contamos las apariciones de cada producto, actualizándolo en el hashmap
+        for (int i = 0; i < productsList.size(); i++) {
+            Product p = productsList.get(i);
+            Category cat = p.getCategory();
+            countMap.put(cat, countMap.get(cat) + 1);
+        }
+
+        //Actualizamos el HashMap hasTwo según el conteo
+        for (int i = 0; i < allCategories.length; i++) {
+            Category cat = allCategories[i];
+            hasTwoProductsInTicket.put(cat, countMap.get(cat) >= 2);
+        }
+    }
+
+    private double whatDiscountToApply(Product product) {
         double discount;
         switch (product.getCategory()) {
             case STATIONERY:
@@ -159,28 +177,16 @@ public class Ticket {
         return discount;
     }
 
-    public void newTicket() {
-        this.productsList = new Product[MAX_PRODUCTOS];
-        this.amountProducts = 0;
-        this.totalCost = 0;
-        this.discount = 0;
-        System.out.println("ticket new: ok");
-
-    }
-
     public void removeProductFromTicket(int productID){
-       int productsToRemove = 0;
         if(Catalog.idExists(productID)){
-            for(int i=0;i<amountProducts;i++){
-                if(this.productsList[i].getId()==productID){
-                    this.productsList[i]=null;
-                    Utilities.arrayShifterToLeft(productsList);
-                    productsToRemove++;
+            for (int i = 0; i < productsList.size(); i++) {
+                if (productsList.get(i).getId() == productID) {
+                    productsList.remove(i);
+                    i--; // Ajustar índice porque la lista se acorta
                 }
             }
         }
-        amountProducts -= productsToRemove;
-        this.sortProducts();//sort the products after the remove
+        updateHasTwo(); //Actualizamos nuestro hashmap para poner false a los elementos que no tienen 2 prodcutos
     }
 
 }
