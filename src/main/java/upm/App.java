@@ -19,15 +19,25 @@ public class App {
 
     private void run(String[] args) {
         Scanner scanner = createScanner(args);
+        System.setErr(System.out);
+        //Esto hace que todos los errores sean system.out en vez de system.err, lo hago por un error que ocurre en la salida en la consola, no van a la misma
+        // velocidad y eso provoca que los system.out se impriman antes que los system.err, dando lugar a texto mal puesto
+        // No queda igual de bonito, pero es la unica solución que he podido encontrar
+
+        Ticket ticketActual = new Ticket(); //Antes de iniciar el programa se crea un ticket desde 0
         if (scanner == null) {
             return;
         }
         System.out.println("Ticket module. Type 'help' to see commands.");
         while (true) {
             System.out.print("tUPM> ");
-            String userInput = scanner.nextLine();
+            String userInput = scanner.nextLine().trim(); //El trim evita que tengamos espacios al final y al inicio del string
+
+            if (userInput.isEmpty()) continue; //Esto se hace por si se da enter simplemente ignorando la información vacía y no poner el mensaje de error de comando que sería molesto
+
             String[] arrayUserInput = userInput.split(" ");
-            switch (arrayUserInput[0]) {
+            try {
+            switch (arrayUserInput[0].toLowerCase()) {
                 case "help":
                     helpCommand();
                     break;
@@ -40,59 +50,137 @@ public class App {
                 case "exit":
                     return;
                 case "prod":
-                    if (arrayUserInput.length > 1) {
-                        switch (arrayUserInput[1]) {
-                            case "add":
-                                if (arrayUserInput.length > 5)
-                                    prodAddCommand(arrayUserInput);
-                                else
-                                    System.err.println("Lack of parameters to add the product.");
-                                break;
-                            case "list":
-                                prodListCommand();
-                                break;
-                            case "update":
-                                if (arrayUserInput.length > 4)
-                                    prodUpdateCommand(arrayUserInput);
-                                else
-                                    System.err.println("Lack of parameters to update the product.");
-                                break;
-                            case "remove":
-                                if (arrayUserInput.length == 3)
-                                    prodRemoveCommand(arrayUserInput);
-                                else
-                                    System.err.println("Number of parameters incorrect.");
-                        }
-                    } else {
-                        System.err.println("Command not found. Type 'help' to see the command list.");
-                        break;
-                    }
+                    handleProdCommand(arrayUserInput);
+                    break;
 
                 case "ticket":
-                    if (arrayUserInput.length > 1) {
-                        switch (arrayUserInput[1]) {
-                            case "new":
-                                // todo
-                                break;
-                            case "add":
-                                //
-                                break;
-                            case "remove":
-                                //
-                                break;
-                            case "print":
-                                //
-                                break;
-                        }
-                    } else {
-                        System.err.println("Command not found. Type 'help' to see the command list.");
-                        break;
-                    }
+                    ticketActual = handleTicketCommand(arrayUserInput, ticketActual);
                     break;
+
                 default:
                     System.err.println("Command not found. Type 'help' to see the command list.");
+                }
+            } catch (Exception e) {
+                System.err.println("Unexpected error: " + e.getMessage());
             }
         }
+    }
+
+    private void handleProdCommand(String[] arrayUserInput){
+        if (arrayUserInput.length < 2) {
+            System.err.println("Usage: prod <add|list|update|remove>");
+            return;
+        }
+
+        String prodCmd = arrayUserInput[1].toLowerCase();
+        switch (prodCmd) {
+            case "add":
+                if (arrayUserInput.length < 6) {
+                    System.err.println("Usage: prod add <id> \"<nombre>\" <categoria> <precio>");
+                } else {
+                    try {
+                        prodAddCommand(arrayUserInput);
+                        System.out.println("prod add: ok");
+                    } catch (Exception e) {
+                        System.err.println("Error adding product: " + e.getMessage());
+                    }
+                }
+                break;
+
+            case "list":
+                prodListCommand();
+                System.out.println("prod list: ok");
+                break;
+
+            case "update":
+                if (arrayUserInput.length < 5) {
+                    System.err.println("Usage: prod update <id> <campo> <valor> (campo: nombre|categoria|precio)");
+                } else {
+                    try {
+                        prodUpdateCommand(arrayUserInput);
+                        System.out.println("Prod update: ok");
+                    } catch (Exception e) {
+                        System.err.println("Error updating product: " + e.getMessage());
+                    }
+                }
+                break;
+
+            case "remove":
+                if (arrayUserInput.length != 3) {
+                    System.err.println("Usage: prod remove <id>");
+                } else {
+                    try {
+                        prodRemoveCommand(arrayUserInput);
+                        System.out.println("prod remove: ok");
+                    } catch (Exception e) {
+                        System.err.println("Error removing product: " + e.getMessage());
+                    }
+                }
+                break;
+
+            default:
+                System.err.println("Unknown prod command. Type 'help' to see the command list.");
+        }
+    }
+
+    private Ticket handleTicketCommand(String[] arrayUserInput, Ticket ticketActual) {
+        if (arrayUserInput.length < 2) {
+            System.err.println("Usage: ticket <new|add|remove|print>");
+            return ticketActual;
+        }
+        String ticketCmd = arrayUserInput[1].toLowerCase();
+        switch (ticketCmd) {
+            case "new":
+                System.out.println("ticket new: ok");
+                return new Ticket();
+            case "add":
+                if (arrayUserInput.length < 4) {
+                    System.err.println("Usage: ticket add <prodId> <cantidad>");
+                } else {
+                    try {
+                        int prodId = Integer.parseInt(arrayUserInput[2]); //El id al que se accede es el elemento del array por lo que se debe de restar un numero
+                        int cantidad = Integer.parseInt(arrayUserInput[3]);
+                        if(Catalog.idExists(prodId)){
+                            ticketActual.addProductToTicket(prodId, cantidad);
+                            System.out.println("ticket add: ok");
+                        } else {
+                         System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.err.println("prodId and cantidad must be integers.");
+                    } catch (Exception e) {
+                        System.err.println("Error adding product to ticket: " + e.getMessage());
+                    }
+                }
+                break;
+
+            case "remove":
+                if (arrayUserInput.length < 3) {
+                    System.err.println("Usage: ticket remove <prodId>");
+                } else {
+                    try {
+                        int prodId = Integer.parseInt(arrayUserInput[2]);
+                        ticketActual.removeProductFromTicket(prodId);
+                    } catch (NumberFormatException e) {
+                        System.err.println("prodId must be an integer.");
+                    } catch (Exception e) {
+                        System.err.println("Error removing product from ticket: " + e.getMessage());
+                    }
+                }
+                break;
+
+            case "print":
+                try {
+                    ticketActual.printCurrentTicket();
+                } catch (Exception e) {
+                    System.err.println("Error printing ticket: " + e.getMessage());
+                }
+                break;
+
+            default:
+                System.err.println("Unknown ticket command. Type 'help' to see the command list.");
+        }
+        return ticketActual;
     }
 
 
@@ -139,17 +227,30 @@ public class App {
             int price = Integer.parseInt(arrayUserInput[i]);
             Product product = new Product(id, name.toString(), category, price);
             Catalog.addProduct(product);
+            //Imprimimos por pantalla el producto que hemos puesto
+            System.out.print("{class:" + product.getClass().getSimpleName());
+            System.out.print(",id: " + product.getId());
+            System.out.print(",name:" + product.getName());
+            System.out.print(",Category:" + product.getCategory());
+            System.out.print(",price:" + product.getPrice());
+            System.out.println("}");
         }
     }
 
     private void prodListCommand() {
         Product[] productList = Catalog.getCatalog();
-        System.out.println("Catalog:");
-        for (int j = 0; j < Catalog.getAmountProducts(); j++) {
-            System.out.print("Id: " + productList[j].getId());
-            System.out.print(", name:" + productList[j].getName());
-            System.out.print(", Category:" + productList[j].getCategory()); // no se si lo imprime bien
-            System.out.println(", price:" + productList[j].getPrice());
+        if(productList[0]==null){
+            System.out.println("The catalog is empty.");
+        }else{
+            System.out.println("Catalog:");
+            for (int j = 0; j < Catalog.getAmountProducts(); j++) {
+                System.out.print("  {class:" + productList[j].getClass().getSimpleName());
+                System.out.print(",id: " + productList[j].getId());
+                System.out.print(",name:" + productList[j].getName());
+                System.out.print(",Category:" + productList[j].getCategory()); // no se si lo imprime bien
+                System.out.print(",price:" + productList[j].getPrice());
+                System.out.println("}");
+            }
         }
     }
 
@@ -184,21 +285,38 @@ public class App {
                         catalog[index].setCategory(category);
                         break;
                 }
-                System.out.println("Prod update: ok");
+                //Imprimimos por pantalla lo que hemos actualizado
+                Product updatedProduct = Catalog.getProduct(id);
+                if (updatedProduct != null) { //Esto es simplemente para evitar un NullPointerException, algo que no ocurriría nunca, pero por si acaso
+                    System.out.print("{class:" + updatedProduct.getClass().getSimpleName());
+                    System.out.print(",id: " + updatedProduct.getId());
+                    System.out.print(",name:" + updatedProduct.getName());
+                    System.out.print(",Category:" + updatedProduct.getCategory());
+                    System.out.print(",price:" + updatedProduct.getPrice());
+                    System.out.println("}");
+                }
             } else {
                 System.err.println("Product with id " + id + " didn't found.");
             }
         } catch (NumberFormatException exception) {
             System.err.print("Id must be an integer number.");
-        } finally {
-            System.out.println();
         }
     }
 
     private void prodRemoveCommand(String[] arrayUserInput) {
         try {
             int id = Integer.parseInt(arrayUserInput[2]);
-            Catalog.remove(id);
+            Product productRemoved = Catalog.getProduct(id);
+            if (productRemoved != null) { //Esto ya directamente comprueba si se puede eliminar o no por lo que no importa no comprobarlo antes
+                System.out.println("{class:" + productRemoved.getClass().getSimpleName() +
+                        ",id:" + productRemoved.getId() +
+                        ",name:" + productRemoved.getName() +
+                        ",Category:" + productRemoved.getCategory() +
+                        ",price:" + productRemoved.getPrice() + "}");
+                Catalog.remove(id);
+            } else {
+                System.err.println("The product couldn't be removed. Product not found.");
+            }
         } catch (NumberFormatException exception) {
             System.err.print("Id must be an integer number.");
         }
