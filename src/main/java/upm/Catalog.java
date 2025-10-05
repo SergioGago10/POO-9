@@ -9,11 +9,20 @@ public class Catalog {
         try {
             catalog[amountProducts] = product;
             amountProducts++;
-            System.out.println("prod add: ok");
         } catch (ArrayIndexOutOfBoundsException ex) {
             System.out.println("Maximun products reached.");
         }
     }
+
+    public static Product getProduct(int id) {
+        int index = indexOfProduct(id);
+        if (index != -1) {
+            return catalog[index];
+        } else {
+            return null;
+        }
+    }
+
 
     public static Product[] getCatalog() {
         return catalog;
@@ -23,17 +32,18 @@ public class Catalog {
         return amountProducts;
     }
 
-    public static void remove(int id) {
+    public static boolean remove(int id) { //Déjalo en boolean, puede ser util luego
+        boolean removed;
         int index = indexOfProduct(id);
-        System.out.print("Product with the id: " + id);
         if (index != -1) {
             catalog[index] = null;
             Utilities.arrayShifterToLeft(catalog);
             amountProducts--;
-            System.out.println(" successfully removed.");
-        } else{
-            System.out.println("didn't found.");
+            removed = true;
+        } else {
+            removed = false;
         }
+        return removed;
     }
 
     //busca el producto y, devuelve su índice, o -1 si no lo encuentra
