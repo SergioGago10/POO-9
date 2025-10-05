@@ -9,7 +9,9 @@ public class Product {
     private int id;
     private String name;
     private Category category;
-    private int price;//debatir si int o double
+    private double price;
+    //El precio debe ser double, ya que con los descuentos obtenemos decimales y además los precios pueden tener decimales al ser euros y centimos
+    //no creo que caparlo a un int sea buena idea
 
     public Product(int id, String name, String category, int price) {
         this.id = id;
@@ -36,7 +38,7 @@ public class Product {
         this.price = price;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
