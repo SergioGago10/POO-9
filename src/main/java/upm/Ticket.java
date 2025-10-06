@@ -1,18 +1,14 @@
 package upm;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 public class Ticket {
-    private final static int MAX_PRODUCTOS=100;
+    private final static int MAX_PRODUCTOS = 100;
     private List<Product> productsList;
     private Map<Category, Boolean> hasTwoProductsInTicket;
     //poner un amountProducts es inútil, los productos que hay es el tamaño del arraylist
 
-    public Ticket(){
+    public Ticket() {
         productsList = new ArrayList<>();
         // El arraylist es util, ya que tenemos 100 elementos, si tuviéramos muchísimos más,
         // una linked list sería más eficaz, ya que en la eliminación de productos tardaríamos mucho con un arraylist
@@ -53,7 +49,7 @@ public class Ticket {
      * Calcula el precio total y los descuentos del ticket actual.
      * El descuento se aplica a cada producto de forma individual
      * (no sobre el total final del ticket).
-     *
+     * <p>
      * Complejidad: O(N)
      *
      * @return An array containing 3 integers: [finalPriceWithoutDiscount, finalPriceWithDiscount, totalDiscount] in that order
@@ -75,13 +71,13 @@ public class Ticket {
         }
         double totalDiscount = finalPriceWithoutDiscount - finalPriceWithDiscount;
 
-        return new double[]{finalPriceWithoutDiscount,finalPriceWithDiscount,totalDiscount};
+        return new double[]{finalPriceWithoutDiscount, finalPriceWithDiscount, totalDiscount};
     }
 
 
     public void addProductToTicket(int productID, int quantity) {
         boolean productAdded = false;
-        Product productToBeAdded = Catalog.getProduct(productID);;
+        Product productToBeAdded = Catalog.getProduct(productID);
         if (productToBeAdded != null) {
             boolean canAdd = true;
             for (int i = 0; (i < quantity) && (canAdd); i++) {
@@ -93,9 +89,10 @@ public class Ticket {
                     productAdded = true;
                 }
             }
-            if(productAdded){
+            if (productAdded) {
                 updateHasTwo(); //Actualizamos nuestro hashmap para poner true a los elementos que tienen 2 prodcutos o más
                 printCurrentTicket();
+                System.out.println("ticket add: ok");
             }
         }
     }
@@ -104,31 +101,31 @@ public class Ticket {
     public void printCurrentTicket() {
         if (productsList.isEmpty()) {
             System.out.println("Ticket is empty.");
-            return;
-        }
-        // Ordenamos los productos por nombre antes de imprimirlos
-        sortProducts();
-        for (int i = 0; i < productsList.size(); i++) {
-            Product currentProduct = productsList.get(i);
-            System.out.print("{class:" + currentProduct.getClass().getSimpleName() +
-                    ", id:" + currentProduct.getId() +
-                    ", name:" + currentProduct.getName() +
-                    ", category:" + currentProduct.getCategory() +
-                    ", price:" + currentProduct.getPrice() + "}");
+        } else {
+            // Ordenamos los productos por nombre antes de imprimirlos
+            sortProducts();
+            for (int i = 0; i < productsList.size(); i++) {
+                Product currentProduct = productsList.get(i);
+                System.out.print("{class:" + currentProduct.getClass().getSimpleName() +
+                        ", id:" + currentProduct.getId() +
+                        ", name:" + currentProduct.getName() +
+                        ", category:" + currentProduct.getCategory() +
+                        ", price:" + currentProduct.getPrice() + "}");
 
-            // Vemos si el producto está 2 o más veces en el ticket
-            if (hasTwoProductsInTicket.get(currentProduct.getCategory())) {
-                double priceAfterDiscount = currentProduct.getPrice() * whatDiscountToApply(currentProduct);
-                double discountAmount = currentProduct.getPrice() - priceAfterDiscount;
-                System.out.printf(" **Discount -%.2f%n", discountAmount);
-            } else {
-                System.out.println(); //Aplicamos salto de linea si no hay descuento
+                // Vemos si el producto está 2 o más veces en el ticket
+                if (hasTwoProductsInTicket.get(currentProduct.getCategory())) {
+                    double priceAfterDiscount = currentProduct.getPrice() * whatDiscountToApply(currentProduct);
+                    double discountAmount = currentProduct.getPrice() - priceAfterDiscount;
+                    System.out.printf(" **Discount -%.2f%n", discountAmount);
+                } else {
+                    System.out.println(); //Aplicamos salto de linea si no hay descuento
+                }
             }
+            double[] priceAndDiscounts = getTotalPriceAndDiscounts();
+            System.out.printf("Total price: %.2f%n", priceAndDiscounts[0]);
+            System.out.printf("Total discount: %.2f%n", priceAndDiscounts[2]);
+            System.out.printf("Final price: %.2f%n", priceAndDiscounts[1]);
         }
-        double[] priceAndDiscounts = getTotalPriceAndDiscounts();
-        System.out.printf("Total price: %.2f%n", priceAndDiscounts[0]);
-        System.out.printf("Total discount: %.2f%n", priceAndDiscounts[2]);
-        System.out.printf("Final price: %.2f%n", priceAndDiscounts[1]);
     }
 
     private void updateHasTwo() {
@@ -177,16 +174,15 @@ public class Ticket {
         return discount;
     }
 
-    public void removeProductFromTicket(int productID){
-        if(Catalog.idExists(productID)){
-            for (int i = 0; i < productsList.size(); i++) {
-                if (productsList.get(i).getId() == productID) {
-                    productsList.remove(i);
-                    i--; // Ajustar índice porque la lista se acorta
-                }
+    public void removeProductFromTicket(int productID) {
+        for (int i = 0; i < productsList.size(); i++) {
+            if (productsList.get(i).getId() == productID) {
+                productsList.remove(i);
+                i--; // Ajustar índice porque la lista se acorta
             }
         }
         updateHasTwo(); //Actualizamos nuestro hashmap para poner false a los elementos que no tienen 2 prodcutos
+
     }
 
 }

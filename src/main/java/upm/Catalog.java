@@ -64,8 +64,8 @@ public class Catalog {
         return indexOfProduct(id) != -1;
     }
 
-    public static boolean isEmpty(){
-        return catalog[0]==null;
+    public static boolean isEmpty() {
+        return catalog[0] == null;
     }
 
 

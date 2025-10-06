@@ -33,40 +33,43 @@ public class App {
             System.out.print("tUPM> ");
             String userInput = scanner.nextLine().trim(); //El trim evita que tengamos espacios al final y al inicio del string
 
-            if (userInput.isEmpty()) continue; //Esto se hace por si se da enter simplemente ignorando la información vacía y no poner el mensaje de error de comando que sería molesto
+            if (userInput.isEmpty())
+                continue; //Esto se hace por si se da enter simplemente ignorando la información vacía y no poner el mensaje de error de comando que sería molesto
 
             String[] arrayUserInput = userInput.split(" ");
             try {
-            switch (arrayUserInput[0].toLowerCase()) {
-                case "help":
-                    helpCommand();
-                    break;
-                case "echo":
-                    for (int i = 1; i < arrayUserInput.length; i++) {
-                        System.out.print(arrayUserInput[i] + " ");
-                    }
-                    System.out.println();
-                    break;
-                case "exit":
-                    return;
-                case "prod":
-                    handleProdCommand(arrayUserInput);
-                    break;
+                switch (arrayUserInput[0].toLowerCase()) {
+                    case "help":
+                        helpCommand();
+                        break;
+                    case "echo":
+                        System.out.print("echo ");
+                        for (int i = 1; i < arrayUserInput.length; i++) {
+                            System.out.print(arrayUserInput[i] + " ");
+                        }
+                        System.out.println();
+                        break;
+                    case "exit":
+                        return;
+                    case "prod":
+                        handleProdCommand(arrayUserInput);
+                        break;
 
-                case "ticket":
-                    ticketActual = handleTicketCommand(arrayUserInput, ticketActual);
-                    break;
+                    case "ticket":
+                        ticketActual = handleTicketCommand(arrayUserInput, ticketActual);
+                        break;
 
-                default:
-                    System.err.println("Command not found. Type 'help' to see the command list.");
+                    default:
+                        System.err.println("Command not found. Type 'help' to see the command list.");
                 }
             } catch (Exception e) {
                 System.err.println("Unexpected error: " + e.getMessage());
             }
+            System.out.println();
         }
     }
 
-    private void handleProdCommand(String[] arrayUserInput){
+    private void handleProdCommand(String[] arrayUserInput) {
         if (arrayUserInput.length < 2) {
             System.err.println("Usage: prod <add|list|update|remove>");
             return;
@@ -80,7 +83,6 @@ public class App {
                 } else {
                     try {
                         prodAddCommand(arrayUserInput);
-                        System.out.println("prod add: ok");
                     } catch (Exception e) {
                         System.err.println("Error adding product: " + e.getMessage());
                     }
@@ -98,7 +100,6 @@ public class App {
                 } else {
                     try {
                         prodUpdateCommand(arrayUserInput);
-                        System.out.println("Prod update: ok");
                     } catch (Exception e) {
                         System.err.println("Error updating product: " + e.getMessage());
                     }
@@ -111,7 +112,6 @@ public class App {
                 } else {
                     try {
                         prodRemoveCommand(arrayUserInput);
-                        System.out.println("prod remove: ok");
                     } catch (Exception e) {
                         System.err.println("Error removing product: " + e.getMessage());
                     }
@@ -134,17 +134,16 @@ public class App {
                 System.out.println("ticket new: ok");
                 return new Ticket();
             case "add":
-                if (arrayUserInput.length < 4) {
+                if (arrayUserInput.length != 4) {
                     System.err.println("Usage: ticket add <prodId> <cantidad>");
                 } else {
                     try {
                         int prodId = Integer.parseInt(arrayUserInput[2]); //El id al que se accede es el elemento del array por lo que se debe de restar un numero
                         int cantidad = Integer.parseInt(arrayUserInput[3]);
-                        if(Catalog.idExists(prodId)){
+                        if (Catalog.idExists(prodId)) {
                             ticketActual.addProductToTicket(prodId, cantidad);
-                            System.out.println("ticket add: ok");
                         } else {
-                         System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
+                            System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
                         }
                     } catch (NumberFormatException e) {
                         System.err.println("prodId and cantidad must be integers.");
@@ -155,12 +154,17 @@ public class App {
                 break;
 
             case "remove":
-                if (arrayUserInput.length < 3) {
+                if (arrayUserInput.length != 3) {
                     System.err.println("Usage: ticket remove <prodId>");
                 } else {
                     try {
                         int prodId = Integer.parseInt(arrayUserInput[2]);
-                        ticketActual.removeProductFromTicket(prodId);
+                        if (Catalog.idExists(prodId)){
+                            ticketActual.removeProductFromTicket(prodId);
+                            System.out.println("ticket remove: ok");
+                        }
+                        else
+                            System.out.println("Product with the id" + prodId + " didn't found.");
                     } catch (NumberFormatException e) {
                         System.err.println("prodId must be an integer.");
                     } catch (Exception e) {
@@ -172,6 +176,7 @@ public class App {
             case "print":
                 try {
                     ticketActual.printCurrentTicket();
+                    System.out.println("ticket print: ok");
                 } catch (Exception e) {
                     System.err.println("Error printing ticket: " + e.getMessage());
                 }
@@ -221,27 +226,32 @@ public class App {
                 name.append(arrayUserInput[i]);
                 arrayChars = arrayUserInput[i].toCharArray();
             } while (arrayChars[arrayChars.length - 1] != '\"');
-            i++;
-            String category = arrayUserInput[i];
-            i++;
-            int price = Integer.parseInt(arrayUserInput[i]);
-            Product product = new Product(id, name.toString(), category, price);
-            Catalog.addProduct(product);
-            //Imprimimos por pantalla el producto que hemos puesto
-            System.out.print("{class:" + product.getClass().getSimpleName());
-            System.out.print(",id: " + product.getId());
-            System.out.print(",name:" + product.getName());
-            System.out.print(",Category:" + product.getCategory());
-            System.out.print(",price:" + product.getPrice());
-            System.out.println("}");
+            if (name.length() > Product.getMaxCharName())
+                System.err.println("Maximun " + Product.getMaxCharName() + " characteres on name");
+            else {
+                i++;
+                String category = arrayUserInput[i];
+                i++;
+                int price = Integer.parseInt(arrayUserInput[i]);
+                Product product = new Product(id, name.toString(), category, price);
+                Catalog.addProduct(product);
+                //Imprimimos por pantalla el producto que hemos puesto
+                System.out.print("{class:" + product.getClass().getSimpleName());
+                System.out.print(", id:" + product.getId());
+                System.out.print(", name:" + product.getName());
+                System.out.print(", Category:" + product.getCategory());
+                System.out.print(", price:" + product.getPrice());
+                System.out.println("}");
+                System.out.println("prod add: ok");
+            }
         }
     }
 
     private void prodListCommand() {
         Product[] productList = Catalog.getCatalog();
-        if(productList[0]==null){
+        if (productList[0] == null) {
             System.out.println("The catalog is empty.");
-        }else{
+        } else {
             System.out.println("Catalog:");
             for (int j = 0; j < Catalog.getAmountProducts(); j++) {
                 System.out.print("  {class:" + productList[j].getClass().getSimpleName());
@@ -294,6 +304,7 @@ public class App {
                     System.out.print(",Category:" + updatedProduct.getCategory());
                     System.out.print(",price:" + updatedProduct.getPrice());
                     System.out.println("}");
+                    System.out.println("Prod update: ok");
                 }
             } else {
                 System.err.println("Product with id " + id + " didn't found.");
@@ -314,6 +325,7 @@ public class App {
                         ",Category:" + productRemoved.getCategory() +
                         ",price:" + productRemoved.getPrice() + "}");
                 Catalog.remove(id);
+                System.out.println("prod remove: ok");
             } else {
                 System.err.println("The product couldn't be removed. Product not found.");
             }
