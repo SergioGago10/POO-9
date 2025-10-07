@@ -16,7 +16,7 @@ public class Product {
     public Product(int id, String name, String category, int price) {
         this.id = id;
         this.name = name;
-        this.category = Category.valueOf(category);
+        this.category = Category.valueOf(category.toUpperCase());
         this.price=price;
     }
 

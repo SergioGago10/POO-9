@@ -213,7 +213,6 @@ public class App {
 
     private void prodAddCommand(String[] arrayUserInput) {
         int i = 2;
-        char[] arrayChars;
         int id = Integer.parseInt(arrayUserInput[2]);
         if (Catalog.idExists(id)) {
             System.err.println("Product with id " + id + " already exist.");
@@ -224,8 +223,7 @@ public class App {
                 if (i != 3)
                     name.append(" ");
                 name.append(arrayUserInput[i]);
-                arrayChars = arrayUserInput[i].toCharArray();
-            } while (arrayChars[arrayChars.length - 1] != '\"');
+            } while (!arrayUserInput[i].endsWith("\""));
             if (name.length() > Product.getMaxCharName())
                 System.err.println("Maximun " + Product.getMaxCharName() + " characteres on name");
             else {
@@ -274,15 +272,13 @@ public class App {
                 switch (arrayUserInput[3]) {
                     case "NAME":
                         StringBuilder name = new StringBuilder(Product.getMaxCharName());
-                        char[] arrayChars;
                         int i = 3;
                         do {
                             i++;
                             if (i != 4)
                                 name.append(" ");
                             name.append(arrayUserInput[i]);
-                            arrayChars = arrayUserInput[i].toCharArray();
-                        } while (arrayChars[arrayChars.length - 1] != '\"');
+                        } while (!arrayUserInput[i].endsWith("\""));
                         catalog[index].setName(name.toString());
                         break;
                     case "PRICE":
