@@ -8,7 +8,7 @@ class ProductTest {
 
     @Test
     void creaProductoValido() {
-        upm.Product p = new upm.Product(1, "Libro POO","Book", 25);
+        upm.Product p = new upm.Product(1, "Libro POO","BOOK", 25);
 
         assertEquals(1, p.getId());
         assertEquals("Libro POO", p.getName());
