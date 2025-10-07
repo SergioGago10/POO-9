@@ -185,4 +185,17 @@ public class Ticket {
 
     }
 
+    public void ticketNew() {
+        productsList.clear();
+
+        for (Category cat : Category.values()) {
+            hasTwoProductsInTicket.put(cat, false);
+        }
+
+        System.out.println("ticket  new:  ok");
+    }
+
+
+
+
 }
