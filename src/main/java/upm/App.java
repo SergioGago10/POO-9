@@ -159,11 +159,10 @@ public class App {
                 } else {
                     try {
                         int prodId = Integer.parseInt(arrayUserInput[2]);
-                        if (Catalog.idExists(prodId)){
+                        if (Catalog.idExists(prodId)) {
                             ticketActual.removeProductFromTicket(prodId);
                             System.out.println("ticket remove: ok");
-                        }
-                        else
+                        } else
                             System.out.println("Product with the id" + prodId + " didn't found.");
                     } catch (NumberFormatException e) {
                         System.err.println("prodId must be an integer.");
@@ -230,7 +229,7 @@ public class App {
                 i++;
                 String category = arrayUserInput[i];
                 i++;
-                int price = Integer.parseInt(arrayUserInput[i]);
+                double price = Double.parseDouble(arrayUserInput[i]);
                 Product product = new Product(id, name.toString(), category, price);
                 Catalog.addProduct(product);
                 //Imprimimos por pantalla el producto que hemos puesto
@@ -238,7 +237,7 @@ public class App {
                 System.out.print(", id:" + product.getId());
                 System.out.print(", name:" + product.getName());
                 System.out.print(", Category:" + product.getCategory());
-                System.out.print(", price:" + product.getPrice());
+                System.out.printf(", price: %.2f", product.getPrice());
                 System.out.println("}");
                 System.out.println("prod add: ok");
             }
@@ -256,7 +255,7 @@ public class App {
                 System.out.print(",id: " + productList[j].getId());
                 System.out.print(",name:" + productList[j].getName());
                 System.out.print(",Category:" + productList[j].getCategory()); // no se si lo imprime bien
-                System.out.print(",price:" + productList[j].getPrice());
+                System.out.printf(",price: %.2f", productList[j].getPrice());
                 System.out.println("}");
             }
         }
@@ -283,7 +282,7 @@ public class App {
                         break;
                     case "PRICE":
                         String price = arrayUserInput[4];
-                        int newPrice = Integer.parseInt(price);
+                        double newPrice = Double.parseDouble(price);
                         catalog[index].setPrice(newPrice);
                         break;
                     case "CATEGORY":
@@ -298,7 +297,7 @@ public class App {
                     System.out.print(",id: " + updatedProduct.getId());
                     System.out.print(",name:" + updatedProduct.getName());
                     System.out.print(",Category:" + updatedProduct.getCategory());
-                    System.out.print(",price:" + updatedProduct.getPrice());
+                    System.out.printf(",price: %.2f", updatedProduct.getPrice());
                     System.out.println("}");
                     System.out.println("Prod update: ok");
                 }
@@ -315,13 +314,13 @@ public class App {
             int id = Integer.parseInt(arrayUserInput[2]);
             Product productRemoved = Catalog.getProduct(id);
             if (productRemoved != null) { //Esto ya directamente comprueba si se puede eliminar o no por lo que no importa no comprobarlo antes
-                System.out.println("{class:" + productRemoved.getClass().getSimpleName() +
+                System.out.print("{class:" + productRemoved.getClass().getSimpleName() +
                         ",id:" + productRemoved.getId() +
                         ",name:" + productRemoved.getName() +
-                        ",Category:" + productRemoved.getCategory() +
-                        ",price:" + productRemoved.getPrice() + "}");
-                Catalog.remove(id);
-                System.out.println("prod remove: ok");
+                        ",Category:" + productRemoved.getCategory());
+                System.out.printf(",price: %.2f}\n", productRemoved.getPrice());
+                if (Catalog.remove(id))
+                    System.out.println("prod remove: ok");
             } else {
                 System.err.println("The product couldn't be removed. Product not found.");
             }
