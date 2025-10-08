@@ -1,4 +1,4 @@
-package test.java.upm;
+package upm;
 
 import jdk.jfr.Category;
 import org.junit.jupiter.api.Test;
