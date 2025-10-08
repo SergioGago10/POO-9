@@ -227,7 +227,7 @@ public class App {
                 System.err.println("Maximun " + Product.getMaxCharName() + " characteres on name");
             else {
                 i++;
-                String category = arrayUserInput[i];
+                Category category = Category.valueOf(arrayUserInput[i]);
                 i++;
                 double price = Double.parseDouble(arrayUserInput[i]);
                 Product product = new Product(id, name.toString(), category, price);
@@ -286,7 +286,7 @@ public class App {
                         catalog[index].setPrice(newPrice);
                         break;
                     case "CATEGORY":
-                        String category = arrayUserInput[4];
+                        Category category = Category.valueOf(arrayUserInput[4]);
                         catalog[index].setCategory(category);
                         break;
                 }
