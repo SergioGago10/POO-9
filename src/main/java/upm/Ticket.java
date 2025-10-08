@@ -27,6 +27,7 @@ public class Ticket {
         //poder aplicar descuentos luego
     }
 
+
     public void sortProducts() {
         /*
          * En Java, las listas (como ArrayList) ya incluyen el .sort(),
@@ -75,6 +76,13 @@ public class Ticket {
     }
 
 
+    /**
+     * Busca el Id del prodycto pasado por parámetro en catalog, si lo tenemos se añade al ticket de uno en uno hasta MAX_PRODUCTS.
+     * Si se han añadido productos al ticket actualizamos nuestro hashmap para poner true a los elementos que tienen 2 productos o más y imprimes el ticket actual
+     *  @param productID
+     * @param quantity
+     *
+     */
     public void addProductToTicket(int productID, int quantity) {
         boolean productAdded = false;
         Product productToBeAdded = Catalog.getProduct(productID);
@@ -96,6 +104,10 @@ public class Ticket {
             }
         }
     }
+    /**
+     *
+     *
+     */
 
 
     public void printCurrentTicket() {
@@ -192,7 +204,7 @@ public class Ticket {
             hasTwoProductsInTicket.put(cat, false);
         }
 
-        System.out.println("ticket  new:  ok");
+        System.out.println("ticket new: ok");
     }
 
 

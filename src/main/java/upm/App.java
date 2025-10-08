@@ -131,8 +131,8 @@ public class App {
         String ticketCmd = arrayUserInput[1].toLowerCase();
         switch (ticketCmd) {
             case "new":
-                System.out.println("ticket new: ok");
-                return new Ticket();
+                ticketActual.ticketNew();
+                return ticketActual;
             case "add":
                 if (arrayUserInput.length != 4) {
                     System.err.println("Usage: ticket add <prodId> <cantidad>");
