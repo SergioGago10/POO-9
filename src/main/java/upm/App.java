@@ -58,7 +58,6 @@ public class App {
                     case "ticket":
                         ticketActual = handleTicketCommand(arrayUserInput, ticketActual);
                         break;
-
                     default:
                         System.err.println("Command not found. Type 'help' to see the command list.");
                 }
@@ -78,7 +77,7 @@ public class App {
         String prodCmd = arrayUserInput[1].toLowerCase();
         switch (prodCmd) {
             case "add":
-                if (arrayUserInput.length < 6) {
+                if (arrayUserInput.length < 6 || !arrayUserInput[3].contains("\"")) {
                     System.err.println("Usage: prod add <id> \"<nombre>\" <categoria> <precio>");
                 } else {
                     try {
@@ -163,7 +162,7 @@ public class App {
                             ticketActual.removeProductFromTicket(prodId);
                             System.out.println("ticket remove: ok");
                         } else
-                            System.out.println("Product with the id" + prodId + " didn't found.");
+                            System.out.println("Product with the id " + prodId + " didn't found.");
                     } catch (NumberFormatException e) {
                         System.err.println("prodId must be an integer.");
                     } catch (Exception e) {
@@ -211,36 +210,42 @@ public class App {
     }
 
     private void prodAddCommand(String[] arrayUserInput) {
-        int i = 2;
-        int id = Integer.parseInt(arrayUserInput[2]);
-        if (Catalog.idExists(id)) {
-            System.err.println("Product with id " + id + " already exist.");
-        } else {
-            StringBuilder name = new StringBuilder(Product.getMaxCharName());
-            do {
-                i++;
-                if (i != 3)
-                    name.append(" ");
-                name.append(arrayUserInput[i]);
-            } while (!arrayUserInput[i].endsWith("\""));
-            if (name.length() > Product.getMaxCharName())
-                System.err.println("Maximun " + Product.getMaxCharName() + " characteres on name");
-            else {
-                i++;
-                Category category = Category.valueOf(arrayUserInput[i]);
-                i++;
-                double price = Double.parseDouble(arrayUserInput[i]);
-                Product product = new Product(id, name.toString(), category, price);
-                Catalog.addProduct(product);
-                //Imprimimos por pantalla el producto que hemos puesto
-                System.out.print("{class:" + product.getClass().getSimpleName());
-                System.out.print(", id:" + product.getId());
-                System.out.print(", name:" + product.getName());
-                System.out.print(", Category:" + product.getCategory());
-                System.out.printf(", price: %.2f", product.getPrice());
-                System.out.println("}");
-                System.out.println("prod add: ok");
+        try {
+            int i = 2;
+            int id = Integer.parseInt(arrayUserInput[2]);
+            if (Catalog.idExists(id)) {
+                System.err.println("Product with id " + id + " already exist.");
+            } else {
+                StringBuilder name = new StringBuilder(Product.getMaxCharName());
+                do {
+                    i++;
+                    if (i != 3)
+                        name.append(" ");
+                    name.append(arrayUserInput[i]);
+                } while (!arrayUserInput[i].endsWith("\""));
+                if (name.length() > Product.getMaxCharName())
+                    System.err.println("Maximun " + Product.getMaxCharName() + " characteres on name");
+                else {
+                    i++;
+                    Category category = Category.valueOf(arrayUserInput[i]);
+                    i++;
+                    double price = Double.parseDouble(arrayUserInput[i]);
+                    Product product = new Product(id, name.toString(), category, price);
+                    Catalog.addProduct(product);
+                    //Imprimimos por pantalla el producto que hemos puesto
+                    System.out.print("{class:" + product.getClass().getSimpleName());
+                    System.out.print(", id:" + product.getId());
+                    System.out.print(", name:" + product.getName());
+                    System.out.print(", Category:" + product.getCategory());
+                    System.out.printf(", price: %.2f", product.getPrice());
+                    System.out.println("}");
+                    System.out.println("prod add: ok");
+                }
             }
+        } catch (NumberFormatException exception) {
+            System.err.print("Id must be an integer number.");
+        } catch (ArrayIndexOutOfBoundsException exception){
+            System.err.print("Usage: prod update <id> <campo> <valor> (campo: nombre|categoria|precio)");
         }
     }
 
@@ -265,9 +270,11 @@ public class App {
     private void prodUpdateCommand(String[] arrayUserInput) {
         try {
             Product[] catalog = Catalog.getCatalog();
+            boolean updated;
             int id = Integer.parseInt(arrayUserInput[2]);
+            Product updatedProduct = Catalog.getProduct(id);
             int index = Catalog.indexOfProduct(id);
-            if (index != -1) {
+            if (index != -1 && updatedProduct!=null) {
                 switch (arrayUserInput[3]) {
                     case "NAME":
                         StringBuilder name = new StringBuilder(Product.getMaxCharName());
@@ -278,21 +285,26 @@ public class App {
                                 name.append(" ");
                             name.append(arrayUserInput[i]);
                         } while (!arrayUserInput[i].endsWith("\""));
-                        catalog[index].setName(name.toString());
+                        updatedProduct.setName(name.toString());
+                        updated=true;
                         break;
                     case "PRICE":
                         String price = arrayUserInput[4];
                         double newPrice = Double.parseDouble(price);
-                        catalog[index].setPrice(newPrice);
+                        updatedProduct.setPrice(newPrice);
+                        updated=true;
                         break;
                     case "CATEGORY":
                         Category category = Category.valueOf(arrayUserInput[4]);
-                        catalog[index].setCategory(category);
+                        updatedProduct.setCategory(category);
+                        updated=true;
                         break;
+                    default:
+                        System.err.println("Only allowed update on NAME, PRICE OR CATEGORY");
+                        updated=false;
                 }
                 //Imprimimos por pantalla lo que hemos actualizado
-                Product updatedProduct = Catalog.getProduct(id);
-                if (updatedProduct != null) { //Esto es simplemente para evitar un NullPointerException, algo que no ocurriría nunca, pero por si acaso
+                if (updated) { //Esto es simplemente para evitar un NullPointerException, algo que no ocurriría nunca, pero por si acaso
                     System.out.print("{class:" + updatedProduct.getClass().getSimpleName());
                     System.out.print(",id: " + updatedProduct.getId());
                     System.out.print(",name:" + updatedProduct.getName());
@@ -306,6 +318,8 @@ public class App {
             }
         } catch (NumberFormatException exception) {
             System.err.print("Id must be an integer number.");
+        }catch (ArrayIndexOutOfBoundsException exception){
+            System.err.print("Name field must be between \"\"");
         }
     }
 
@@ -322,7 +336,7 @@ public class App {
                 if (Catalog.remove(id))
                     System.out.println("prod remove: ok");
             } else {
-                System.err.println("The product couldn't be removed. Product not found.");
+                System.err.println("The product with the id:"+id+" couldn't be removed. Product not found.");
             }
         } catch (NumberFormatException exception) {
             System.err.print("Id must be an integer number.");
