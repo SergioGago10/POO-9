@@ -44,7 +44,7 @@ public class Ticket {
          * https://docs.oracle.com/javase/8/docs/api/java/util/List.html#sort-java.util.Comparator-
          * https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html
          */
-        productsList.sort(Comparator.comparing(Product::getName));
+        productsList.sort(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER));
     }
 
     /**
