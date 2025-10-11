@@ -14,6 +14,17 @@ public class Product {
     //no creo que caparlo a un int sea buena idea
 
     public Product(int id, String name, Category category, double price) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("El id debe ser positivo");
+        }
+
+        if (name == null || name.isBlank() || name.length() >= MAX_CHAR_NAME) {
+            throw new IllegalArgumentException("Nombre inválido");
+        }
+
+        if (price <= 0) {
+            throw new IllegalArgumentException("El precio debe ser mayor que 0");
+        }
         this.id = id;
         this.name = name;
         this.category = category;
