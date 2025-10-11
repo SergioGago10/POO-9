@@ -26,7 +26,7 @@ public class Product {
             throw new IllegalArgumentException("El precio debe ser mayor que 0");
         }
         this.id = id;
-        this.name = name;
+        this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
         this.category = category;
         this.price=price;
     }
