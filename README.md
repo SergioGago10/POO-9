@@ -46,3 +46,25 @@ Los comandos para implementar son los siguientes:
 • echo "<texto>" (imprime el texto en el valor texto)
 • exit (cierra la aplicación)
 ```
+## Justificación del diseño UML
+
+El proyecto se ha organizado por las siguientes capas:
+
+- **Modelos** (`Product`, `Ticket`): Solo contienen los datos del dominio.  
+- **Repositorio** (`Catalog`): Gestiona el almacenamiento y las operaciones CRUD sobre los productos.  
+- **Servicio** (`App`): Coordina los comandos principales de la aplicación.  
+- **Utilities**: Agrupa métodos de apoyo generales.
+
+Esta separación facilita la comprensión del código, la reutilización y las pruebas.
+
+---
+
+### Uso de librerías Java
+
+- **ArrayList**: se utiliza en `Ticket` para almacenar los productos, ya que permite crecer dinámicamente y recorrerlos fácilmente para imprimir o calcular descuentos.  
+- **Map (HashMap)**: se usa en `Ticket` para comprobar si una categoría aparece más de una vez, simplificando el cálculo de descuentos.  
+- **Arrays / Collections**: se emplean en `Catalog` para manejar el listado de productos de forma eficiente.  
+- **Scanner**: se usa en `App` para leer los comandos del usuario por consola.
+
+Estas clases estándar de la biblioteca Java se eligen por su simplicidad, eficiencia y claridad, adecuadas al propósito educativo del proyecto.
+
