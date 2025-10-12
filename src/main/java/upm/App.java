@@ -271,7 +271,6 @@ public class App {
 
     private void prodUpdateCommand(String[] arrayUserInput) {
         try {
-            Product[] catalog = Catalog.getCatalog();
             boolean updated;
             int id = Integer.parseInt(arrayUserInput[2]);
             Product updatedProduct = Catalog.getProduct(id);
