@@ -60,7 +60,21 @@ Cuando se genera un ticket, los descuentos se aplican automáticamente cuando ha
 
 ### Comandos disponibles
 
-#### Productos
+```bash
+prod add <id> "<nombre>" <categoria> <precio>      → agrega un producto con nuevo ID  
+prod list                                          → lista los productos actuales  
+prod update <id> campo valor                       → actualiza (campos: nombre | categoria | precio)  
+prod remove <id>                                   → elimina un producto por ID  
+
+ticket new                                         → reinicia el ticket actual  
+ticket add <prodId> <cantidad>                     → agrega una cantidad de producto al ticket  
+ticket remove <prodId>                             → elimina todas las apariciones del producto  
+ticket print                                       → imprime la factura del ticket  
+
+help                                               → muestra los comandos disponibles  
+echo "<texto>"                                     → imprime el texto indicado  
+exit                                               → cierra la aplicación
+
 ---
 
 ## Justificación del diseño UML
