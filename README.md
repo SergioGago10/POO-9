@@ -7,45 +7,61 @@ Matrícula   Nombre
 -bv0209     Saúl de Antonio
 -bu0119     Julián Rozadillas
 ```text
-Entrega E1:
-El cliente solicita un módulo de tickets que permita crear y gestionar productos, aplicar
-descuentos por categoría y emitir factura de un ticket ordenada alfabéticamente por nombre
-de producto.
+## Entrega E1
 
-Los productos están definidos por un identificador en el sistema (dos productos no son iguales
-si tienen diferente ID), número positivo, que los define dentro del sistema, un nombre no vacío
-y de menos de 100 caracteres, una categoría (MERCH, PAPELERIA, ROPA, LIBRO,
-ELECTRÓNICA) y un precio que es un número superior a 0 sin límite superior. No podrá haber
-dos productos con el mismo id en el sistema. No existirán más de 200 productos diferentes en
-el sistema para esta versión.
+El cliente solicita un **módulo de tickets** que permita:
 
-Cuando se genera un ticket, se aplican descuentos de manera automática cuando hay más de un
-producto de la misma categoría. Los descuentos son:
-MERCH(0%), PAPELERÍA(5%), ROPA(7%), LIBRO(10%), ELECTRÓNICA(3%).
+- Crear y gestionar productos.  
+- Aplicar descuentos por categoría.  
+- Emitir una factura de un ticket ordenada alfabéticamente por nombre de producto.
 
-En la primera versión de la aplicación se arranca con una lista de productos vacía y un ticket vacío.
-Se insertan los productos de manera progresiva. Se permite en cualquier momento reiniciar el
-proceso e iniciar un nuevo ticket. Al imprimir el ticket, se imprime por pantalla y se inicia un
-nuevo ticket hasta que se cierra la aplicación.
+---
 
-Al incorporar un producto al ticket, modificarlo o borrarlo, se debe imprimir el importe provisional
-del ticket aplicando los descuentos actuales. El borrado de un producto borrará todas las apariciones
-del ticket. Para esta versión se asume que los tickets no tendrán más de 100 productos.
+### Requisitos de los productos
 
-Los comandos para implementar son los siguientes:
+- Cada producto está definido por:
+  - **ID**: número positivo que lo identifica dentro del sistema.  
+  - **Nombre**: texto no vacío y de menos de **100 caracteres**.  
+  - **Categoría**: una de las siguientes  
+    `MERCH`, `PAPELERIA`, `ROPA`, `LIBRO`, `ELECTRÓNICA`.  
+  - **Precio**: número mayor que 0, sin límite superior.
 
-• prod add <id> "<nombre>" <categoria> <precio> (agrega un producto con nuevo id)
-• prod list (lista productos actuales)
-• prod update <id> campo valor (campos: nombre|categoria|precio)
-• prod remove <id>
-• ticket new (resetea ticket en curso)
-• ticket add <prodId> <cantidad> (agrega al ticket la cantidad de ese producto)
-• ticket remove <prodId> (elimina todas las apariciones del producto, revisa si existe el id)
-• ticket print (imprime factura)
-• help (lista los comandos)
-• echo "<texto>" (imprime el texto en el valor texto)
-• exit (cierra la aplicación)
-```
+- Dos productos con diferente ID **no son iguales**.  
+- No podrá haber **dos productos con el mismo ID** en el sistema.  
+- No existirán más de **200 productos diferentes** en esta versión.
+
+---
+
+### Descuentos automáticos por categoría
+
+Cuando se genera un ticket, los descuentos se aplican automáticamente cuando hay más de un producto de la misma categoría.
+
+| Categoría     | Descuento |
+|----------------|------------|
+| MERCH          | 0% |
+| PAPELERÍA      | 5% |
+| ROPA           | 7% |
+| LIBRO          | 10% |
+| ELECTRÓNICA    | 3% |
+
+---
+
+### Funcionamiento de la aplicación
+
+- La aplicación comienza con una **lista de productos vacía** y un **ticket vacío**.  
+- Se pueden **insertar productos progresivamente**.  
+- En cualquier momento se puede **reiniciar el proceso** e iniciar un **nuevo ticket**.  
+- Al **imprimir el ticket**, se muestra por pantalla y se inicia uno nuevo.  
+- Al **agregar, modificar o borrar** un producto, se imprime el **importe provisional del ticket**, aplicando los descuentos actuales.  
+- Al **eliminar un producto**, se borran todas sus apariciones del ticket.  
+- Se asume que **cada ticket no tendrá más de 100 productos**.
+
+---
+
+### Comandos disponibles
+
+#### Productos
+
 ## Justificación del diseño UML
 
 El proyecto se ha organizado por las siguientes capas:
