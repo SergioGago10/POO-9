@@ -6,7 +6,7 @@ Matrícula   Nombre
 -bv0033     Jesús Martínez
 -bv0209     Saúl de Antonio
 -bu0119     Julián Rozadillas
-```text
+
 ## Entrega E1
 
 El cliente solicita un **módulo de tickets** que permita:
@@ -60,7 +60,7 @@ Cuando se genera un ticket, los descuentos se aplican automáticamente cuando ha
 
 ### Comandos disponibles
 
-```bash
+bash
 prod add <id> "<nombre>" <categoria> <precio>      → agrega un producto con nuevo ID  
 prod list                                          → lista los productos actuales  
 prod update <id> campo valor                       → actualiza (campos: nombre | categoria | precio)  
