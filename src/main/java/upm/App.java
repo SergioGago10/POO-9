@@ -227,7 +227,7 @@ public class App {
                     System.err.println("Maximun " + Product.getMaxCharName() + " characteres on name");
                 else {
                     i++;
-                    Category category = Category.valueOf(arrayUserInput[i]);
+                    Category category = Category.valueOf(arrayUserInput[i].toUpperCase());
                     i++;
                     double price = Double.parseDouble(arrayUserInput[i]);
                     Product product = new Product(id, name.toString(), category, price);
@@ -243,9 +243,11 @@ public class App {
                 }
             }
         } catch (NumberFormatException exception) {
-            System.err.print("Id must be an integer number.");
-        } catch (ArrayIndexOutOfBoundsException exception){
-            System.err.print("Usage: prod update <id> <campo> <valor> (campo: nombre|categoria|precio)");
+            System.err.print("Id must be an integer number and price must be a decimal number.");
+        } catch (ArrayIndexOutOfBoundsException exception) {
+            System.err.print("Usage: prod add <id> \"<name>\" <category> <price>");
+        } catch (IllegalArgumentException exception) {
+            System.err.println("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC.");
         }
     }
 
@@ -274,7 +276,7 @@ public class App {
             int id = Integer.parseInt(arrayUserInput[2]);
             Product updatedProduct = Catalog.getProduct(id);
             int index = Catalog.indexOfProduct(id);
-            if (index != -1 && updatedProduct!=null) {
+            if (index != -1 && updatedProduct != null) {
                 switch (arrayUserInput[3]) {
                     case "NAME":
                         StringBuilder name = new StringBuilder(Product.getMaxCharName());
@@ -286,22 +288,22 @@ public class App {
                             name.append(arrayUserInput[i]);
                         } while (!arrayUserInput[i].endsWith("\""));
                         updatedProduct.setName(name.toString());
-                        updated=true;
+                        updated = true;
                         break;
                     case "PRICE":
                         String price = arrayUserInput[4];
                         double newPrice = Double.parseDouble(price);
                         updatedProduct.setPrice(newPrice);
-                        updated=true;
+                        updated = true;
                         break;
                     case "CATEGORY":
-                        Category category = Category.valueOf(arrayUserInput[4]);
+                        Category category = Category.valueOf(arrayUserInput[4].toUpperCase());
                         updatedProduct.setCategory(category);
-                        updated=true;
+                        updated = true;
                         break;
                     default:
                         System.err.println("Only allowed update on NAME, PRICE OR CATEGORY");
-                        updated=false;
+                        updated = false;
                 }
                 //Imprimimos por pantalla lo que hemos actualizado
                 if (updated) { //Esto es simplemente para evitar un NullPointerException, algo que no ocurriría nunca, pero por si acaso
@@ -317,9 +319,11 @@ public class App {
                 System.err.println("Product with id " + id + " didn't found.");
             }
         } catch (NumberFormatException exception) {
-            System.err.print("Id must be an integer number.");
-        }catch (ArrayIndexOutOfBoundsException exception){
+            System.err.print("Id must be an integer number and price must be a decimal number.");
+        } catch (ArrayIndexOutOfBoundsException exception) {
             System.err.print("Name field must be between \"\"");
+        }catch (IllegalArgumentException exception) {
+            System.err.println("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC.");
         }
     }
 
@@ -336,7 +340,7 @@ public class App {
                 if (Catalog.remove(id))
                     System.out.println("prod remove: ok");
             } else {
-                System.err.println("The product with the id:"+id+" couldn't be removed. Product not found.");
+                System.err.println("The product with the id:" + id + " couldn't be removed. Product not found.");
             }
         } catch (NumberFormatException exception) {
             System.err.print("Id must be an integer number.");
