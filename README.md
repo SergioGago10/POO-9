@@ -61,6 +61,7 @@ Cuando se genera un ticket, los descuentos se aplican automáticamente cuando ha
 ### Comandos disponibles
 
 #### Productos
+---
 
 ## Justificación del diseño UML
 
@@ -83,4 +84,5 @@ Esta separación facilita la comprensión del código, la reutilización y las p
 - **Scanner**: se usa en `App` para leer los comandos del usuario por consola.
 
 Estas clases estándar de la biblioteca Java se eligen por su simplicidad, eficiencia y claridad, adecuadas al propósito educativo del proyecto.
+
 
