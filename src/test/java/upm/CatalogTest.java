@@ -4,6 +4,8 @@ package upm;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class CatalogTest {
@@ -11,9 +13,8 @@ public class CatalogTest {
     @Before
     public void resetCatalog() {
         //Reiniciar catalogo despues de cualquier test
-        Product[] arr = Catalog.getCatalog();
-        for (int i = 0; i < arr.length; i++) arr[i] = null;
-
+        List<Product> catalog = Catalog.getCatalog();
+        catalog.clear();
         try {
             var field = Catalog.class.getDeclaredField("amountProducts");
             field.setAccessible(true);
@@ -75,8 +76,8 @@ public class CatalogTest {
         assertTrue(removed);
         assertEquals(2, Catalog.getAmountProducts());
 
-        Product[] cat = Catalog.getCatalog();
-        assertEquals(3, cat[1].getId());
+        List<Product> cat = Catalog.getCatalog();
+        assertEquals(3, cat.get(1).getId());
         assertFalse(Catalog.idExists(2));
     }
 

@@ -2,6 +2,7 @@ package upm;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
@@ -19,6 +20,7 @@ public class App {
 
     private void run(String[] args) {
         Scanner scanner = createScanner(args);
+        boolean isIteractive = (args.length == 0); //False si se pasa archivo, true si escribimos por el command line
         System.setErr(System.out);
         //Esto hace que todos los errores sean system.out en vez de system.err, lo hago por un error que ocurre en la salida en la consola, no van a la misma
         // velocidad y eso provoca que los system.out se impriman antes que los system.err, dando lugar a texto mal puesto
@@ -33,8 +35,11 @@ public class App {
             System.out.print("tUPM> ");
             String userInput = scanner.nextLine().trim(); //El trim evita que tengamos espacios al final y al inicio del string
 
-            if (userInput.isEmpty())
-                continue; //Esto se hace por si se da enter simplemente ignorando la información vacía y no poner el mensaje de error de comando que sería molesto
+            if(!isIteractive){
+                System.out.println(userInput);
+            }
+
+            if (userInput.isEmpty()) continue; //Esto se hace por si se da enter simplemente ignorando la información vacía y no poner el mensaje de error de comando que sería molesto
 
             String[] arrayUserInput = userInput.split(" ");
             try {
@@ -252,17 +257,17 @@ public class App {
     }
 
     private void prodListCommand() {
-        Product[] productList = Catalog.getCatalog();
-        if (productList[0] == null) {
+        List<Product> productList = Catalog.getCatalog();
+        if (productList.isEmpty()) {
             System.out.println("The catalog is empty.");
         } else {
             System.out.println("Catalog:");
             for (int j = 0; j < Catalog.getAmountProducts(); j++) {
-                System.out.print("  {class:" + productList[j].getClass().getSimpleName());
-                System.out.print(",id: " + productList[j].getId());
-                System.out.print(",name:" + productList[j].getName());
-                System.out.print(",Category:" + productList[j].getCategory()); // no se si lo imprime bien
-                System.out.printf(",price: %.2f", productList[j].getPrice());
+                System.out.print("  {class:" + productList.get(j).getClass().getSimpleName());
+                System.out.print(",id: " + productList.get(j).getId());
+                System.out.print(",name:" + productList.get(j).getName());
+                System.out.print(",Category:" + productList.get(j).getCategory()); // no se si lo imprime bien
+                System.out.printf(",price: %.2f", productList.get(j).getPrice());
                 System.out.println("}");
             }
         }
