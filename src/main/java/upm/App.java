@@ -232,6 +232,7 @@ public class App {
                     System.err.println("Maximun " + Product.getMaxCharName() + " characteres on name");
                 else {
                     i++;
+                    //"Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC."
                     Category category = Category.valueOf(arrayUserInput[i].toUpperCase());
                     i++;
                     double price = Double.parseDouble(arrayUserInput[i]);
@@ -252,7 +253,7 @@ public class App {
         } catch (ArrayIndexOutOfBoundsException exception) {
             System.err.print("Usage: prod add <id> \"<name>\" <category> <price>");
         } catch (IllegalArgumentException exception) {
-            System.err.println("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC.");
+            System.err.println(exception.getMessage());
         }
     }
 
@@ -327,7 +328,7 @@ public class App {
         } catch (ArrayIndexOutOfBoundsException exception) {
             System.err.print("Name field must be between \"\"");
         }catch (IllegalArgumentException exception) {
-            System.err.println("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC.");
+            System.err.println(exception.getMessage());
         }
     }
 

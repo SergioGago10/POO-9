@@ -15,15 +15,15 @@ public class Product {
 
     public Product(int id, String name, Category category, double price) {
         if (id <= 0) {
-            throw new IllegalArgumentException("El id debe ser positivo");
+            throw new IllegalArgumentException("id must be positive.");
         }
 
         if (name == null || name.isBlank() || name.length() >= MAX_CHAR_NAME) {
-            throw new IllegalArgumentException("Nombre inválido");
+            throw new IllegalArgumentException("Invalid name.");
         }
 
         if (price <= 0) {
-            throw new IllegalArgumentException("El precio debe ser mayor que 0");
+            throw new IllegalArgumentException("Price must be positive.");
         }
         this.id = id;
         this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
