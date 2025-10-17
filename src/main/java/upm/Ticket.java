@@ -10,16 +10,18 @@ public class Ticket {
 
     public Ticket() {
         productsList = new ArrayList<>();
-        // El arraylist es util, ya que tenemos 100 elementos, si tuviéramos muchísimos más,
-        // una linked list sería más eficaz, ya que en la eliminación de productos tardaríamos mucho con un arraylist
-        // Ten en cuenta que la eliminación es o(n^2) en el arraylist en el peor caso y o(n) en la linked list, por lo que
-        // si el número de productos máximos es muy alto, la diferencia es muy muy notoria.
+        // El arraylist es util, ya que vamos a recorrer la lista siempre y la eliminación de productos será al inicio mitad y final,
+        // por lo que una linked list no supone mucha diferencia, además que con tan pocos elementos no hay ninguna diferencia notoria entre
+        // linked list y array list, es simplemente decision propia
+        // Además como accedemos a elementos con un índice el arraylist es esencial en estos casos concretos, ya que una linked list no te accede directamente,
+        // un arraylist sí que te puede acceder directamente al índice indicado.
+        // Las linked lists serán útiles si tenemos un MAX_PRODUCTOS = 1M; o algo similar, ya que el arraylist no seria conveniente por tiempos de eliminacion de elementos
+        // en esa situación sí que sería más util usar la linked list u otra estructura de datos mas avanzada (a pesar de que el acceso a elementos por indice sea mas costoso)
 
         Category[] allCategories = Category.values();//Pillamos todos los enum de la clase product
         this.hasTwoProductsInTicket = new HashMap<>();
 
-        for (int i = 0; i < allCategories.length; i++) {
-            Category currentCategory = allCategories[i];
+        for (Category currentCategory : allCategories) {
             hasTwoProductsInTicket.put(currentCategory, false);
         }
         //Esto lo hago por si se tiene pensado poner más enums, y ayudar a la complejidad de los algoritmos usados
@@ -43,7 +45,7 @@ public class Ticket {
          * https://docs.oracle.com/javase/8/docs/api/java/util/List.html#sort-java.util.Comparator-
          * https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html
          */
-        productsList.sort(Comparator.comparing(Product::getName));
+        productsList.sort(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER));
     }
 
     /**
@@ -58,8 +60,7 @@ public class Ticket {
     public double[] getTotalPriceAndDiscounts() {
         double finalPriceWithoutDiscount = 0;
         double finalPriceWithDiscount = 0;
-        for (int i = 0; i < productsList.size(); i++) {
-            Product currentProduct = productsList.get(i);
+        for (Product currentProduct : productsList) {
             double price = currentProduct.getPrice(); // suponemos que getPrice() devuelve int o double
             finalPriceWithoutDiscount += price;
             boolean applyDiscount = hasTwoProductsInTicket.get(currentProduct.getCategory());
@@ -116,8 +117,7 @@ public class Ticket {
         } else {
             // Ordenamos los productos por nombre antes de imprimirlos
             sortProducts();
-            for (int i = 0; i < productsList.size(); i++) {
-                Product currentProduct = productsList.get(i);
+            for (Product currentProduct : productsList) {
                 System.out.print("{class:" + currentProduct.getClass().getSimpleName() +
                         ", id:" + currentProduct.getId() +
                         ", name:" + currentProduct.getName() +
@@ -146,20 +146,18 @@ public class Ticket {
         HashMap<Category, Integer> countMap = new HashMap<>();
 
         //Ponemos todos sus valores correspondientes, las apariciones a 0 y luego los enums existentes
-        for (int i = 0; i < allCategories.length; i++) {
-            countMap.put(allCategories[i], 0);
+        for (Category allCategory : allCategories) {
+            countMap.put(allCategory, 0);
         }
 
         //Recorremos todos los productos y contamos las apariciones de cada producto, actualizándolo en el hashmap
-        for (int i = 0; i < productsList.size(); i++) {
-            Product p = productsList.get(i);
+        for (Product p : productsList) {
             Category cat = p.getCategory();
             countMap.put(cat, countMap.get(cat) + 1);
         }
 
         //Actualizamos el HashMap hasTwo según el conteo
-        for (int i = 0; i < allCategories.length; i++) {
-            Category cat = allCategories[i];
+        for (Category cat : allCategories) {
             hasTwoProductsInTicket.put(cat, countMap.get(cat) >= 2);
         }
     }
@@ -187,14 +185,15 @@ public class Ticket {
     }
 
     public void removeProductFromTicket(int productID) {
-        for (int i = 0; i < productsList.size(); i++) {
-            if (productsList.get(i).getId() == productID) {
-                productsList.remove(i);
-                i--; // Ajustar índice porque la lista se acorta
+        //Usamos un iterator, ya que en la eliminacion es lo eficiente y lo que se debe hacer, un for loop con ajuste de índice sería incorrecto y mala práctica
+        Iterator<Product> it = productsList.iterator();
+        while (it.hasNext()) {
+            Product p = it.next();
+            if (p.getId() == productID) {
+                it.remove();
             }
         }
-        updateHasTwo(); //Actualizamos nuestro hashmap para poner false a los elementos que no tienen 2 prodcutos
-
+        updateHasTwo(); //Actualizamos nuestro hashmap para poner false a los elementos que no tienen 2 productos
     }
 
     public void ticketNew() {

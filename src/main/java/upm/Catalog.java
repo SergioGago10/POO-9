@@ -1,62 +1,61 @@
 package upm;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Catalog {
     private final static int MAX_DIF_PRODUCTS = 200;
-    private static Product[] catalog = new Product[MAX_DIF_PRODUCTS];
-    private static int amountProducts = 0;
+    private static List<Product> catalog = new ArrayList<>();
 
     public static void addProduct(Product product) {
-        try {
-            catalog[amountProducts] = product;
-            amountProducts++;
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            System.out.println("Maximun products reached.");
+        if (catalog.size() < MAX_DIF_PRODUCTS) {
+            catalog.add(product);
+        } else {
+            System.out.println("Maximum products reached.");
         }
     }
 
     public static Product getProduct(int id) {
         int index = indexOfProduct(id);
         if (index != -1) {
-            return catalog[index];
+            return catalog.get(index);
         } else {
             return null;
         }
     }
 
 
-    public static Product[] getCatalog() {
-        return catalog;
-    }
+    public static List<Product> getCatalog() {return catalog;}
 
     public static int getAmountProducts() {
-        return amountProducts;
+        return catalog.size();
     }
 
+
     public static boolean remove(int id) { //Déjalo en boolean, puede ser util luego
-        boolean removed;
         int index = indexOfProduct(id);
+        boolean removed = false;
         if (index != -1) {
-            catalog[index] = null;
-            Utilities.arrayShifterToLeft(catalog);
-            amountProducts--;
+            catalog.remove(index);
             removed = true;
-        } else {
-            removed = false;
         }
         return removed;
     }
 
     //busca el producto y, devuelve su índice, o -1 si no lo encuentra
     public static int indexOfProduct(int id) {
+        int index = -1;
+        boolean found = false;
         int i = 0;
-        while (i < amountProducts && catalog[i].getId() != id)
-            i++;
-        if (i < amountProducts)
-            return i;
-        else {
-            return -1;
+        while (i < catalog.size() && !found) {
+            if (catalog.get(i).getId() == id) {
+                index = i;
+                found = true;
+            } else {
+                i++;
+            }
         }
-
+        return index;
     }
 
     //true=exist false=doesn't exist
@@ -65,8 +64,7 @@ public class Catalog {
     }
 
     public static boolean isEmpty() {
-        return catalog[0] == null;
+        return catalog.isEmpty();
     }
-
 
 }
