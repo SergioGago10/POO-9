@@ -13,7 +13,7 @@ public class CatalogTest {
     @Before
     public void resetCatalog() {
         //Reiniciar catalogo despues de cualquier test
-        List<Product> catalog = Catalog.getCatalog();
+        List<BasicProduct> catalog = Catalog.getCatalog();
         catalog.clear();
         try {
             var field = Catalog.class.getDeclaredField("amountProducts");
@@ -24,11 +24,11 @@ public class CatalogTest {
 
     @Test
     public void addProduct_incrementaCantidadYSePuedeRecuperar() {
-        Product p = new Product(1, "Libro", Category.BOOK, 25.0);
+        BasicProduct p = new BasicProduct(1, "Libro", Category.BOOK, 25.0);
         Catalog.addProduct(p);
 
         assertEquals(1, Catalog.getAmountProducts());
-        Product obtenido = Catalog.getProduct(1);
+        BasicProduct obtenido = Catalog.getProduct(1);
         assertNotNull(obtenido);
         assertEquals("Libro", obtenido.getName());
         assertEquals(Category.BOOK, obtenido.getCategory());
@@ -36,7 +36,7 @@ public class CatalogTest {
 
     @Test
     public void getProduct_devuelveNullSiNoExiste() {
-        Product p = new Product(1, "A", Category.MERCH, 10.0);
+        BasicProduct p = new BasicProduct(1, "A", Category.MERCH, 10.0);
         Catalog.addProduct(p);
 
         assertNull(Catalog.getProduct(999)); // id inexistente
@@ -44,7 +44,7 @@ public class CatalogTest {
 
     @Test
     public void idExists_funcionaCorrectamente() {
-        Product p = new Product(5, "Pendrive", Category.ELECTRONIC, 12.0);
+        BasicProduct p = new BasicProduct(5, "Pendrive", Category.ELECTRONIC, 12.0);
         Catalog.addProduct(p);
 
         assertTrue(Catalog.idExists(5));
@@ -53,8 +53,8 @@ public class CatalogTest {
 
     @Test
     public void indexOfProduct_devuelveIndiceCorrecto() {
-        Product p1 = new Product(1, "A", Category.MERCH, 1.0);
-        Product p2 = new Product(2, "B", Category.BOOK, 2.0);
+        BasicProduct p1 = new BasicProduct(1, "A", Category.MERCH, 1.0);
+        BasicProduct p2 = new BasicProduct(2, "B", Category.BOOK, 2.0);
         Catalog.addProduct(p1);
         Catalog.addProduct(p2);
 
@@ -65,9 +65,9 @@ public class CatalogTest {
 
     @Test
     public void remove_eliminaYDesplazaElementos() {
-        Product p1 = new Product(1, "A", Category.MERCH, 1.0);
-        Product p2 = new Product(2, "B", Category.BOOK, 2.0);
-        Product p3 = new Product(3, "C", Category.CLOTHES, 3.0);
+        BasicProduct p1 = new BasicProduct(1, "A", Category.MERCH, 1.0);
+        BasicProduct p2 = new BasicProduct(2, "B", Category.BOOK, 2.0);
+        BasicProduct p3 = new BasicProduct(3, "C", Category.CLOTHES, 3.0);
         Catalog.addProduct(p1);
         Catalog.addProduct(p2);
         Catalog.addProduct(p3);
@@ -76,14 +76,14 @@ public class CatalogTest {
         assertTrue(removed);
         assertEquals(2, Catalog.getAmountProducts());
 
-        List<Product> cat = Catalog.getCatalog();
+        List<BasicProduct> cat = Catalog.getCatalog();
         assertEquals(3, cat.get(1).getId());
         assertFalse(Catalog.idExists(2));
     }
 
     @Test
     public void remove_devuelveFalseSiNoExiste() {
-        Product p = new Product(1, "A", Category.MERCH, 1.0);
+        BasicProduct p = new BasicProduct(1, "A", Category.MERCH, 1.0);
         Catalog.addProduct(p);
 
         boolean removed = Catalog.remove(99);
@@ -94,7 +94,7 @@ public class CatalogTest {
     @Test
     public void isEmpty_trueSiNoHayProductos() {
         assertTrue(Catalog.isEmpty());
-        Product p = new Product(1, "A", Category.MERCH, 1.0);
+        BasicProduct p = new BasicProduct(1, "A", Category.MERCH, 1.0);
         Catalog.addProduct(p);
         assertFalse(Catalog.isEmpty());
     }
@@ -103,12 +103,12 @@ public class CatalogTest {
     public void addProduct_noRompeCuandoSeSuperaMaximo() {
 
         for (int i = 0; i < 200; i++) {
-            Catalog.addProduct(new Product(i + 1, "Prod" + i, Category.MERCH, 1.0));
+            Catalog.addProduct(new BasicProduct(i + 1, "Prod" + i, Category.MERCH, 1.0));
         }
         assertEquals(200, Catalog.getAmountProducts());
 
         try {
-            Catalog.addProduct(new Product(9999, "Extra", Category.MERCH, 1.0));
+            Catalog.addProduct(new BasicProduct(9999, "Extra", Category.MERCH, 1.0));
 
         } catch (Exception e) {
             fail("El método addProduct lanzó una excepción al superar el máximo: " + e.getMessage());

@@ -5,9 +5,10 @@ import java.util.List;
 
 public class Catalog {
     private final static int MAX_DIF_PRODUCTS = 200;
-    private static List<Product> catalog = new ArrayList<>();
+    private static List<BasicProduct> catalog = new ArrayList<>();
+    private static int newId = 0;
 
-    public static void addProduct(Product product) {
+    public static void addProduct(BasicProduct product) {
         if (catalog.size() < MAX_DIF_PRODUCTS) {
             catalog.add(product);
         } else {
@@ -15,7 +16,7 @@ public class Catalog {
         }
     }
 
-    public static Product getProduct(int id) {
+    public static BasicProduct getProduct(int id) {
         int index = indexOfProduct(id);
         if (index != -1) {
             return catalog.get(index);
@@ -25,7 +26,9 @@ public class Catalog {
     }
 
 
-    public static List<Product> getCatalog() {return catalog;}
+    public static List<BasicProduct> getCatalog() {
+        return catalog;
+    }
 
     public static int getAmountProducts() {
         return catalog.size();
@@ -65,6 +68,12 @@ public class Catalog {
 
     public static boolean isEmpty() {
         return catalog.isEmpty();
+    }
+
+    public static int generateNewProductId() {
+        while (idExists(newId))
+            newId++;
+        return newId;
     }
 
 }

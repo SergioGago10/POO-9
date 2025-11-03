@@ -1,5 +1,5 @@
-package upm;
 
+package upm;
 
 import org.junit.After;
 import org.junit.Before;
@@ -33,12 +33,12 @@ private final PrintStream originalErr = System.err;
 
     /* ---------- Helpers ---------- */
 
-   private Product p(int id, String name, Category cat, double price) {
-       return new Product(id, name, cat, price);
+   private BasicProduct p(int id, String name, Category cat, double price) {
+       return new BasicProduct(id, name, cat, price);
     }
 
-    private void seedCatalog(Product... ps) {
-        for (Product prod : ps) {
+    private void seedCatalog(BasicProduct... ps) {
+        for (BasicProduct prod : ps) {
             Catalog.addProduct(prod);
         }
     }
@@ -48,7 +48,7 @@ private final PrintStream originalErr = System.err;
     @Test
    public void aplica10PorcSiHayDosBOOK_enLineasYTotales() {
        // 2 libros de 30 → -3.00 por línea, total -6.00, final 54.00
-       Product libro = p(1001, "Libro POO V2", Category.BOOK, 30.0);
+       BasicProduct libro = p(1001, "Libro POO V2", Category.BOOK, 30.0);
        seedCatalog(libro);
 
        Ticket t = new Ticket();
@@ -67,7 +67,7 @@ private final PrintStream originalErr = System.err;
 
     @Test
     public void sinDescuentoConUnaSolaUnidadPorCategoria() {
-        Product shirt = p(1002, "Camiseta talla:M UPM", Category.CLOTHES, 15.0);
+        BasicProduct shirt = p(1002, "Camiseta talla:M UPM", Category.CLOTHES, 15.0);
         seedCatalog(shirt);
 
         Ticket t = new Ticket();
@@ -84,8 +84,8 @@ private final PrintStream originalErr = System.err;
 
    @Test
     public void imprimeOrdenadoPorNombreAlfabetico() {
-        Product libro = p(1003, "Libro POO", Category.BOOK, 30.0);
-        Product camisa = p(1004, "Camiseta UPM", Category.CLOTHES, 15.0);
+        BasicProduct libro = p(1003, "Libro POO", Category.BOOK, 30.0);
+        BasicProduct camisa = p(1004, "Camiseta UPM", Category.CLOTHES, 15.0);
         seedCatalog(libro, camisa);
 
         Ticket t = new Ticket();
@@ -117,8 +117,8 @@ private final PrintStream originalErr = System.err;
 
     @Test
     public void removeProductFromTicket_eliminaTodasLasAparicionesYActualizaDescuentos() {
-        Product libro = p(1005, "Libro", Category.BOOK, 20.0);
-        Product merch = p(1006, "Llaveros", Category.MERCH, 5.0);
+        BasicProduct libro = p(1005, "Libro", Category.BOOK, 20.0);
+        BasicProduct merch = p(1006, "Llaveros", Category.MERCH, 5.0);
        seedCatalog(libro, merch);
 
         Ticket t = new Ticket();
@@ -139,7 +139,7 @@ private final PrintStream originalErr = System.err;
     }
     public void descuentosPorCategoria_con2Unidades(Category cat, double price, int qty, String expectedTotalDiscountStr) {
         // Cada ítem se descuenta según tu switch (factores: 0.95, 0.93, 0.9, 0.97, 1)
-        Product prod = p(2000 + cat.ordinal(), "Prod " + cat, cat, price);
+        BasicProduct prod = p(2000 + cat.ordinal(), "Prod " + cat, cat, price);
         seedCatalog(prod);
 
         Ticket t = new Ticket();
@@ -154,8 +154,8 @@ private final PrintStream originalErr = System.err;
 
     @Test
     public void getTotalPriceAndDiscounts_devuelveArregloConTotalesEnOrden() {
-        Product a = p(1010, "AAA", Category.BOOK, 30.0);       // dos → 10% c/u
-        Product b = p(1011, "BBB", Category.CLOTHES, 15.0);    // uno → 0%
+        BasicProduct a = p(1010, "AAA", Category.BOOK, 30.0);       // dos → 10% c/u
+        BasicProduct b = p(1011, "BBB", Category.CLOTHES, 15.0);    // uno → 0%
        seedCatalog(a, b);
 
         Ticket t = new Ticket();
@@ -168,3 +168,4 @@ private final PrintStream originalErr = System.err;
         assertEquals(6.0,  arr[2], 1e-6);  // totalDiscount
     }
 }
+

@@ -1,19 +1,12 @@
 package upm;
 
-enum Category {
-    MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONIC
-}
+public abstract class ProductAbstract {
+    public final static int MAX_CHAR_NAME = 100;
+    public int id;
+    public String name;
+    public double price;
 
-public class Product {
-    private final static int MAX_CHAR_NAME = 100;
-    private int id;
-    private String name;
-    private Category category;
-    private double price;
-    //El precio debe ser double, ya que con los descuentos obtenemos decimales y además los precios pueden tener decimales al ser euros y centimos
-    //no creo que caparlo a un int sea buena idea
-
-    public Product(int id, String name, Category category, double price) {
+    public ProductAbstract(int id, String name, double price) {
         if (id <= 0) {
             throw new IllegalArgumentException("id must be positive.");
         }
@@ -27,22 +20,15 @@ public class Product {
         }
         this.id = id;
         this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
-        this.category = category;
-        this.price=price;
+        this.price = price;
     }
-
 
     public static int getMaxCharName(){
         return MAX_CHAR_NAME;
     }
 
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
     }
 
     public void setPrice(double price) {
@@ -51,10 +37,6 @@ public class Product {
 
     public double getPrice() {
         return price;
-    }
-
-    public Category getCategory() {
-        return category;
     }
 
     public String getName() {
@@ -66,4 +48,3 @@ public class Product {
     }
 
 }
-

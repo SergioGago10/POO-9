@@ -4,19 +4,19 @@ import java.util.*;
 
 public class Ticket {
     private final static int MAX_PRODUCTOS = 100;
-    private List<Product> productsList;
+    private List<BasicProduct> productsList;
     private Map<Category, Boolean> hasTwoProductsInTicket;
     //poner un amountProducts es inútil, los productos que hay es el tamaño del arraylist
 
     public Ticket() {
         productsList = new ArrayList<>();
         // El arraylist es util, ya que vamos a recorrer la lista siempre y la eliminación de productos será al inicio mitad y final,
-        // por lo que una linked list no supone mucha diferencia, además que con tan pocos elementos no hay ninguna diferencia notoria entre
-        // linked list y array list, es simplemente decision propia
-        // Además como accedemos a elementos con un índice el arraylist es esencial en estos casos concretos, ya que una linked list no te accede directamente,
-        // un arraylist sí que te puede acceder directamente al índice indicado.
-        // Las linked lists serán útiles si tenemos un MAX_PRODUCTOS = 1M; o algo similar, ya que el arraylist no seria conveniente por tiempos de eliminacion de elementos
-        // en esa situación sí que sería más util usar la linked list u otra estructura de datos mas avanzada (a pesar de que el acceso a elementos por indice sea mas costoso)
+        //        // por lo que una linked list no supone mucha diferencia, además que con tan pocos elementos no hay ninguna diferencia notoria entre
+        //        // linked list y array list, es simplemente decision propia
+        //        // Además como accedemos a elementos con un índice el arraylist es esencial en estos casos concretos, ya que una linked list no te accede directamente,
+        //        // un arraylist sí que te puede acceder directamente al índice indicado.
+        //        // Las linked lists serán útiles si tenemos un MAX_PRODUCTOS = 1M; o algo similar, ya que el arraylist no seria conveniente por tiempos de eliminacion de elementos
+        //        // en esa situación sí que sería más util usar la linked list u otra estructura de datos mas avanzada (a pesar de que el acceso a elementos por indice sea mas costoso)
 
         Category[] allCategories = Category.values();//Pillamos todos los enum de la clase product
         this.hasTwoProductsInTicket = new HashMap<>();
@@ -44,7 +44,7 @@ public class Ticket {
          * https://docs.oracle.com/javase/8/docs/api/java/util/List.html#sort-java.util.Comparator-
          * https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html
          */
-        productsList.sort(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER));
+        productsList.sort(Comparator.comparing(BasicProduct::getName, String.CASE_INSENSITIVE_ORDER));
     }
 
     /**
@@ -59,7 +59,7 @@ public class Ticket {
     public double[] getTotalPriceAndDiscounts() {
         double finalPriceWithoutDiscount = 0;
         double finalPriceWithDiscount = 0;
-        for (Product currentProduct : productsList) {
+        for (BasicProduct currentProduct : productsList) {
             double price = currentProduct.getPrice(); // suponemos que getPrice() devuelve int o double
             finalPriceWithoutDiscount += price;
             boolean applyDiscount = hasTwoProductsInTicket.get(currentProduct.getCategory());
@@ -78,7 +78,7 @@ public class Ticket {
 
     public void addProductToTicket(int productID, int quantity) {
         boolean productAdded = false;
-        Product productToBeAdded = Catalog.getProduct(productID);
+        BasicProduct productToBeAdded = Catalog.getProduct(productID);
         if (productToBeAdded != null) {
             boolean canAdd = true;
             for (int i = 0; (i < quantity) && (canAdd); i++) {
@@ -105,7 +105,7 @@ public class Ticket {
         } else {
             // Ordenamos los productos por nombre antes de imprimirlos
             sortProducts();
-            for (Product currentProduct : productsList) {
+            for (BasicProduct currentProduct : productsList) {
                 System.out.print("{class:" + currentProduct.getClass().getSimpleName() +
                         ", id:" + currentProduct.getId() +
                         ", name:" + currentProduct.getName() +
@@ -139,7 +139,7 @@ public class Ticket {
         }
 
         //Recorremos todos los productos y contamos las apariciones de cada producto, actualizándolo en el hashmap
-        for (Product p : productsList) {
+        for (BasicProduct p : productsList) {
             Category cat = p.getCategory();
             countMap.put(cat, countMap.get(cat) + 1);
         }
@@ -150,7 +150,7 @@ public class Ticket {
         }
     }
 
-    private double whatDiscountToApply(Product product) {
+    private double whatDiscountToApply(BasicProduct product) {
         double discount;
         switch (product.getCategory()) {
             case STATIONERY:
@@ -173,10 +173,11 @@ public class Ticket {
     }
 
     public void removeProductFromTicket(int productID) {
-        //Usamos un iterator, ya que en la eliminacion es lo eficiente y lo que se debe hacer, un for loop con ajuste de índice sería incorrecto y mala práctica
-        Iterator<Product> it = productsList.iterator();
+        //Usamos un iterator, ya que en la eliminacion es lo eficiente y lo que se debe hacer, un for loop con
+        // ajuste de índice sería incorrecto y mala práctica
+        Iterator<BasicProduct> it = productsList.iterator();
         while (it.hasNext()) {
-            Product p = it.next();
+            BasicProduct p = it.next();
             if (p.getId() == productID) {
                 it.remove();
             }
@@ -193,8 +194,6 @@ public class Ticket {
 
         System.out.println("ticket  new:  ok");
     }
-
-
 
 
 }
