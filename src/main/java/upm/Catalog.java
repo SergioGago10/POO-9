@@ -1,5 +1,7 @@
 package upm;
 
+import upm.Products.BasicProduct;
+
 import java.util.ArrayList;
 import java.util.List;
 

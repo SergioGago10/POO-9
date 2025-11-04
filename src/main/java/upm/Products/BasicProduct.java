@@ -1,12 +1,15 @@
-package upm;
+package upm.Products;
 
-public abstract class ProductAbstract {
+import upm.Catalog;
+
+public class BasicProduct implements IProduct {
     public final static int MAX_CHAR_NAME = 100;
     public int id;
     public String name;
     public double price;
+    private Category category;
 
-    public ProductAbstract(int id, String name, double price) {
+    public BasicProduct(int id, String name, Category category, double price) {
         if (id <= 0) {
             throw new IllegalArgumentException("id must be positive.");
         }
@@ -21,12 +24,25 @@ public abstract class ProductAbstract {
         this.id = id;
         this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
         this.price = price;
+        this.category = category;
+    }
+
+    public BasicProduct(String name, Category category, double price) {
+        this(Catalog.generateNewProductId(),name,category,price);
     }
 
     public static int getMaxCharName(){
         return MAX_CHAR_NAME;
     }
 
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -46,5 +62,5 @@ public abstract class ProductAbstract {
     public int getId() {
         return id;
     }
-
 }
+

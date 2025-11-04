@@ -1,5 +1,7 @@
 package upm;
 
+import upm.Products.BasicProduct;
+
 public class Utilities {
 
     public static void arrayShifterToLeft(BasicProduct[] product) {

@@ -1,6 +1,8 @@
 package upm;
 
 import org.junit.Test;
+import upm.Products.BasicProduct;
+import upm.Products.Category;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;

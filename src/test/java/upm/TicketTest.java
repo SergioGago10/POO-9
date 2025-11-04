@@ -4,6 +4,8 @@ package upm;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import upm.Products.BasicProduct;
+import upm.Products.Category;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

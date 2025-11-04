@@ -1,5 +1,8 @@
 package upm;
 
+import upm.Products.BasicProduct;
+import upm.Products.Category;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;

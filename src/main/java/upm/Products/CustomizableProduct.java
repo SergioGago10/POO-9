@@ -1,4 +1,4 @@
-package upm;
+package upm.Products;
 
 public class CustomizableProduct extends BasicProduct {
     private int maxPersonalized;

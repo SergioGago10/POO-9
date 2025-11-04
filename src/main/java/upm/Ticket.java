@@ -1,5 +1,8 @@
 package upm;
 
+import upm.Products.BasicProduct;
+import upm.Products.Category;
+
 import java.util.*;
 
 public class Ticket {
