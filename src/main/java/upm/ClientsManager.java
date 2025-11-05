@@ -1,41 +1,46 @@
 package upm;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
-public class ClientsManager extends Client{
+public class ClientsManager {
     public static List<Client> clientsList = new ArrayList();
 
-    public ClientsManager(String name, String dni, String email, int cashId) {
-        super(name, dni, email, cashId);
-    }
-
     public static boolean addClient (Client client){
+        if (client==null) return false;
         ListIterator<Client> it = clientsList.listIterator();
         while (it.hasNext()){
-            Client current = it.next();
-            if (current.equals(client)){
+            String currentDni = it.next().getDni();
+            if (currentDni.equals(client.getDni())){
                 return false;
             }
         }
-        it.add(client);
-        return true;
+        return clientsList.add(client);
     }
 
     public static boolean removeClient (Client client){
         Iterator<Client> it = clientsList.iterator();
         boolean found = false;
         while (it.hasNext() && !found){
-            Client current = it.next();
-            if (current.equals(client)){
+            String currentDni = it.next().getDni();
+            if (currentDni.equals(client.getDni())){
+                it.remove();
+                Utilities.arrayShifterToLeft();
                 found=true;
             }
         }
         return found;
     }
-    public static String showClients(){
-
+    public static StringBuilder showClients(){
+        StringBuilder sb = new StringBuilder();
+        if (clientsList.isEmpty()){
+            sb.append("No hay clientes registrados en el sistema.");
+            return sb;
+        }
+        Collections.sort(clientsList,Comparator.comparing(Client::getName,String.CASE_INSENSITIVE_ORDER));
+        sb.append("Lista de clientes:\n" );
+        for (Client client : clientsList){
+            sb.append(client.toString());
+        }
+        return sb;
     }
 }
