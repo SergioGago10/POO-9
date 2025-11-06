@@ -12,6 +12,7 @@ public class ProdCommands extends Command {
         prodcommands.add(new ProdAddMeetingCommand());
         prodcommands.add(new ProdListCommand());
         prodcommands.add(new ProdRemoveCommand());
+        prodcommands.add(new ProdUpdateCommand());
     }
 
     @Override
