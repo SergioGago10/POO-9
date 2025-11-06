@@ -1,10 +1,10 @@
 package upm;
 
 public abstract class User {
-    public final String name;
-    public final String dni;
-    public final String email;
-    public final int cashId;
+    public String name;
+    public String dni;
+    public String email;
+    public int cashId;
 
     public User(String name, String dni, String email, int cashId){
         this.name = name;

@@ -14,5 +14,16 @@ public class Utilities {
             }
         }
     }
+    public static void arrayShifterToLeft(Client[] clients) {
+        for (int i = 0; i < clients.length - 1; i++) {
+            if (clients[i] == null) {
+                for (int j = i; j < clients.length - 1; j++) {
+                    clients[j] = clients[j + 1];
+                }
+                clients[clients.length - 1] = null;
+            }
+        }
+    }
+
 
 }
