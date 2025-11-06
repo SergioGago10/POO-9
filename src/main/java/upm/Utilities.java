@@ -2,6 +2,8 @@ package upm;
 
 import upm.Products.BasicProduct;
 
+import java.util.List;
+
 public class Utilities {
 
     public static void arrayShifterToLeft(BasicProduct[] product) {
@@ -14,13 +16,13 @@ public class Utilities {
             }
         }
     }
-    public static void arrayShifterToLeft(Client[] clients) {
-        for (int i = 0; i < clients.length - 1; i++) {
-            if (clients[i] == null) {
-                for (int j = i; j < clients.length - 1; j++) {
-                    clients[j] = clients[j + 1];
+    public static void arrayShifterToLeft(List<Client> clients) {
+        for (int i = 0; i < clients.size() - 1; i++) {
+            if (clients.get(i) == null) {
+                for (int j = i; j < clients.size() - 1; j++) {
+                    clients.set(j, clients.get(j + 1));
                 }
-                clients[clients.length - 1] = null;
+                clients.set(clients.size() - 1, null);
             }
         }
     }

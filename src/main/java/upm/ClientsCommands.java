@@ -1,17 +1,17 @@
 package upm;
-
 import java.util.*;
 
-public class ClientsManager {
+public class ClientsCommands {
     public static List<Client> clientsList = new ArrayList();
 
     public static boolean addClient (Client client){
-        if (client==null) return false;
+        boolean added = false;
+        if (client==null) return added;
         ListIterator<Client> it = clientsList.listIterator();
         while (it.hasNext()){
             String currentDni = it.next().getDni();
             if (currentDni.equals(client.getDni())){
-                return false;
+                return added;
             }
         }
         return clientsList.add(client);
@@ -19,16 +19,16 @@ public class ClientsManager {
 
     public static boolean removeClient (Client client){
         Iterator<Client> it = clientsList.iterator();
-        boolean found = false;
-        while (it.hasNext() && !found){
+        boolean removed = false;
+        while (it.hasNext() && !removed){
             String currentDni = it.next().getDni();
             if (currentDni.equals(client.getDni())){
                 it.remove();
-                Utilities.arrayShifterToLeft(client);
-                found=true;
+                Utilities.arrayShifterToLeft(clientsList);
+                removed =true;
             }
         }
-        return found;
+        return removed;
     }
     public static StringBuilder showClients(){
         StringBuilder sb = new StringBuilder();
