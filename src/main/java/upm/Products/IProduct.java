@@ -10,5 +10,5 @@ public interface IProduct {
     double getPrice();
     String getName();
     int getId();
-
+    String toString();
 }

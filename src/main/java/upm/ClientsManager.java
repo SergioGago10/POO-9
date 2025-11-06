@@ -24,7 +24,7 @@ public class ClientsManager {
             String currentDni = it.next().getDni();
             if (currentDni.equals(client.getDni())){
                 it.remove();
-                Utilities.arrayShifterToLeft();
+                Utilities.arrayShifterToLeft(client);
                 found=true;
             }
         }

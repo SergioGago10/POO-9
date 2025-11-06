@@ -1,16 +1,17 @@
 package upm;
 
 import upm.Products.BasicProduct;
+import upm.Products.IProduct;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Catalog {
     private final static int MAX_DIF_PRODUCTS = 200;
-    private static List<BasicProduct> catalog = new ArrayList<>();
+    private static List<IProduct> catalog = new ArrayList<>();
     private static int newId = 0;
 
-    public static void addProduct(BasicProduct product) {
+    public static void addProduct(IProduct product) {
         if (catalog.size() < MAX_DIF_PRODUCTS) {
             catalog.add(product);
         } else {
@@ -18,7 +19,7 @@ public class Catalog {
         }
     }
 
-    public static BasicProduct getProduct(int id) {
+    public static IProduct getProduct(int id) {
         int index = indexOfProduct(id);
         if (index != -1) {
             return catalog.get(index);
@@ -28,7 +29,7 @@ public class Catalog {
     }
 
 
-    public static List<BasicProduct> getCatalog() {
+    public static List<IProduct> getCatalog() {
         return catalog;
     }
 

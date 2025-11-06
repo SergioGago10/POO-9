@@ -27,9 +27,6 @@ public class BasicProduct implements IProduct {
         this.category = category;
     }
 
-    public BasicProduct(String name, Category category, double price) {
-        this(Catalog.generateNewProductId(),name,category,price);
-    }
 
     public static int getMaxCharName(){
         return MAX_CHAR_NAME;
@@ -61,6 +58,17 @@ public class BasicProduct implements IProduct {
 
     public int getId() {
         return id;
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder sb= new StringBuilder();
+        sb.append("  {class: BasicProduct");
+        sb.append(",id: ").append(id);
+        sb.append(",name:").append(name);
+        sb.append(",Category:").append(category);
+        sb.append(",price:").append(String.format("%.2f", price)).append("}");
+        return sb.toString();
     }
 }
 

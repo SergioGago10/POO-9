@@ -1,5 +1,6 @@
 package upm.Products;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 //hay que poner minutos
@@ -7,12 +8,12 @@ public abstract class Event implements IProduct {
     public int id;
     public String name;
     public double price;
-    private int maxParticipants;
-    private LocalDateTime creationDate;
-    private LocalDateTime expiration;
+    public int maxParticipants;
+    public LocalDateTime creationDate;
+    public LocalDate expiration;
 
 
-    public Event(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDateTime expiration) {
+    public Event(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDate expiration, int maxParticipants) {
         if (id <= 0) {
             throw new IllegalArgumentException("id must be positive.");
         }
@@ -29,14 +30,13 @@ public abstract class Event implements IProduct {
         this.price = pricePerson;
         this.creationDate = creationDate;
         this.expiration = expiration;
+        this.maxParticipants=maxParticipants;
     }
 
-    public Event(int id, String name, double pricePerson, LocalDateTime expiration) {
-        this(id, name, pricePerson, LocalDateTime.now(), expiration);
-        if ((creationDate.plusHours(12).isAfter(expiration))) {
-            throw new IllegalArgumentException("The meeting should be planned at least 12 hours before");
-        }
+    public Event(int id, String name, double pricePerson, LocalDate expiration, int maxParticipants) {
+        this(id, name, pricePerson, LocalDateTime.now(), expiration, maxParticipants);
     }
+
 
     public void setName(String name) {
         this.name = name;
@@ -58,5 +58,15 @@ public abstract class Event implements IProduct {
         return id;
     }
 
-
+    @Override
+    public String toString() {
+        StringBuilder sb= new StringBuilder();
+        sb.append("  {class: BasicProduct");
+        sb.append(",id: ").append(id);
+        sb.append(",name:").append(name);
+        sb.append(",creationDate: ").append(creationDate);
+        sb.append(",plannedDate: ").append(expiration);
+        sb.append(",price:").append(String.format("%.2f", price)).append("}");
+        return sb.toString();
+    }
 }
