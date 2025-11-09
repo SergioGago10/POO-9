@@ -2,9 +2,9 @@ package upm.Users;
 
 import java.lang.classfile.ClassElement;
 
-public class Client extends upm.User {
+public class Client extends User {
     public String dni;
-    public Client(String name, String dni, String email, int cashId){
+    public Client(String name, String dni, String email, String cashId){
         super(name,email,cashId);
         this.dni=dni;
     }
