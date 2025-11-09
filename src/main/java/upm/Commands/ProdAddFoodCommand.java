@@ -1,0 +1,64 @@
+package upm.Commands;
+
+import upm.Catalog;
+import upm.Products.FoodProduct;
+import upm.Products.IProduct;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+public class ProdAddFoodCommand extends Command {
+
+    public ProdAddFoodCommand() {
+        super("addFood");
+    }
+
+    @Override
+    public boolean apply(String[] args) {
+        boolean applied;
+        if (args.length < 6) {
+            applied = false;
+        } else {
+            try {
+                int i = 2;
+                int id;
+                IProduct product;
+                if (args[i].contains("\"")) {
+                    id = Catalog.generateNewProductId();
+                } else {
+                    id = Integer.parseInt(args[i]);
+                    i++;
+                }
+                String name = args[i].replace("\"", "");
+                i++;
+                double price = Double.parseDouble(args[i]);
+                i++;
+                String[] dateStr = args[i].split("-");
+                int expirationYear = Integer.parseInt(dateStr[0]);
+                int expirationMonth = Integer.parseInt(dateStr[1]);
+                int expirationDay = Integer.parseInt(dateStr[2]);
+                LocalDate date = LocalDate.of(expirationYear, expirationMonth, expirationDay);
+                i++;
+                int maxPeople = Integer.parseInt(args[i]);
+                i++;
+                if (i == args.length - 1) {
+                    String[] creationDateStr = args[i].split("-");
+                    int creationYear = Integer.parseInt(creationDateStr[0]);
+                    int creationMonth = Integer.parseInt(creationDateStr[1]);
+                    int creationDay = Integer.parseInt(creationDateStr[2]);
+                    int creationHour = Integer.parseInt(creationDateStr[3]);
+                    int creationMinute = Integer.parseInt(creationDateStr[4]);
+                    LocalDateTime creationDate = LocalDateTime.of(creationYear, creationMonth, creationDay,
+                            creationHour, creationMinute);
+                    product = new FoodProduct(id, name, price, creationDate, date, maxPeople);
+                } else
+                    product = new FoodProduct(id, name, price, date, maxPeople);
+                Catalog.addProduct(product);
+                applied = true;
+            } catch (NumberFormatException ex) {
+                applied = false;
+            }
+        }
+        return applied;
+    }
+}

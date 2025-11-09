@@ -1,5 +1,8 @@
 package upm;
 
+import upm.Products.BasicProduct;
+import upm.Products.Category;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -221,22 +224,22 @@ public class App {
             if (Catalog.idExists(id)) {
                 System.err.println("Product with id " + id + " already exist.");
             } else {
-                StringBuilder name = new StringBuilder(Product.getMaxCharName());
+                StringBuilder name = new StringBuilder(BasicProduct.getMaxCharName());
                 do {
                     i++;
                     if (i != 3)
                         name.append(" ");
                     name.append(arrayUserInput[i]);
                 } while (!arrayUserInput[i].endsWith("\""));
-                if (name.length() > Product.getMaxCharName())
-                    System.err.println("Maximun " + Product.getMaxCharName() + " characteres on name");
+                if (name.length() > BasicProduct.getMaxCharName())
+                    System.err.println("Maximun " + BasicProduct.getMaxCharName() + " characteres on name");
                 else {
                     i++;
                     //"Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC."
                     Category category = Category.valueOf(arrayUserInput[i].toUpperCase());
                     i++;
                     double price = Double.parseDouble(arrayUserInput[i]);
-                    Product product = new Product(id, name.toString(), category, price);
+                    BasicProduct product = new BasicProduct(id, name.toString(), category, price);
                     Catalog.addProduct(product);
                     //Imprimimos por pantalla el producto que hemos puesto
                     System.out.print("{class:" + product.getClass().getSimpleName());
@@ -258,7 +261,7 @@ public class App {
     }
 
     private void prodListCommand() {
-        List<Product> productList = Catalog.getCatalog();
+        List<BasicProduct> productList = Catalog.getCatalog();
         if (productList.isEmpty()) {
             System.out.println("The catalog is empty.");
         } else {
@@ -279,12 +282,12 @@ public class App {
         try {
             boolean updated;
             int id = Integer.parseInt(arrayUserInput[2]);
-            Product updatedProduct = Catalog.getProduct(id);
+            BasicProduct updatedProduct = Catalog.getProduct(id);
             int index = Catalog.indexOfProduct(id);
             if (index != -1 && updatedProduct != null) {
                 switch (arrayUserInput[3]) {
                     case "NAME":
-                        StringBuilder name = new StringBuilder(Product.getMaxCharName());
+                        StringBuilder name = new StringBuilder(BasicProduct.getMaxCharName());
                         int i = 3;
                         do {
                             i++;
@@ -335,7 +338,7 @@ public class App {
     private void prodRemoveCommand(String[] arrayUserInput) {
         try {
             int id = Integer.parseInt(arrayUserInput[2]);
-            Product productRemoved = Catalog.getProduct(id);
+            BasicProduct productRemoved = Catalog.getProduct(id);
             if (productRemoved != null) { //Esto ya directamente comprueba si se puede eliminar o no por lo que no importa no comprobarlo antes
                 System.out.print("{class:" + productRemoved.getClass().getSimpleName() +
                         ",id:" + productRemoved.getId() +

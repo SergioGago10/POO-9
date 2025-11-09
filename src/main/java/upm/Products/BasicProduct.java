@@ -1,19 +1,15 @@
-package upm;
+package upm.Products;
 
-enum Category {
-    MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONIC
-}
+import upm.Catalog;
 
-public class Product {
-    private final static int MAX_CHAR_NAME = 100;
-    private int id;
-    private String name;
+public class BasicProduct implements IProduct {
+    public final static int MAX_CHAR_NAME = 100;
+    public int id;
+    public String name;
+    public double price;
     private Category category;
-    private double price;
-    //El precio debe ser double, ya que con los descuentos obtenemos decimales y además los precios pueden tener decimales al ser euros y centimos
-    //no creo que caparlo a un int sea buena idea
 
-    public Product(int id, String name, Category category, double price) {
+    public BasicProduct(int id, String name, Category category, double price) {
         if (id <= 0) {
             throw new IllegalArgumentException("id must be positive.");
         }
@@ -27,8 +23,8 @@ public class Product {
         }
         this.id = id;
         this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
+        this.price = price;
         this.category = category;
-        this.price=price;
     }
 
 
@@ -37,12 +33,15 @@ public class Product {
     }
 
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPrice(double price) {
@@ -53,10 +52,6 @@ public class Product {
         return price;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
     public String getName() {
         return name;
     }
@@ -65,5 +60,15 @@ public class Product {
         return id;
     }
 
+    @Override
+    public String toString(){
+        StringBuilder sb= new StringBuilder();
+        sb.append("  {class: BasicProduct");
+        sb.append(",id: ").append(id);
+        sb.append(",name:").append(name);
+        sb.append(",Category:").append(category);
+        sb.append(",price:").append(String.format("%.2f", price)).append("}");
+        return sb.toString();
+    }
 }
 
