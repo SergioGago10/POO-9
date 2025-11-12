@@ -17,8 +17,10 @@ public class TicketManager {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm-");
         String datePart = now.format(fmt);
-        int randomPart = new Random().nextInt(100_000); // 5 cifras
-        return datePart + String.format("%05d", randomPart);
+        Random rand = new Random();
+        int num = rand.nextInt(100000); // [0 - 99999]
+        String fiveDigits = String.format("%05d", num); // obligamos que el numero sea de 5 digitos
+        return datePart + String.format("%05d", Integer.parseInt(fiveDigits));
     }
 
     public Ticket newTicket(int cashId, int userId) {
