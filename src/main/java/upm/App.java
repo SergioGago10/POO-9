@@ -233,18 +233,35 @@ public class App {
                         System.err.println("Usage: ticket print <ticketId> <cashId>");
                     } else{
                         String ticketId = arrayUserInput[2];
-                       // ticketActual.printCurrentTicket();
-                        System.out.println("ticket print: ok");
+                        int cashId = Integer.parseInt(arrayUserInput[3]);
+                        Ticket ticketAMostrar = ticketManager.getTicketById(ticketId);
+                        if(ticketAMostrar != null){
+                            ticketAMostrar.printFinalTicket();
+                            System.out.println("ticket print: ok");
+                        } else{
+                            System.err.println("Error: Ticket " + ticketId + " does not exist.");
+                        }
                     }
                 } catch (Exception e) {
                     System.err.println("Error printing ticket: " + e.getMessage());
                 }
                 break;
-
+            case "list":
+                try{
+                    if(arrayUserInput.length!=2){
+                        System.err.println("Usage: ticket list");
+                    }else{
+                        ticketManager.printListTickets();
+                        System.out.println("ticket list: ok");
+                    }
+                } catch (Exception e) {
+                    System.err.println("Error printing all ticket: " + e.getMessage());
+                }
+                break;
             default:
                 System.err.println("Unknown ticket command. Type 'help' to see the command list.");
         }
-        return ticketActual;
+        return ticketManager;
     }
 
 
