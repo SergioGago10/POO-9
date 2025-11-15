@@ -2,9 +2,12 @@ package upm;
 
 import upm.Products.BasicProduct;
 import upm.Products.Category;
+import upm.tickets.TicketManager;
+import upm.tickets.Ticket;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -29,7 +32,7 @@ public class App {
         // velocidad y eso provoca que los system.out se impriman antes que los system.err, dando lugar a texto mal puesto
         // No queda igual de bonito, pero es la unica solución que he podido encontrar
 
-        Ticket ticketActual = new Ticket(); //Antes de iniciar el programa se crea un ticket desde 0
+        TicketManager ticketManager = new TicketManager(); //Antes de iniciar el programa se crea un ticketManager
         if (scanner == null) {
             return;
         }
@@ -64,7 +67,7 @@ public class App {
                         break;
 
                     case "ticket":
-                        ticketActual = handleTicketCommand(arrayUserInput, ticketActual);
+                        ticketManager = handleTicketCommand(arrayUserInput, ticketManager);
                         break;
                     default:
                         System.err.println("Command not found. Type 'help' to see the command list.");
@@ -130,25 +133,61 @@ public class App {
         }
     }
 
-    private Ticket handleTicketCommand(String[] arrayUserInput, Ticket ticketActual) {
+    private TicketManager handleTicketCommand(String[] arrayUserInput, TicketManager ticketManager) {
         if (arrayUserInput.length < 2) {
-            System.err.println("Usage: ticket <new|add|remove|print>");
-            return ticketActual;
+            System.err.println("Usage: ticket <new|add|remove|print|list>");
+            return ticketManager;
         }
         String ticketCmd = arrayUserInput[1].toLowerCase();
         switch (ticketCmd) {
             case "new":
-                ticketActual.ticketNew();
-                return ticketActual;
+                if(arrayUserInput.length<4 || arrayUserInput.length>5){
+                    System.out.println("Usage: ticket new [<id>] <cashId> <userId> ");
+                } else if (arrayUserInput.length == 4) {
+                    ticketManager.newTicket(Integer.parseInt(arrayUserInput[2]),Integer.parseInt(arrayUserInput[3]));
+                } else{
+                    ticketManager.newTicket(arrayUserInput[2],Integer.parseInt(arrayUserInput[3]),Integer.parseInt(arrayUserInput[4]));
+                }
+                System.out.println("ticket new: ok");
+                break;
             case "add":
-                if (arrayUserInput.length != 4) {
-                    System.err.println("Usage: ticket add <prodId> <cantidad>");
+                if (arrayUserInput.length < 6) {
+                    System.err.println("ticket add <ticketId> <cashId> <prodId> <amount> [--p<txt> --p<txt>]");
                 } else {
                     try {
-                        int prodId = Integer.parseInt(arrayUserInput[2]); //El id al que se accede es el elemento del array por lo que se debe de restar un numero
-                        int cantidad = Integer.parseInt(arrayUserInput[3]);
+                        String ticketId = arrayUserInput[2];
+                        int cashId = Integer.parseInt(arrayUserInput[3]);
+                        int prodId = Integer.parseInt(arrayUserInput[4]);
+                        int amount = Integer.parseInt(arrayUserInput[5]);
                         if (Catalog.idExists(prodId)) {
-                            ticketActual.addProductToTicket(prodId, cantidad);
+                            Ticket ticketAModificar = ticketManager.getTicketById(ticketId);
+                            if(ticketAModificar != null){
+                                if(ticketAModificar.getCashId() != cashId){
+                                    System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
+                                } else{
+                                    if(arrayUserInput.length == 6){ //producto sin personalizaciones
+                                        ticketAModificar.addProductToTicket(prodId,amount,null);
+                                    } else{
+                                        ArrayList<String> customTexts = new ArrayList<>();
+                                        boolean correctFormat = true;
+                                        for (int i = 6; (i < arrayUserInput.length) && (correctFormat); i++) {
+                                            String s = arrayUserInput[i];
+                                            if (!s.startsWith("--p")) {
+                                                System.err.println("Error: [--p<txt>] is the correct usage, try again." + s);
+                                                correctFormat = false;
+                                            }
+                                            if (correctFormat){
+                                                customTexts.add(s.substring(3));
+                                            }
+                                        }
+                                        if(correctFormat){
+                                            ticketAModificar.addProductToTicket(prodId, amount, customTexts);
+                                        }
+                                    }
+                                }
+                            } else {
+                                System.err.println("Error: Ticket "  + ticketId + " does not exist.");
+                            }
                         } else {
                             System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
                         }
@@ -159,18 +198,28 @@ public class App {
                     }
                 }
                 break;
-
             case "remove":
-                if (arrayUserInput.length != 3) {
-                    System.err.println("Usage: ticket remove <prodId>");
+                if (arrayUserInput.length != 5) {
+                    System.err.println("Usage: ticket remove <ticketId> <cashId> <prodId>");
                 } else {
                     try {
-                        int prodId = Integer.parseInt(arrayUserInput[2]);
+                        String ticketId = arrayUserInput[2];
+                        int cashId = Integer.parseInt(arrayUserInput[3]);
+                        int prodId = Integer.parseInt(arrayUserInput[4]);
                         if (Catalog.idExists(prodId)) {
-                            ticketActual.removeProductFromTicket(prodId);
-                            System.out.println("ticket remove: ok");
+                            Ticket ticketAModificar = ticketManager.getTicketById(ticketId); //Si es null es que no existe dicho ticketId!
+                            if(ticketAModificar == null){
+                                System.err.println("Error: Ticket " + ticketId + " does not exist.");
+                            } else {
+                                if(ticketAModificar.getCashId() != cashId){
+                                    System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
+                                }else {
+                                    ticketAModificar.removeProductFromTicket(prodId);
+                                    System.out.println("ticket remove: ok");
+                                }
+                            }
                         } else
-                            System.out.println("Product with the id " + prodId + " didn't found.");
+                            System.out.println("Product with the id " + prodId + " was not found.");
                     } catch (NumberFormatException e) {
                         System.err.println("prodId must be an integer.");
                     } catch (Exception e) {
@@ -178,11 +227,15 @@ public class App {
                     }
                 }
                 break;
-
             case "print":
                 try {
-                    ticketActual.printCurrentTicket();
-                    System.out.println("ticket print: ok");
+                    if(arrayUserInput.length!= 4){
+                        System.err.println("Usage: ticket print <ticketId> <cashId>");
+                    } else{
+                        String ticketId = arrayUserInput[2];
+                       // ticketActual.printCurrentTicket();
+                        System.out.println("ticket print: ok");
+                    }
                 } catch (Exception e) {
                     System.err.println("Error printing ticket: " + e.getMessage());
                 }
