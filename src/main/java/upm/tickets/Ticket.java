@@ -15,11 +15,14 @@ public class Ticket {
     private int userId;
     private boolean closed;
     private TicketState estado;
+    private static final DateTimeFormatter TICKET_ID_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
+    private LocalDateTime fechaApertura;
     private LocalDateTime fechaCierre;
     private List<String> customTexts; //Para saber que personalizacion tiene cada producto personalizable
 
     public Ticket(String ticketId, int cashId, int userId) {
-        this.ticketId = ticketId;
+        this.fechaApertura = LocalDateTime.now();
+        this.ticketId = fechaApertura.format(TICKET_ID_FORMAT) + "-" + ticketId;
         this.cashId = cashId;
         this.userId = userId;
         this.closed = false;
@@ -218,8 +221,7 @@ public class Ticket {
             estado = TicketState.CLOSED;
             fechaCierre = LocalDateTime.now();
             // Añadir fecha de cierre al ID
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
-            ticketId = ticketId + "-" + fechaCierre.format(formatter);
+            ticketId = ticketId + "-" + fechaCierre.format(TICKET_ID_FORMAT);
         }
     }
 

@@ -1,7 +1,5 @@
 package upm.tickets;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TicketManager {
@@ -11,18 +9,15 @@ public class TicketManager {
 
     public TicketManager() {
         ticketsByTicketId = new HashMap<>();
+        ticketsByCashId = new HashMap<>();
     }
 
     public boolean exists(String ticketId) {return ticketsByTicketId.containsKey(ticketId);}
 
     private String generateTicketId() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm-");
-        String datePart = now.format(fmt);
         Random rand = new Random();
         int num = rand.nextInt(100000); // [0 - 99999]
-        String fiveDigits = String.format("%05d", num);
-        return datePart + fiveDigits;
+        return String.format("%05d", num);
     }
 
     //Guardamos el ticket en el ticketmanager y en el ticketCashier.
