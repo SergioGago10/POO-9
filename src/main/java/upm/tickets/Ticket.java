@@ -198,6 +198,14 @@ public class Ticket {
         }
         printCurrentTicket();
     }
+    private void closeTicket(){
+        if (estado != TicketState.CLOSED){
+            estado = TicketState.CLOSED;
+            fechaCierre = LocalDateTime.now();
+            // Añadir fecha de cierre al ID
+            ticketId = ticketId + "-" + fechaCierre.format(TICKET_ID_FORMAT);
+        }
+    }
 
     public void removeProductFromTicket(int productID) {
         if(estado != TicketState.CLOSED){
@@ -215,14 +223,4 @@ public class Ticket {
             System.out.println("This ticket has been closed. You can't add or remove products from it.");
         }
     }
-
-    public void closeTicket(){
-        if (estado != TicketState.CLOSED){
-            estado = TicketState.CLOSED;
-            fechaCierre = LocalDateTime.now();
-            // Añadir fecha de cierre al ID
-            ticketId = ticketId + "-" + fechaCierre.format(TICKET_ID_FORMAT);
-        }
-    }
-
 }
