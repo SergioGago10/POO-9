@@ -48,7 +48,7 @@ public class Ticket {
         if (texts == null) {
             this.customTexts = new ArrayList<>();
         } else {
-            this.customTexts = new ArrayList<>(texts); // copia defensiva
+            this.customTexts = new ArrayList<>(texts);
         }
     }
 
