@@ -41,7 +41,7 @@ public class TicketManager {
         return ticket;
     }
 
-    public Ticket getTicketId(String ticketId) {
+    public Ticket getTicketById(String ticketId) {
         return ticketsByTicketId.get(ticketId);
     }
 
