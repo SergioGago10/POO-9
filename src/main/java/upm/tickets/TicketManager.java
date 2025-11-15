@@ -75,12 +75,13 @@ public class TicketManager {
         }
     }
 
+    //METODO A USAR PARA EL COMANDO CASH TICKET <TICKETID>
     public void printTicketsByCashier(int cashId) {
         List<Ticket> list = ticketsByCashId.get(cashId);
         if (list == null || list.isEmpty()) {
             System.out.println("Cashier " + cashId + " has no tickets.");
         } else{
-            list.sort(Comparator.comparing(Ticket::getCashId)); //Ordenamos por cashId
+            list.sort(Comparator.comparing(Ticket::getTicketId)); //Ordenamos por ticketId
             System.out.println("Tickets for cashier " + cashId + ":");
             for (Ticket t : list) {
                 System.out.println("{ticketId: " + t.getTicketId() +
