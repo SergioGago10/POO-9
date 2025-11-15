@@ -1,9 +1,12 @@
 package upm.Users;
 
+import upm.tickets.Ticket;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Cashier extends User {
-
+    private ArrayList<Ticket> tickersCash;
     public Cashier(String name, String email, String cashId) {
         super(name, email, cashId);
     }
