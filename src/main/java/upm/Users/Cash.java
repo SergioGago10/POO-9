@@ -1,15 +1,12 @@
 package upm.Users;
 
 public class Cash extends User {
-    private String id; // UW + 9 dígitos
-
-    // Constructor con ID generado aleatoriamente
+    private String id;
     public Cash(String name, String email) {
-        super(name, email, null); // cashId es null porque un cajero no tiene cashId
+        super(name, email, null);
         this.id = CashManager.generateRandomId();
     }
 
-    // Constructor con ID dado
     public Cash(String id, String name, String email) {
         super(name, email, null);
         this.id = id;
