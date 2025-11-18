@@ -9,7 +9,9 @@ public class CashManager {
         cashList = new ArrayList<>();
     }
 
-    public ArrayList<Cash> getCashList() {
+
+
+    public static ArrayList<Cash> getCashList() {
         return cashList;
     }
 
@@ -36,9 +38,9 @@ public class CashManager {
     }
 
     public static Cash getCashById(String id) {
-        for (Cash c : cashList) {
-            if (c.getId().equals(id)) {
-                return c;
+        for (Cash cash : cashList) {
+            if (cash.getId().equals(id)) {
+                return cash;
             }
         }
         return null;
