@@ -43,9 +43,9 @@ public class CashManager {
         }
         return null;
     }
-    private static final Random random = new Random();
 
     public static String generateRandomId() {
+        Random random = new Random();
         int number = 1_000_000 + random.nextInt(9_000_000);
         return "UW" + number;
     }
