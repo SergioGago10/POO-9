@@ -16,7 +16,7 @@ public class CommandHelp extends Command {
         }
 
         //  "help" sin más argumentos
-        if (args.length != 1 || !args[0].equalsIgnoreCase("help")) {
+        if (args.length != 1 || !args[0].equalsIgnoreCase(text)) {
             return false;
         }
 

@@ -18,10 +18,10 @@ public class ProdCommands extends Command {
     @Override
     public boolean apply(String[] message) {
         boolean applied = false;
-        if (message.length > 0) {
+        if (message.length > 0 && message[0].equalsIgnoreCase(text)) {
             String subCommand = message[1];
             for (Command cmd : prodcommands) {
-                if (!applied || cmd.getText().equalsIgnoreCase(subCommand)) {
+                if (!applied && cmd.getText().equalsIgnoreCase(subCommand)) {
                     applied = cmd.apply(message);
                 }
             }
