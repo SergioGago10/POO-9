@@ -12,6 +12,14 @@ import java.util.List;
 import java.util.Scanner;
 
 public class App {
+    //Para controlar Exit
+    private boolean running = true;
+
+    private interface Command {
+       //Linea separa en args[0]= comando
+       //Devuelve true si encuentra el comando y lo ejecuta
+        boolean execute(String[] args);
+    }
 
     public static void main(String[] args) {
         App app = new App();
@@ -23,61 +31,132 @@ public class App {
     private void init() {
         System.out.println("Welcome to the ticket module App.");
     }
-
     private void run(String[] args) {
         Scanner scanner = createScanner(args);
-        boolean isIteractive = (args.length == 0); //False si se pasa archivo, true si escribimos por el command line
+        boolean isInteractive = (args.length == 0); // false si se pasa archivo, true si escribimos por la consola
         System.setErr(System.out);
-        //Esto hace que todos los errores sean system.out en vez de system.err, lo hago por un error que ocurre en la salida en la consola, no van a la misma
-        // velocidad y eso provoca que los system.out se impriman antes que los system.err, dando lugar a texto mal puesto
-        // No queda igual de bonito, pero es la unica solución que he podido encontrar
 
-        TicketManager ticketManager = new TicketManager(); //Antes de iniciar el programa se crea un ticketManager
+        TicketManager ticketManager = new TicketManager(); // Antes de iniciar el programa se crea un ticketManager
+
         if (scanner == null) {
             return;
         }
-        System.out.println("Ticket module. Type 'help' to see commands.");
-        while (true) {
-            System.out.print("tUPM> ");
-            String userInput = scanner.nextLine().trim(); //El trim evita que tengamos espacios al final y al inicio del string
 
-            if(!isIteractive){
+        System.out.println("Ticket module. Type 'help' to see commands.");
+
+        // 1) Lista de comandos
+        List<Command> commands = new ArrayList<>();
+        commands.add(new HelpCommand());
+        commands.add(new EchoCommand());
+        commands.add(new ExitCommand());
+        commands.add(new ProdCommand());
+        commands.add(new TicketCommand(ticketManager));
+
+        // 2) Bucle principal de CLI
+        while (running && scanner.hasNextLine()) {
+            System.out.print("tUPM> ");
+            String userInput = scanner.nextLine().trim(); // El trim evita espacios al principio y al final
+
+            if (!isInteractive) {
+                // Si estamos leyendo de archivo, se vuelve a mostrar el comando
                 System.out.println(userInput);
             }
 
-            if (userInput.isEmpty()) continue; //Esto se hace por si se da enter simplemente ignorando la información vacía y no poner el mensaje de error de comando que sería molesto
+            if (userInput.isEmpty()) {
+                // Ignoramos líneas vacías
+                continue;
+            }
 
             String[] arrayUserInput = userInput.split(" ");
-            try {
-                switch (arrayUserInput[0].toLowerCase()) {
-                    case "help":
-                        helpCommand();
-                        break;
-                    case "echo":
-                        System.out.print("echo ");
-                        for (int i = 1; i < arrayUserInput.length; i++) {
-                            System.out.print(arrayUserInput[i] + " ");
-                        }
-                        System.out.println();
-                        break;
-                    case "exit":
-                        return;
-                    case "prod":
-                        handleProdCommand(arrayUserInput);
-                        break;
 
-                    case "ticket":
-                        ticketManager = handleTicketCommand(arrayUserInput, ticketManager);
-                        break;
-                    default:
-                        System.err.println("Command not found. Type 'help' to see the command list.");
+            boolean handled = false; // indica si algún comando ha gestionado la entrada
+
+            for (Command command : commands) {
+                try {
+                    if (command.execute(arrayUserInput)) {
+                        handled = true;
+                        break; // ya hay un comando que ha ejecutado esta línea
+                    }
+                } catch (Exception e) {
+                    System.err.println("Unexpected error: " + e.getMessage());
+                    handled = true; // consideramos la línea “gestionada” aunque sea con error
+                    break;
                 }
-            } catch (Exception e) {
-                System.err.println("Unexpected error: " + e.getMessage());
             }
+
+            if (!handled) {
+                System.err.println("Command not found. Type 'help' to see the command list.");
+            }
+
             System.out.println();
         }
     }
+
+    private class HelpCommand implements Command {
+        @Override
+        public boolean execute(String[] args) {
+            if (args.length == 0 || !args[0].equalsIgnoreCase("help")) {
+                return false; // Comando no ejecutado
+            }
+            helpCommand();
+            return true;
+        }
+    }
+    private class EchoCommand implements Command {
+        @Override
+        public boolean execute(String[] args) {
+            if (args.length == 0 || !args[0].equalsIgnoreCase("echo")) {
+                return false;
+            }
+
+            System.out.print("echo ");
+            for (int i = 1; i < args.length; i++) {
+                System.out.print(args[i] + " ");
+            }
+            System.out.println();
+            return true;
+        }
+    }
+    private class ExitCommand implements Command {
+        @Override
+        public boolean execute(String[] args) {
+            if (args.length == 0 || !args[0].equalsIgnoreCase("exit")) {
+                return false;
+            }
+            // Simplemente paramos el bucle principal
+            running = false;
+            return true;
+        }
+    }
+    private class ProdCommand implements Command {
+        @Override
+        public boolean execute(String[] args) {
+            if (args.length == 0 || !args[0].equalsIgnoreCase("prod")) {
+                return false;
+            }
+            handleProdCommand(args);
+            return true;
+        }
+    }
+    private class TicketCommand implements Command {
+        private TicketManager ticketManager;
+
+        public TicketCommand(TicketManager ticketManager) {
+            this.ticketManager = ticketManager;
+        }
+
+        @Override
+        public boolean execute(String[] args) {
+            if (args.length == 0 || !args[0].equalsIgnoreCase("ticket")) {
+                return false;
+            }
+            ticketManager = handleTicketCommand(args, ticketManager);
+            return true;
+        }
+    }
+
+
+
 
     private void handleProdCommand(String[] arrayUserInput) {
         if (arrayUserInput.length < 2) {
