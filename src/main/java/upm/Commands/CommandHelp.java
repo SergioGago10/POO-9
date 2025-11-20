@@ -4,7 +4,7 @@ package upm.Commands;
 
 public class CommandHelp extends Command {
     public CommandHelp(String text) {
-        super(text);
+        super("help");
     }
 
 

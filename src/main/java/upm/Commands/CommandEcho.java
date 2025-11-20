@@ -13,7 +13,7 @@ public class CommandEcho extends Command {
             Pattern.compile("^echo\\s+\"(.*)\"\\s*$", Pattern.CASE_INSENSITIVE);
 
     public CommandEcho(String text) {
-        super(text);
+        super("echo");
     }
 
     @Override
