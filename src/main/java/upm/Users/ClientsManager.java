@@ -1,7 +1,4 @@
 package upm.Users;
-import upm.Commands.Command;
-import upm.Users.Client;
-import upm.Utilities;
 
 import java.util.*;
 
@@ -55,5 +52,22 @@ public class ClientsManager {
         }
         return sb;
     }
-
+    public static Client getClientByDni (String dni){
+        for (Client client : clientsList){
+            if (client.getDni().equals(dni)){
+                return client;
+            }
+        }
+        return null;
+    }
+    public static boolean removeClientByDni (String dni){
+        boolean done = false;
+        for (Client client : clientsList){
+            if (client.getDni().equals(dni)){
+                clientsList.remove(client);
+                done=true;
+            }
+        }
+        return done;
+    }
 }
