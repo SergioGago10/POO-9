@@ -315,8 +315,12 @@ public class App {
                         int cashId = Integer.parseInt(arrayUserInput[3]);
                         Ticket ticketAMostrar = ticketManager.getTicketById(ticketId);
                         if(ticketAMostrar != null){
-                            ticketAMostrar.printFinalTicket();
-                            System.out.println("ticket print: ok");
+                            if(ticketAMostrar.getCashId() != cashId){
+                                System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
+                            } else{
+                                ticketAMostrar.printFinalTicket();
+                                System.out.println("ticket print: ok");
+                            }
                         } else{
                             System.err.println("Error: Ticket " + ticketId + " does not exist.");
                         }
