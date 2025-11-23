@@ -5,7 +5,7 @@ import java.util.*;
 public class TicketManager {
     // Map para acceder rápido a los tickets por su ID
     private Map<String, Ticket> ticketsByTicketId;
-    private Map<Integer,List<Ticket>> ticketsByCashId;
+    private static Map<Integer,List<Ticket>> ticketsByCashId;
 
     public TicketManager() {
         ticketsByTicketId = new HashMap<>();
@@ -76,7 +76,7 @@ public class TicketManager {
     }
 
     //METODO A USAR PARA EL COMANDO CASH TICKET <TICKETID>
-    public void printTicketsByCashier(int cashId) {
+    public static List<Ticket> printTicketsByCashier(String cashId) {
         List<Ticket> list = ticketsByCashId.get(cashId);
         if (list == null || list.isEmpty()) {
             System.out.println("Cashier " + cashId + " has no tickets.");
@@ -89,6 +89,7 @@ public class TicketManager {
                         ", closed: " + t.isClosed() + "}");
             }
         }
+        return null;
     }
 }
 
