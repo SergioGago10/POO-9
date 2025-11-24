@@ -1,14 +1,7 @@
 package upm.Commands;
 
-import upm.Catalog;
-import upm.Products.BasicProduct;
-import upm.Products.Category;
-import upm.Products.CustomizableProduct;
-import upm.Products.IProduct;
 import upm.Users.Client;
 import upm.Users.ClientsManager;
-
-import java.util.ListIterator;
 
 public class ClientAddCommand extends Command {
     public ClientAddCommand(){

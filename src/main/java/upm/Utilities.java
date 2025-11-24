@@ -1,8 +1,9 @@
 package upm;
 
 import upm.Products.BasicProduct;
+import upm.Products.Catalog;
 
-import java.util.List;
+import java.util.Random;
 
 public class Utilities {
 
@@ -17,4 +18,26 @@ public class Utilities {
         }
     }
 
+    public static String generarId() {
+        Random random = new Random();
+        int num = 1000000 + random.nextInt(9000000);
+        return "UW" + num;
+    }
+
+    public static boolean isValidProd(int id, String name, double price) {
+        boolean resul = true;
+        if (id < 0) {
+            CLI.print("Id must be positive.");
+            resul = false;
+        }
+        if (price < 0) {
+            CLI.print("Price must be positive.");
+            resul = false;
+        }
+        if (name.isBlank() || name.length() > Catalog.MAX_CHAR_NAME) {
+            CLI.print("Name length must be between 0 and " + Catalog.MAX_CHAR_NAME);
+            resul = false;
+        }
+        return resul;
+    }
 }

@@ -1,6 +1,6 @@
 package upm.Commands;
 
-import upm.Catalog;
+import upm.Products.Catalog;
 import upm.tickets.Ticket;
 import upm.tickets.TicketManager;
 

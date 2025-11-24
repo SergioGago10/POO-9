@@ -1,13 +1,11 @@
-package upm;
-
-import upm.Products.BasicProduct;
-import upm.Products.IProduct;
+package upm.Products;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Catalog {
     private final static int MAX_DIF_PRODUCTS = 200;
+    public final static int MAX_CHAR_NAME = 100;
     private static List<IProduct> catalog = new ArrayList<>();
     private static int newId = 0;
 

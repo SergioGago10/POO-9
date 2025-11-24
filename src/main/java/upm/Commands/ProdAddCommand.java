@@ -1,10 +1,8 @@
 package upm.Commands;
 
-import upm.Catalog;
-import upm.Products.BasicProduct;
-import upm.Products.Category;
-import upm.Products.CustomizableProduct;
-import upm.Products.IProduct;
+import upm.CLI;
+import upm.Products.*;
+import upm.Utilities;
 
 public class ProdAddCommand extends Command {
 
@@ -16,6 +14,7 @@ public class ProdAddCommand extends Command {
     public boolean apply(String[] args) {
         boolean applied;
         if (args.length < 5) {
+            CLI.print("Format must be: prod add [<id>] \"<name>\" <category> <price> [<maxPers>]");
             applied = false;
         } else {
             try {
@@ -29,22 +28,40 @@ public class ProdAddCommand extends Command {
                     id = Catalog.generateNewProductId();
                 } else {
                     id = Integer.parseInt(args[i]);
+                    if (id < 0) {
+                        CLI.print("Id must be positive");
+                        return false;
+                    }
                     i++;
                 }
                 name = args[i].replace("\"", "");
+                if (name.length() > Catalog.MAX_CHAR_NAME) {
+                    CLI.print("name length must be lower than" + Catalog.MAX_CHAR_NAME);
+                    return false;
+                }
                 i++;
                 category = Category.valueOf(args[i]);
                 i++;
                 price = Double.parseDouble(args[i]);
+                if (price < 0) {
+                    CLI.print("Price must be positive");
+                    return false;
+                }
                 i++;
-                if (i == args.length - 1) {
-                    int maxPers = Integer.parseInt(args[i]);
-                    product = new CustomizableProduct(id, name, category, price, maxPers);
-                } else
-                    product = new BasicProduct(id, name, category, price);
-                Catalog.addProduct(product);
+                if (Utilities.isValidProd(id, name, price)) {
+                    if (i == args.length - 1) {
+                        int maxPers = Integer.parseInt(args[i]);
+                        product = new CustomizableProduct(id, name, category, price, maxPers);
+                    } else
+                        product = new BasicProduct(id, name, category, price);
+                    Catalog.addProduct(product);
+                }
                 applied = true;
             } catch (NumberFormatException ex) {
+                CLI.print("Id and max personalization must be integer and price must be double");
+                applied = false;
+            }catch(IllegalArgumentException exc){
+                CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
                 applied = false;
             }
         }

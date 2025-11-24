@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ClientListCommand extends Command {
-    public ClientListCommand(String text) {
+    public ClientListCommand() {
         super("List");
     }
     @Override

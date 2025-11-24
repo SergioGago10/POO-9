@@ -1,6 +1,6 @@
 package upm.tickets;
 
-import upm.Catalog;
+import upm.Products.Catalog;
 import upm.Products.*;
 
 import java.time.LocalDateTime;

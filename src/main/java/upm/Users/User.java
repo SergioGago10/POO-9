@@ -12,7 +12,9 @@ public abstract class User {
     }
     public String getName(){return name;}
     public String getEmail(){return email;}
-    public String getCashId(){return cashId;}
+    public String getCashId(){
+        return cashId;
+    }
 
 
 }

@@ -1,7 +1,5 @@
 package upm.Products;
 
-import upm.Catalog;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

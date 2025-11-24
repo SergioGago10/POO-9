@@ -10,31 +10,24 @@ public abstract class Event implements IProduct {
     public double price;
     public int maxParticipants;
     public LocalDateTime creationDate;
-    public LocalDate expiration;
+    public LocalDate plannedDate;
+    public static final LocalDate expiration = LocalDate.of(2025, 12, 30);
 
 
-    public Event(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDate expiration, int maxParticipants) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("id must be positive.");
-        }
-
-        if (name == null || name.isBlank() || name.length() >= MAX_CHAR_NAME) {
-            throw new IllegalArgumentException("Invalid name.");
-        }
-
-        if (pricePerson <= 0) {
-            throw new IllegalArgumentException("Price must be positive.");
-        }
+    public Event(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDate plannedDate,
+                 int maxParticipants) {
+        if (expiration.isBefore(plannedDate))
+            throw new IllegalArgumentException("Date must be before "+expiration);
         this.id = id;
         this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
         this.price = pricePerson;
         this.creationDate = creationDate;
-        this.expiration = expiration;
-        this.maxParticipants=maxParticipants;
+        this.plannedDate = plannedDate;
+        this.maxParticipants = maxParticipants;
     }
 
-    public Event(int id, String name, double pricePerson, LocalDate expiration, int maxParticipants) {
-        this(id, name, pricePerson, LocalDateTime.now(), expiration, maxParticipants);
+    public Event(int id, String name, double pricePerson, LocalDate plannedDate, int maxParticipants) {
+        this(id, name, pricePerson, LocalDateTime.now(), plannedDate, maxParticipants);
     }
 
 
@@ -60,12 +53,12 @@ public abstract class Event implements IProduct {
 
     @Override
     public String toString() {
-        StringBuilder sb= new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.append("  {class: BasicProduct");
         sb.append(",id: ").append(id);
         sb.append(",name:").append(name);
         sb.append(",creationDate: ").append(creationDate);
-        sb.append(",plannedDate: ").append(expiration);
+        sb.append(",plannedDate: ").append(plannedDate);
         sb.append(",price:").append(String.format("%.2f", price)).append("}");
         return sb.toString();
     }

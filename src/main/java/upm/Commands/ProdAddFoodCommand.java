@@ -1,8 +1,10 @@
 package upm.Commands;
 
-import upm.Catalog;
+import upm.CLI;
+import upm.Products.Catalog;
 import upm.Products.FoodProduct;
 import upm.Products.IProduct;
+import upm.Utilities;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,9 +17,10 @@ public class ProdAddFoodCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied;
+        boolean applied = false;
         if (args.length < 6) {
-            applied = false;
+            CLI.print("Format must be: " +
+                    "prod addFood [<id>] \"< name>\" <price> <expiration: yyyy-MM-dd> <max_people>");
         } else {
             try {
                 int i = 2;
@@ -41,22 +44,28 @@ public class ProdAddFoodCommand extends Command {
                 i++;
                 int maxPeople = Integer.parseInt(args[i]);
                 i++;
-                if (i == args.length - 1) {
-                    String[] creationDateStr = args[i].split("-");
-                    int creationYear = Integer.parseInt(creationDateStr[0]);
-                    int creationMonth = Integer.parseInt(creationDateStr[1]);
-                    int creationDay = Integer.parseInt(creationDateStr[2]);
-                    int creationHour = Integer.parseInt(creationDateStr[3]);
-                    int creationMinute = Integer.parseInt(creationDateStr[4]);
-                    LocalDateTime creationDate = LocalDateTime.of(creationYear, creationMonth, creationDay,
-                            creationHour, creationMinute);
-                    product = new FoodProduct(id, name, price, creationDate, date, maxPeople);
-                } else
-                    product = new FoodProduct(id, name, price, date, maxPeople);
-                Catalog.addProduct(product);
-                applied = true;
+                if (Utilities.isValidProd(id, name, price)) {
+                    if (i == args.length - 1) {
+                        String[] creationDateStr = args[i].split("-");
+                        int creationYear = Integer.parseInt(creationDateStr[0]);
+                        int creationMonth = Integer.parseInt(creationDateStr[1]);
+                        int creationDay = Integer.parseInt(creationDateStr[2]);
+                        int creationHour = Integer.parseInt(creationDateStr[3]);
+                        int creationMinute = Integer.parseInt(creationDateStr[4]);
+                        LocalDateTime creationDate = LocalDateTime.of(creationYear, creationMonth, creationDay,
+                                creationHour, creationMinute);
+                        //if(creationDate.plusDays(3).isAfter(expiration.atStartOfDay()))
+                        product = new FoodProduct(id, name, price, creationDate, date, maxPeople);
+                    } else
+                        product = new FoodProduct(id, name, price, date, maxPeople);
+                    if (Utilities.isValidProd(id, name, price)) {
+                        applied = true;
+                        Catalog.addProduct(product);
+                    }
+                }
+
             } catch (NumberFormatException ex) {
-                applied = false;
+                CLI.print("Id and max personalization must be integer and price must be double");
             }
         }
         return applied;

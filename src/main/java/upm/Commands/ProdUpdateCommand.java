@@ -1,6 +1,7 @@
 package upm.Commands;
 
-import upm.Catalog;
+import upm.CLI;
+import upm.Products.Catalog;
 import upm.Products.BasicProduct;
 import upm.Products.Category;
 import upm.Products.IProduct;
@@ -36,6 +37,7 @@ public class ProdUpdateCommand extends Command {
                     }
                 }
             } catch (IllegalArgumentException ignored) {
+                CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
             }
         }
         return applied;

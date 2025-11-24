@@ -1,5 +1,7 @@
 package upm.Commands;
 
+import upm.CLI;
+
 import java.util.ArrayList;
 
 public class ProdCommands extends Command {
@@ -18,11 +20,13 @@ public class ProdCommands extends Command {
     @Override
     public boolean apply(String[] message) {
         boolean applied = false;
-        if (message.length > 0 && message[0].equalsIgnoreCase(text)) {
+        if (message.length > 1 && message[0].equalsIgnoreCase(text)) {
             String subCommand = message[1];
             for (Command cmd : prodcommands) {
                 if (!applied && cmd.getText().equalsIgnoreCase(subCommand)) {
-                    applied = cmd.apply(message);
+                    applied = true;
+                    if (cmd.apply(message))
+                        CLI.print(cmd.getClass().getName()+": ok");
                 }
             }
         }

@@ -4,6 +4,7 @@ package upm;
 import org.junit.Before;
 import org.junit.Test;
 import upm.Products.BasicProduct;
+import upm.Products.Catalog;
 import upm.Products.Category;
 
 import java.util.List;

@@ -1,7 +1,9 @@
 package upm;
 
 import upm.Products.BasicProduct;
+import upm.Products.Catalog;
 import upm.Products.Category;
+import upm.Products.IProduct;
 import upm.tickets.TicketManager;
 import upm.tickets.Ticket;
 
@@ -102,6 +104,7 @@ public class App {
             return true;
         }
     }
+
     private class EchoCommand implements Command {
         @Override
         public boolean execute(String[] args) {
@@ -414,19 +417,14 @@ public class App {
     }
 
     private void prodListCommand() {
-        List<BasicProduct> productList = Catalog.getCatalog();
+        List<IProduct> productList = Catalog.getCatalog();
         if (productList.isEmpty()) {
             System.out.println("The catalog is empty.");
         } else {
             System.out.println("Catalog:");
-            for (int j = 0; j < Catalog.getAmountProducts(); j++) {
-                System.out.print("  {class:" + productList.get(j).getClass().getSimpleName());
-                System.out.print(",id: " + productList.get(j).getId());
-                System.out.print(",name:" + productList.get(j).getName());
-                System.out.print(",Category:" + productList.get(j).getCategory()); // no se si lo imprime bien
-                System.out.printf(",price: %.2f", productList.get(j).getPrice());
-                System.out.println("}");
-            }
+           for(IProduct product : productList){
+               System.out.println(product.toString());
+           }
         }
     }
 
@@ -435,7 +433,7 @@ public class App {
         try {
             boolean updated;
             int id = Integer.parseInt(arrayUserInput[2]);
-            BasicProduct updatedProduct = Catalog.getProduct(id);
+            IProduct updatedProduct = Catalog.getProduct(id);
             int index = Catalog.indexOfProduct(id);
             if (index != -1 && updatedProduct != null) {
                 switch (arrayUserInput[3]) {
@@ -459,7 +457,6 @@ public class App {
                         break;
                     case "CATEGORY":
                         Category category = Category.valueOf(arrayUserInput[4].toUpperCase());
-                        updatedProduct.setCategory(category);
                         updated = true;
                         break;
                     default:
@@ -471,7 +468,6 @@ public class App {
                     System.out.print("{class:" + updatedProduct.getClass().getSimpleName());
                     System.out.print(",id: " + updatedProduct.getId());
                     System.out.print(",name:" + updatedProduct.getName());
-                    System.out.print(",Category:" + updatedProduct.getCategory());
                     System.out.printf(",price: %.2f", updatedProduct.getPrice());
                     System.out.println("}");
                     System.out.println("Prod update: ok");
@@ -491,12 +487,11 @@ public class App {
     private void prodRemoveCommand(String[] arrayUserInput) {
         try {
             int id = Integer.parseInt(arrayUserInput[2]);
-            BasicProduct productRemoved = Catalog.getProduct(id);
+            IProduct productRemoved = Catalog.getProduct(id);
             if (productRemoved != null) { //Esto ya directamente comprueba si se puede eliminar o no por lo que no importa no comprobarlo antes
                 System.out.print("{class:" + productRemoved.getClass().getSimpleName() +
                         ",id:" + productRemoved.getId() +
-                        ",name:" + productRemoved.getName() +
-                        ",Category:" + productRemoved.getCategory());
+                        ",name:" + productRemoved.getName());
                 System.out.printf(",price: %.2f}\n", productRemoved.getPrice());
                 if (Catalog.remove(id))
                     System.out.println("prod remove: ok");
