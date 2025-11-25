@@ -21,7 +21,7 @@ public class ProdListCommand extends Command {
         } else {
             List<IProduct> catalog = Catalog.getCatalog();
             for (IProduct product : catalog)
-                System.out.println(product.toString());
+                CLI.print(product.toString());
             applied=true;
             CLI.print("prod list: ok");
         }

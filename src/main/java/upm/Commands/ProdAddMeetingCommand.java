@@ -16,11 +16,10 @@ public class ProdAddMeetingCommand extends Command{
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied;
+        boolean applied=false;
         if (args.length < 6) {
             CLI.print("Format must be: " +
                     "prod addMeeting [<id>] \"<name>\" <price> < expiration: yyyy-MM-dd> <\n max_people >");
-            applied = false;
         } else {
             try {
                 int i = 2;
@@ -54,12 +53,23 @@ public class ProdAddMeetingCommand extends Command{
                         int creationMinute = Integer.parseInt(creationDateStr[4]);
                         LocalDateTime creationDate = LocalDateTime.of(creationYear, creationMonth, creationDay,
                                 creationHour, creationMinute);
+                        if (creationDate.plusHours(12).isAfter(date.atStartOfDay())) {
+                            CLI.print("The meeting should be planned at least 12 hours before");
+                            return false;
+                        }
                         product = new FoodProduct(id, name, price, creationDate, date, maxPeople);
-                    } else
+                    } else{
+                        if (LocalDateTime.now().plusHours(12).isAfter(date.atStartOfDay())) {
+                            CLI.print("The meeting should be planned at least 12 hours before");
+                            return false;
+                        }
                         product = new FoodProduct(id, name, price, date, maxPeople);
+                    }
                     Catalog.addProduct(product);
+                    applied = true;
+                    CLI.print("prod addMeeting: ok");
                 }
-                applied = true;
+
             } catch (NumberFormatException ex) {
                 applied = false;
             }

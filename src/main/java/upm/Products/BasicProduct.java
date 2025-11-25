@@ -4,7 +4,7 @@ public class BasicProduct implements IProduct {
     public int id;
     public String name;
     public double price;
-    private Category category;
+    public Category category;
 
     public BasicProduct(int id, String name, Category category, double price) {
         this.id = id;
@@ -13,10 +13,6 @@ public class BasicProduct implements IProduct {
         this.category = category;
     }
 
-
-    public static int getMaxCharName(){
-        return MAX_CHAR_NAME;
-    }
 
 
     public void setCategory(Category category) {

@@ -25,4 +25,12 @@ public class MeetingProduct extends Event{
             throw new IllegalArgumentException("The meeting should be planned at least 12 hours before");
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("  {class:Meeting");
+        sb.append(super.toString());
+        return sb.toString();
+    }
 }

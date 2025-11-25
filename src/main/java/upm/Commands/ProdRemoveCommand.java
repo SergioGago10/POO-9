@@ -17,12 +17,13 @@ public class ProdRemoveCommand extends Command {
                 int id = Integer.parseInt(args[2]);
                 IProduct productRemoved = Catalog.getProduct(id);
                 if (productRemoved != null) { //Esto ya directamente comprueba si se puede eliminar o no por lo que no importa no comprobarlo antes
-                    System.out.println(productRemoved.toString());
+                    CLI.print(productRemoved.toString());
+                    CLI.print("prod remove:ok");
                 } else {
-                    System.err.println("The product with the id:" + id + " couldn't be removed. Product not found.");
+                    CLI.print("The product with the id:" + id + " couldn't be removed. Product not found.");
                 }
             } catch (NumberFormatException exception) {
-                System.err.print("Id must be an integer number.");
+                CLI.print("Id must be an integer number.");
                 applied = false;
             }
         } else {

@@ -25,8 +25,6 @@ public class ProdCommands extends Command {
             for (Command cmd : prodcommands) {
                 if (!applied && cmd.getText().equalsIgnoreCase(subCommand)) {
                     applied = true;
-                    if (cmd.apply(message))
-                        CLI.print(cmd.getClass().getName()+": ok");
                 }
             }
         }

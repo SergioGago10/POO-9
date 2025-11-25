@@ -28,15 +28,15 @@ public class Utilities {
         boolean resul = true;
         if (id < 0) {
             CLI.print("Id must be positive.");
-            resul = false;
+            return false;
         }
         if (price < 0) {
             CLI.print("Price must be positive.");
-            resul = false;
+            return false;
         }
         if (name.isBlank() || name.length() > Catalog.MAX_CHAR_NAME) {
             CLI.print("Name length must be between 0 and " + Catalog.MAX_CHAR_NAME);
-            resul = false;
+            return false;
         }
         return resul;
     }

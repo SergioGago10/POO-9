@@ -1,8 +1,8 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Products.Catalog;
 import upm.Products.BasicProduct;
+import upm.Products.Catalog;
 import upm.Products.Category;
 import upm.Products.IProduct;
 
@@ -22,11 +22,16 @@ public class ProdUpdateCommand extends Command {
                 if (product != null) {
                     switch (args[3].toUpperCase()) {
                         case "NAME":
+                            if(args[4].length()>Catalog.MAX_CHAR_NAME)
+                                CLI.print("Name length must be between 0 and " + Catalog.MAX_CHAR_NAME);
                             product.setName(args[4]);
                             applied = true;
                             break;
                         case "PRICE":
-                            product.setPrice(Double.parseDouble(args[4]));
+                            if (Double.parseDouble(args[4]) < 0)
+                                CLI.print("Price must be positive");
+                            else
+                                product.setPrice(Double.parseDouble(args[4]));
                             applied = true;
                             break;
                         case "CATEGORY":
@@ -35,6 +40,8 @@ public class ProdUpdateCommand extends Command {
                                 applied = true;
                             }
                     }
+                    if(applied)
+                        CLI.print("prod update: ok");
                 }
             } catch (IllegalArgumentException ignored) {
                 CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");

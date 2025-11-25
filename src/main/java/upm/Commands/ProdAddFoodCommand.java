@@ -54,18 +54,29 @@ public class ProdAddFoodCommand extends Command {
                         int creationMinute = Integer.parseInt(creationDateStr[4]);
                         LocalDateTime creationDate = LocalDateTime.of(creationYear, creationMonth, creationDay,
                                 creationHour, creationMinute);
-                        //if(creationDate.plusDays(3).isAfter(expiration.atStartOfDay()))
+                        if (creationDate.plusDays(3).isAfter(date.atStartOfDay())) {
+                            CLI.print("The meeting should be planned at least 3 days before");
+                            return false;
+                        }
+
                         product = new FoodProduct(id, name, price, creationDate, date, maxPeople);
-                    } else
-                        product = new FoodProduct(id, name, price, date, maxPeople);
+                    } else {
+                        if (LocalDateTime.now().plusDays(3).isAfter(date.atStartOfDay())) {
+                            CLI.print("The meeting should be planned at least 3 days before");
+                            return false;
+                        } else
+                            product = new FoodProduct(id, name, price, date, maxPeople);
+                    }
                     if (Utilities.isValidProd(id, name, price)) {
-                        applied = true;
                         Catalog.addProduct(product);
+                        applied = true;
+                        CLI.print("prod addFood: ok");
                     }
                 }
 
             } catch (NumberFormatException ex) {
-                CLI.print("Id and max personalization must be integer and price must be double");
+                CLI.print("Id and max personalization must be integer and price must be double," +
+                        "date format: yyyy-MM-dd");
             }
         }
         return applied;

@@ -40,11 +40,14 @@
 
         @Override
         public String toString(){
-            StringBuilder resul=new StringBuilder();
-            resul.append(super.toString());
-            resul.deleteCharAt(resul.length()-1); //para quitarle el } del final
-            resul.append(", maxCustomTexts:").append(maxCustomTexts).append("}");
-            return resul.toString();
+            StringBuilder sb= new StringBuilder();
+            sb.append("  {class: BasicProduct");
+            sb.append(", id: ").append(id);
+            sb.append(", name:").append(name);
+            sb.append(",category:").append(category);
+            sb.append(", price:").append(String.format("%.2f", price));
+            sb.append(", maxPersonal: ").append(maxCustomTexts).append("}");
+            return sb.toString();
         }
 
     }

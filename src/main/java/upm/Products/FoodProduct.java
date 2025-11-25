@@ -9,7 +9,7 @@ public class FoodProduct extends Event{
     public FoodProduct(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDate expiration,int maxParticipants){
         super(id,name,pricePerson,creationDate,expiration,maxParticipants);
         if ((creationDate.plusDays(3).isAfter(expiration.atStartOfDay()))) {
-            throw new IllegalArgumentException("The meeting should be planned at least 12 hours before");
+            throw new IllegalArgumentException("The meeting should be planned at least 3 days before");
         }
     }
 
@@ -22,5 +22,13 @@ public class FoodProduct extends Event{
         if ((this.creationDate.plusDays(3).isAfter(expiration.atStartOfDay()))) {
             throw new IllegalArgumentException("The meeting should be planned at least 3 days before");
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("  {class: Food");
+        sb.append(super.toString());
+        return sb.toString();
     }
 }

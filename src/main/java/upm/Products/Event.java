@@ -54,12 +54,11 @@ public abstract class Event implements IProduct {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("  {class: BasicProduct");
-        sb.append(",id: ").append(id);
-        sb.append(",name:").append(name);
-        sb.append(",creationDate: ").append(creationDate);
-        sb.append(",plannedDate: ").append(plannedDate);
-        sb.append(",price:").append(String.format("%.2f", price)).append("}");
+        sb.append(", id: ").append(id);
+        sb.append(", name:").append(name);
+        sb.append(", price:").append(String.format("%.2f", price)).append("}");
+        sb.append(", date of Event: ").append(plannedDate);
+        sb.append(", max people allowed:").append(maxParticipants);
         return sb.toString();
     }
 }
