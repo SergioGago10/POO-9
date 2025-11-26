@@ -54,6 +54,7 @@ public class ProdAddCommand extends Command {
                     } else
                         product = new BasicProduct(id, name, category, price);
                     Catalog.addProduct(product);
+                    CLI.print(product.toString());
                     applied = true;
                     CLI.print("prod add:ok");
                 }

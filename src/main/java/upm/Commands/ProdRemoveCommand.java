@@ -17,6 +17,7 @@ public class ProdRemoveCommand extends Command {
                 int id = Integer.parseInt(args[2]);
                 IProduct productRemoved = Catalog.getProduct(id);
                 if (productRemoved != null) { //Esto ya directamente comprueba si se puede eliminar o no por lo que no importa no comprobarlo antes
+                    Catalog.remove(id);
                     CLI.print(productRemoved.toString());
                     CLI.print("prod remove:ok");
                 } else {

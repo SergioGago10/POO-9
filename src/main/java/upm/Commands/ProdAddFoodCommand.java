@@ -69,6 +69,7 @@ public class ProdAddFoodCommand extends Command {
                     }
                     if (Utilities.isValidProd(id, name, price)) {
                         Catalog.addProduct(product);
+                        CLI.print(product.toString());
                         applied = true;
                         CLI.print("prod addFood: ok");
                     }
