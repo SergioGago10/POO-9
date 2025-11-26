@@ -12,10 +12,11 @@ public class CLI {
     }
 
     public static String[] nextLine(boolean isInteractive) {
-        String line = sc.nextLine();
+        String line = sc.nextLine().trim();
         if (isInteractive)
             System.out.println(line);
-        return line.split(" +(?=([^\"]\"[^\"]\")[^\"]$)");
+        String [] resul=line.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        return resul;
     }
 
     public static void print(String message) {

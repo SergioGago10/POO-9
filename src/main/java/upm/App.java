@@ -1,19 +1,14 @@
 package upm;
 
+import upm.Commands.*;
 import upm.tickets.TicketManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import upm.Commands.CommandHelp;
-import upm.Commands.ProdCommands;
-import upm.Commands.CommandEcho;
-import upm.Commands.ClientCommands;
-import upm.Commands.*;
 public class App {
     //Para controlar Exit
     private boolean running = true;
-
 
 
     public static void main(String[] args) {
@@ -26,8 +21,10 @@ public class App {
     private void init() {
         System.out.println("Welcome to the ticket module App.");
     }
+
     private void run(String[] args) {
-        boolean isInteractive = (args.length == 0); // false si se pasa archivo, true si escribimos por la consola
+        CLI cli=new CLI(args);
+        boolean isInteractive = (args.length != 0); // true si se pasa archivo, false si escribimos por la consola
         System.setErr(System.out);
 
         TicketManager ticketManager = new TicketManager(); // Antes de iniciar el programa se crea un ticketManager
@@ -36,16 +33,16 @@ public class App {
 
         // 1) Lista de comandos
         List<Command> commands = new ArrayList<>();
-        commands.add((Command) new ProdCommands());
-        commands.add((Command) new CommandHelp());
-        commands.add((Command) new CommandEcho());
-        commands.add((Command) new ClientCommands());
+        commands.add(new ProdCommands());
+        commands.add(new CommandHelp());
+        commands.add(new CommandEcho());
+        commands.add(new ClientCommands());
 
 
         // 2) Bucle principal de CLI
         while (running) {
-            System.out.print("tUPM> ");
-            String [] userInput = CLI.nextLine(isInteractive); // El trim evita espacios al principio y al final
+            System.out.println("tUPM> ");
+            String[] userInput = CLI.nextLine(isInteractive); // El trim evita espacios al principio y al final
 
             if (userInput[0].isEmpty()) {
                 // Ignoramos líneas vacías
@@ -74,14 +71,6 @@ public class App {
             System.out.println();
         }
     }
-
-
-
-
-
-
-
-
 
     private void close() {
         System.out.println("Closing application.\nGoodbye!");
