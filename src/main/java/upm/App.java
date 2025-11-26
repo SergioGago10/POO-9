@@ -41,7 +41,7 @@ public class App {
 
         // 2) Bucle principal de CLI
         while (running) {
-            CLI.print("tUPM> ");
+            CLI.printText("tUPM> ");
             String[] userInput = CLI.nextLine(isInteractive); // El trim evita espacios al principio y al final
 
             if (userInput[0].isEmpty()) {
