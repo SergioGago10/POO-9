@@ -3,7 +3,6 @@ package upm.tickets;
 import java.util.*;
 
 public class TicketManager {
-    // Map para acceder rápido a los tickets por su ID
     private Map<String, Ticket> ticketsByTicketId;
     private static Map<Integer,List<Ticket>> ticketsByCashId;
 

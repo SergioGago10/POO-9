@@ -5,11 +5,8 @@ import java.util.ArrayList;
 
 public class TicketCommands extends Command {
     private final ArrayList<Command> ticketcommands = new ArrayList<>();
-    protected final TicketManager ticketManager;
-
-    public TicketCommands(String text, TicketManager ticketManager) {
-        super(text);
-        this.ticketManager = ticketManager;
+    public TicketCommands(TicketManager ticketManager) {
+        super("ticket");
         ticketcommands.add(new TicketNewCommand(ticketManager));
         ticketcommands.add(new TicketAddCommand(ticketManager));
         ticketcommands.add(new TicketRemoveCommand(ticketManager));
