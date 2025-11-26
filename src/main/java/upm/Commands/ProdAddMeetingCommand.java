@@ -66,6 +66,7 @@ public class ProdAddMeetingCommand extends Command{
                         product = new FoodProduct(id, name, price, date, maxPeople);
                     }
                     Catalog.addProduct(product);
+                    CLI.print(product.toString());
                     applied = true;
                     CLI.print("prod addMeeting: ok");
                 }
