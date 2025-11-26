@@ -16,6 +16,7 @@ public class CLI {
         if (isInteractive)
             System.out.println(line);
         String [] resul=line.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+
         return resul;
     }
 

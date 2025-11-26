@@ -48,7 +48,6 @@ public class App {
                 // Ignoramos líneas vacías
                 continue;
             }
-
             boolean handled = false; // indica si algún comando ha gestionado la entrada
 
             for (Command command : commands) {
