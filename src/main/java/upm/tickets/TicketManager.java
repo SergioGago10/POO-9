@@ -3,8 +3,7 @@ package upm.tickets;
 import java.util.*;
 
 public class TicketManager {
-    // Map para acceder rápido a los tickets por su ID
-    private static Map<String, Ticket> ticketsByTicketId;
+    private Map<String, Ticket> ticketsByTicketId;
     private static Map<Integer,List<Ticket>> ticketsByCashId;
 
     public TicketManager() {
@@ -12,23 +11,23 @@ public class TicketManager {
         ticketsByCashId = new HashMap<>();
     }
 
-    public static boolean exists(String ticketId) {return ticketsByTicketId.containsKey(ticketId);}
+    public boolean exists(String ticketId) {return ticketsByTicketId.containsKey(ticketId);}
 
-    private static String generateTicketId() {
+    private String generateTicketId() {
         Random rand = new Random();
         int num = rand.nextInt(100000); // [0 - 99999]
         return String.format("%05d", num);
     }
 
     //Guardamos el ticket en el ticketmanager y en el ticketCashier.
-    public static Ticket newTicket(int cashId, int userId) {
+    public Ticket newTicket(int cashId, int userId) {
         String ticketId = generateTicketId();
         while (exists(ticketId)) { //En caso de que exista ya esa clave (bastante raro)
             ticketId = generateTicketId();
         }
         return newTicket(ticketId,cashId,userId);
     }
-    public static Ticket newTicket(String ticketId, int cashId, int userId) {
+    public Ticket newTicket(String ticketId, int cashId, int userId) {
        //El ticket ya tendrá el id valido, si no pues el handler se ocupará de ello.
         Ticket ticket = new Ticket(ticketId, cashId, userId);
         ticketsByTicketId.put(ticketId, ticket);
@@ -41,7 +40,7 @@ public class TicketManager {
         return ticket;
     }
 
-    public static Ticket getTicketById(String ticketId) {
+    public Ticket getTicketById(String ticketId) {
         return ticketsByTicketId.get(ticketId);
     }
 
@@ -62,7 +61,7 @@ public class TicketManager {
         return true;
     }
 
-    public static void printListTickets() {
+    public void printListTickets() {
         System.out.println("Ticket list (ordered by cashID):");
         // Convertimos el map a lista y ordenamos por cashId
         List<Ticket> ticketList = new ArrayList<>(ticketsByTicketId.values());
