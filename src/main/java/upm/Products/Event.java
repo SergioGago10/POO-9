@@ -58,7 +58,7 @@ public abstract class Event implements IProduct {
         sb.append(", name:").append(name);
         sb.append(", price:").append(String.format("%.2f", price));
         sb.append(", date of Event: ").append(plannedDate);
-        sb.append(", max people allowed:").append(maxParticipants);
+        sb.append(", max people allowed:").append(maxParticipants).append("}");
         return sb.toString();
     }
 }
