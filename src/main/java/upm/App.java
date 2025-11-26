@@ -37,7 +37,7 @@ public class App {
         commands.add(new CommandHelp());
         commands.add(new CommandEcho());
         commands.add(new ClientCommands());
-
+        commands.add(new TicketCommands());
 
         // 2) Bucle principal de CLI
         while (running) {
@@ -72,7 +72,8 @@ public class App {
     }
 
     private void close() {
-        System.out.println("Closing application.\nGoodbye!");
+        CLI.print("Closing application.\nGoodbye!");
+        CLI.closeSc();
         System.exit(0);
     }
 

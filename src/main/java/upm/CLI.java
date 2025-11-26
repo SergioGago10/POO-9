@@ -20,8 +20,12 @@ public class CLI {
         return resul;
     }
 
-    public static void print(String message) {
+    public static void println(String message) {
         System.out.println(message);
+    }
+
+    public static void print(String message) {
+        System.out.print(message);
     }
 
     public static Scanner createScanner(String[] args) {
@@ -34,9 +38,13 @@ public class CLI {
                 scanner = new Scanner(file);
             }
         } catch (FileNotFoundException ex) {
-            CLI.print(ex.getMessage());
+            CLI.println(ex.getMessage());
             scanner = new Scanner(System.in);
         }
         return scanner;
+    }
+
+    public static void closeSc() {
+        sc.close();
     }
 }

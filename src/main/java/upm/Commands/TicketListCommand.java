@@ -2,10 +2,10 @@ package upm.Commands;
 
 import upm.tickets.TicketManager;
 
-public class TicketListCommand extends TicketCommand{
+public class TicketListCommand extends Command{
 
-    public TicketListCommand(TicketManager ticketManager){
-        super("list",ticketManager);
+    public TicketListCommand(){
+        super("list");
     }
 
     @Override
@@ -15,7 +15,7 @@ public class TicketListCommand extends TicketCommand{
             if(args.length!=2){
                 System.err.println("Usage: ticket list");
             }else{
-                ticketManager.printListTickets();
+                TicketManager.printListTickets();
                 System.out.println("ticket list: ok");
             }
         } catch (Exception e) {

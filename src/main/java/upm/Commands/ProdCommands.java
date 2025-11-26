@@ -24,6 +24,7 @@ public class ProdCommands extends Command {
             String subCommand = message[1];
             for (Command cmd : prodcommands) {
                 if (!applied && cmd.getText().equalsIgnoreCase(subCommand)) {
+                    cmd.apply(message);
                     applied = true;
                 }
             }
