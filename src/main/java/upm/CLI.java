@@ -5,21 +5,24 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class CLI {
-    private Scanner sc;
+    private static Scanner sc;
+
     public CLI(String[] args) {
-         this.sc = createScanner(args);
+        CLI.sc = createScanner(args);
     }
 
-    public String [] nextLine(){
-        String line= sc.nextLine();
+    public static String[] nextLine(boolean isInteractive) {
+        String line = sc.nextLine();
+        if (isInteractive)
+            System.out.println(line);
         return line.split(" +(?=([^\"]\"[^\"]\")[^\"]$)");
     }
 
-    public static void print(String message){
+    public static void print(String message) {
         System.out.println(message);
     }
 
-    private Scanner createScanner(String[] args) {
+    public static Scanner createScanner(String[] args) {
         Scanner scanner = null;
         try {
             if (args.length == 0)
@@ -29,7 +32,8 @@ public class CLI {
                 scanner = new Scanner(file);
             }
         } catch (FileNotFoundException ex) {
-            System.out.println(ex.getMessage());
+            CLI.print(ex.getMessage());
+            scanner = new Scanner(System.in);
         }
         return scanner;
     }

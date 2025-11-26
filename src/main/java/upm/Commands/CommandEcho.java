@@ -11,7 +11,7 @@ public class CommandEcho extends Command {
     private static final Pattern ECHO_PATTERN =
             Pattern.compile("^echo\\s+\"(.*)\"\\s*$", Pattern.CASE_INSENSITIVE);
 
-    public CommandEcho(String text) {
+    public CommandEcho() {
         super("echo");
     }
 

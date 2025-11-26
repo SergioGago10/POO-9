@@ -3,7 +3,7 @@ package upm.Commands;
 
 
 public class CommandHelp extends Command {
-    public CommandHelp(String text) {
+    public CommandHelp() {
         super("help");
     }
 
