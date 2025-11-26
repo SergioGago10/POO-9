@@ -52,7 +52,7 @@ public class App {
 
             for (Command command : commands) {
                 try {
-                    if (command.apply(userInput)) {
+                    if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
                         handled = true;
                         break; // ya hay un comando que ha ejecutado esta línea
                     }
