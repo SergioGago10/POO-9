@@ -25,57 +25,31 @@ public class CommandHelp extends Command {
     }
 
     private void printHelp() {
-        System.out.println("Comandos disponibles:\n");
-
-        System.out.println("CLIENTES / CAJEROS");
-        System.out.println("  client add \"<nombre>\" <DNI> <email> <cashId>");
-        System.out.println("      -> Crea un nuevo cliente asociado al cajero <cashId>.");
-        System.out.println("  client remove <DNI>");
-        System.out.println("      -> Elimina el cliente con ese DNI.");
-        System.out.println("  client list");
-        System.out.println("      -> Lista todos los clientes (ordenados por nombre).");
-        System.out.println("  cash add [<id>] \"<nombre>\" <email>");
-        System.out.println("      -> Crea un nuevo cajero (si no hay <id>, se genera).");
-        System.out.println("  cash remove <id>");
-        System.out.println("      -> Elimina el cajero con ese id.");
-        System.out.println("  cash list");
-        System.out.println("      -> Lista todos los cajeros (ordenados por nombre).");
-        System.out.println("  cash tickets <id>");
-        System.out.println("      -> Muestra los tickets gestionados por ese cajero.\n");
-
-        System.out.println("TICKETS");
-        System.out.println("  ticket new [<id>] <cashId> <userId>");
-        System.out.println("      -> Crea un ticket para el usuario <userId> atendido por <cashId>.");
-        System.out.println("  ticket add <ticketId> <cashId> <prodId> <amount> [--p<txt> ...]");
-        System.out.println("      -> Añade un producto al ticket (con posibles textos de personalización).");
-        System.out.println("  ticket remove <ticketId> <cashId> <prodId>");
-        System.out.println("      -> Elimina un producto del ticket.");
-        System.out.println("  ticket print <ticketId> <cashId>");
-        System.out.println("      -> Imprime y cierra el ticket (cerrado solo se reimprime).");
-        System.out.println("  ticket list");
-        System.out.println("      -> Lista todos los tickets.\n");
-
-        System.out.println("PRODUCTOS");
-        System.out.println("  prod add [<id>] \"<name>\" <category> <price> [<maxPers>]");
-        System.out.println("      -> Crea un producto normal o personalizable (si tiene <maxPers>).");
-        System.out.println("  prod update <id> NAME|CATEGORY|PRICE <value>");
-        System.out.println("      -> Modifica nombre, categoría o precio de un producto.");
-        System.out.println("  prod addFood [<id>] \"<name>\" <price> <expiration: yyyy-MM-dd> <max_people>");
-        System.out.println("      -> Crea un producto de tipo comida (con caducidad y plazas).");
-        System.out.println("  prod addMeeting [<id>] \"<name>\" <price> <expiration: yyyy-MM-dd> <max_people>");
-        System.out.println("      -> Crea un producto de tipo reunión (con caducidad y plazas).");
-        System.out.println("  prod list");
-        System.out.println("      -> Lista todos los productos.");
-        System.out.println("  prod remove <id>");
-        System.out.println("      -> Elimina el producto con ese id.\n");
-
-        System.out.println("GENERALES");
-        System.out.println("  help");
-        System.out.println("      -> Muestra esta ayuda.");
-        System.out.println("  echo \"<text>\"");
-        System.out.println("      -> Imprime <text> tal cual.");
-        System.out.println("  exit");
-        System.out.println("      -> Cierra la aplicación.\n");
+        System.out.println("Commands:\n" +
+                "  client add \"<nombre>\" <DNI> <email> <cashId>\n" +
+                "  client remove <DNI>\n" +
+                "  client list\n" +
+                "  cash add [<id>] \"<nombre>\"<email>\n" +
+                "  cash remove <id>\n" +
+                "  cash list\n" +
+                "  cash tickets <id>\n" +
+                "  ticket new [<id>] <cashId> <userId>\n" +
+                "  ticket add <ticketId><cashId> <prodId> <amount> [--p<txt> --p<txt>] \n" +
+                "  ticket remove <ticketId><cashId> <prodId> \n" +
+                "  ticket print <ticketId> <cashId> \n" +
+                "  ticket list\n" +
+                "  prod add <id> \"<name>\" <category> <price>\n" +
+                "  prod update <id> NAME|CATEGORY|PRICE <value>\n" +
+                "  prod addFood [<id>] \"<name>\" <price> <expiration:yyyy-MM-dd> <max_people>\n" +
+                "  prod addMeeting [<id>] \"<name>\" <price> <expiration:yyyy-MM-dd> <max_people>\n" +
+                "  prod list\n" +
+                "  prod remove <id>\n" +
+                "  help\n" +
+                "  echo “<text>” \n" +
+                "  exit\n" +
+                "\n" +
+                "Categories: MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS\n" +
+                "Discounts if there are ≥2 units in the category: MERCH 0%, STATIONERY 5%, CLOTHES 7%, BOOK 10%, ELECTRONICS 3%.\n");
     }
 }
 
