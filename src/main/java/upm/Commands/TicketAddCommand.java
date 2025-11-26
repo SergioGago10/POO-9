@@ -21,7 +21,7 @@ public class TicketAddCommand extends Command {
         } else {
             try {
                 String ticketId = args[2];
-                int cashId = Integer.parseInt(args[3]);
+                int cashId = Integer.parseInt(args[3].substring(2));
                 int prodId = Integer.parseInt(args[4]);
                 int amount = Integer.parseInt(args[5]);
                 if (Catalog.idExists(prodId)) {

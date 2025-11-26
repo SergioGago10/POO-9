@@ -18,7 +18,7 @@ public class TicketRemoveCommand  extends Command{
         } else {
             try {
                 String ticketId = args[2];
-                int cashId = Integer.parseInt(args[3]);
+                int cashId = Integer.parseInt(args[3].substring(2));
                 int prodId = Integer.parseInt(args[4]);
                 if (Catalog.idExists(prodId)) {
                     Ticket ticketAModificar = TicketManager.getTicketById(ticketId); //Si es null es que no existe dicho ticketId!

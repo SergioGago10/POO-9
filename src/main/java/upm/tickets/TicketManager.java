@@ -25,11 +25,11 @@ public class TicketManager {
         while (exists(ticketId)) { //En caso de que exista ya esa clave (bastante raro)
             ticketId = generateTicketId();
         }
-        return newTicket(ticketId,cashId,userId);
+        return newTicket(ticketId,cashId,userId,true);
     }
-    public static Ticket newTicket(String ticketId, int cashId, int userId) {
+    public static Ticket newTicket(String ticketId, int cashId, int userId, boolean isTicketIdAutoGen) {
        //El ticket ya tendrá el id valido, si no pues el handler se ocupará de ello.
-        Ticket ticket = new Ticket(ticketId, cashId, userId);
+        Ticket ticket = new Ticket(ticketId, cashId, userId,isTicketIdAutoGen);
         ticketsByTicketId.put(ticketId, ticket);
         List<Ticket> list = ticketsByCashId.get(cashId);
         if (list == null) { //si es null significa que no hay ningun cashier con ese id y que tenga tickets.
@@ -37,6 +37,8 @@ public class TicketManager {
             ticketsByCashId.put(cashId, list);
         }
         list.add(ticket);
+        System.out.println("Ticket: " + ticket.getTicketId());
+        ticket.printCurrentTicket();
         return ticket;
     }
 
@@ -62,19 +64,16 @@ public class TicketManager {
     }
 
     public static void printListTickets() {
-        System.out.println("Ticket list (ordered by cashID):");
+        System.out.println("Ticket list : ");
         // Convertimos el map a lista y ordenamos por cashId
         List<Ticket> ticketList = new ArrayList<>(ticketsByTicketId.values());
         ticketList.sort(Comparator.comparingInt(Ticket::getCashId));
         for (Ticket t : ticketList) {
-            System.out.println("{class: Ticket, ticketId: " + t.getTicketId() +
-                    ", cashId: " + t.getCashId() +
-                    ", userId: " + t.getUserId() +
-                    ", closed: " + t.isClosed() + "}");
+            System.out.println("  " + t.getTicketId() + " - " + t.getEstado());
         }
     }
 
-    //METODO A USAR PARA EL COMANDO CASH TICKET <TICKETID>
+
     public static List<Ticket> printTicketsByCashier(String cashId) {
         List<Ticket> list = ticketsByCashId.get(cashId);
         if (list == null || list.isEmpty()) {
