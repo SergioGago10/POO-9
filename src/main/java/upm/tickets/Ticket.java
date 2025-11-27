@@ -80,7 +80,7 @@ public class Ticket {
                         canAdd = false;
                     }
 
-                    else if (productToBeAdded instanceof FoodProduct || productToBeAdded instanceof MeetingProduct) {
+                    else if (productToBeAdded instanceof Event) {
                         // No añadir reuniones/comidas repetidas
                         boolean alreadyInTicket = false;
                         for (IProduct p : productsList) {

@@ -1,9 +1,7 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Products.Catalog;
-import upm.Products.FoodProduct;
-import upm.Products.IProduct;
+import upm.Products.*;
 import upm.Utilities;
 
 import java.time.LocalDate;
@@ -57,13 +55,13 @@ public class ProdAddMeetingCommand extends Command{
                             CLI.print("The meeting should be planned at least 12 hours before");
                             return false;
                         }
-                        product = new FoodProduct(id, name, price, creationDate, date, maxPeople);
+                        product = new Event(id, name, price, creationDate, date, maxPeople,TypeEvent.MEETING);
                     } else{
                         if (LocalDateTime.now().plusHours(12).isAfter(date.atStartOfDay())) {
                             CLI.print("The meeting should be planned at least 12 hours before");
                             return false;
                         }
-                        product = new FoodProduct(id, name, price, date, maxPeople);
+                        product = new Event(id, name, price, date, maxPeople, TypeEvent.MEETING);
                     }
                     Catalog.addProduct(product);
                     CLI.print(product.toString());

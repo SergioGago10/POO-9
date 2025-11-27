@@ -1,10 +1,10 @@
 package upm.Products;
 
 public class BasicProduct implements IProduct {
-    public int id;
-    public String name;
-    public double price;
-    public Category category;
+    protected int id;
+    protected String name;
+    protected double price;
+    protected Category category;
 
     public BasicProduct(int id, String name, Category category, double price) {
         this.id = id;
@@ -45,7 +45,7 @@ public class BasicProduct implements IProduct {
     @Override
     public String toString(){
         StringBuilder sb= new StringBuilder();
-        sb.append("  {class: BasicProduct");
+        sb.append("  {class: Product");
         sb.append(",id: ").append(id);
         sb.append(",name:").append(name);
         sb.append(",Category:").append(category);
