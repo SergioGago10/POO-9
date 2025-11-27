@@ -19,11 +19,16 @@ public class ProdListCommand extends Command {
             CLI.print("Format must be: prod list");
             applied = false;
         } else {
+            applied = true;
             List<IProduct> catalog = Catalog.getCatalog();
-            for (IProduct product : catalog)
-                CLI.print(product.toString());
-            applied=true;
-            CLI.print("prod list: ok");
+            if (catalog.isEmpty())
+                CLI.print("Catalog is empty");
+            else {
+                CLI.print("Catalog:");
+                for (IProduct product : catalog)
+                    CLI.print(product.toString());
+                CLI.print("prod list: ok");
+            }
         }
         return applied;
     }

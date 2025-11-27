@@ -4,10 +4,10 @@ import upm.Products.Catalog;
 import upm.tickets.Ticket;
 import upm.tickets.TicketManager;
 
-public class TicketRemoveCommand  extends  TicketCommand{
+public class TicketRemoveCommand  extends Command{
 
-    public TicketRemoveCommand(TicketManager ticketManager){
-        super("remove",ticketManager);
+    public TicketRemoveCommand(){
+        super("remove");
     }
 
     @Override
@@ -18,10 +18,10 @@ public class TicketRemoveCommand  extends  TicketCommand{
         } else {
             try {
                 String ticketId = args[2];
-                int cashId = Integer.parseInt(args[3]);
+                int cashId = Integer.parseInt(args[3].substring(2));
                 int prodId = Integer.parseInt(args[4]);
                 if (Catalog.idExists(prodId)) {
-                    Ticket ticketAModificar = ticketManager.getTicketById(ticketId); //Si es null es que no existe dicho ticketId!
+                    Ticket ticketAModificar = TicketManager.getTicketById(ticketId); //Si es null es que no existe dicho ticketId!
                     if(ticketAModificar == null){
                         System.err.println("Error: Ticket " + ticketId + " does not exist.");
                     } else {

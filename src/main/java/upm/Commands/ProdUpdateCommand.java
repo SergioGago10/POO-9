@@ -40,8 +40,10 @@ public class ProdUpdateCommand extends Command {
                                 applied = true;
                             }
                     }
-                    if(applied)
+                    if(applied) {
+                        CLI.print(product.toString());
                         CLI.print("prod update: ok");
+                    }
                 }
             } catch (IllegalArgumentException ignored) {
                 CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");

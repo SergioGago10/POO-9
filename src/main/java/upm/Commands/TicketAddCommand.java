@@ -6,10 +6,10 @@ import upm.tickets.TicketManager;
 
 import java.util.ArrayList;
 
-public class TicketAddCommand extends TicketCommand {
+public class TicketAddCommand extends Command {
 
-    public TicketAddCommand(TicketManager ticketManager){
-        super("add",ticketManager);
+    public TicketAddCommand(){
+        super("add");
     }
 
     @Override
@@ -21,11 +21,11 @@ public class TicketAddCommand extends TicketCommand {
         } else {
             try {
                 String ticketId = args[2];
-                int cashId = Integer.parseInt(args[3]);
+                int cashId = Integer.parseInt(args[3].substring(2));
                 int prodId = Integer.parseInt(args[4]);
                 int amount = Integer.parseInt(args[5]);
                 if (Catalog.idExists(prodId)) {
-                    Ticket ticketAModificar = ticketManager.getTicketById(ticketId);
+                    Ticket ticketAModificar = TicketManager.getTicketById(ticketId);
                     if(ticketAModificar != null){
                         if(ticketAModificar.getCashId() != cashId){
                             System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);

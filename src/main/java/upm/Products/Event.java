@@ -4,30 +4,29 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 //hay que poner minutos
-public abstract class Event implements IProduct {
-    public int id;
-    public String name;
-    public double price;
-    public int maxParticipants;
-    public LocalDateTime creationDate;
-    public LocalDate plannedDate;
-    public static final LocalDate expiration = LocalDate.of(2025, 12, 30);
+public class Event implements IProduct {
+    private int id;
+    private String name;
+    private double price;
+    private int maxParticipants;
+    private LocalDateTime creationDate;
+    private LocalDate plannedDate;
+    private TypeEvent typeEvent;
 
 
     public Event(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDate plannedDate,
-                 int maxParticipants) {
-        if (expiration.isBefore(plannedDate))
-            throw new IllegalArgumentException("Date must be before "+expiration);
+                 int maxParticipants, TypeEvent typeEvent) {
+        this.creationDate = creationDate;
+        this.plannedDate = plannedDate;
         this.id = id;
         this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
         this.price = pricePerson;
-        this.creationDate = creationDate;
-        this.plannedDate = plannedDate;
         this.maxParticipants = maxParticipants;
+        this.typeEvent=typeEvent;
     }
 
-    public Event(int id, String name, double pricePerson, LocalDate plannedDate, int maxParticipants) {
-        this(id, name, pricePerson, LocalDateTime.now(), plannedDate, maxParticipants);
+    public Event(int id, String name, double pricePerson, LocalDate plannedDate, int maxParticipants, TypeEvent typeEvent) {
+        this(id, name, pricePerson, LocalDateTime.now(), plannedDate, maxParticipants,typeEvent);
     }
 
 
@@ -54,11 +53,12 @@ public abstract class Event implements IProduct {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("  {class:").append(typeEvent);
         sb.append(", id: ").append(id);
         sb.append(", name:").append(name);
-        sb.append(", price:").append(String.format("%.2f", price)).append("}");
+        sb.append(", price:").append(String.format("%.2f", price));
         sb.append(", date of Event: ").append(plannedDate);
-        sb.append(", max people allowed:").append(maxParticipants);
+        sb.append(", max people allowed:").append(maxParticipants).append("}");
         return sb.toString();
     }
 }

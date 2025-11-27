@@ -3,6 +3,7 @@ package upm.tickets;
 import upm.Products.Catalog;
 import upm.Products.*;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -19,22 +20,16 @@ public class Ticket {
     private LocalDateTime fechaApertura;
     private LocalDateTime fechaCierre;
     private List<String> customTexts; //Para saber que personalizacion tiene cada producto personalizable
+    private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("#.##");
 
-    public Ticket(String ticketId, int cashId, int userId) {
+    public Ticket(String ticketId, int cashId, int userId, boolean isTicketIdAutoGen) {
         this.fechaApertura = LocalDateTime.now();
-        this.ticketId = fechaApertura.format(TICKET_ID_FORMAT) + "-" + ticketId;
+        this.ticketId = isTicketIdAutoGen ? fechaApertura.format(TICKET_ID_FORMAT) + "-" + ticketId : ticketId;
         this.cashId = cashId;
         this.userId = userId;
         this.closed = false;
         this.estado = TicketState.EMPTY;
         productsList = new ArrayList<>();
-        // El arraylist es util, ya que vamos a recorrer la lista siempre y la eliminación de productos será al inicio mitad y final,
-        // por lo que una linked list no supone mucha diferencia, además que con tan pocos elementos no hay ninguna diferencia notoria entre
-        // linked list y array list, es simplemente decision propia
-        // Además como accedemos a elementos con un índice el arraylist es esencial en estos casos concretos, ya que una linked list no te accede directamente,
-        // un arraylist sí que te puede acceder directamente al índice indicado.
-        // Las linked lists serán útiles si tenemos un MAX_PRODUCTOS = 1M; o algo similar, ya que el arraylist no seria conveniente por tiempos de eliminacion de elementos
-        // en esa situación sí que sería más util usar la linked list u otra estructura de datos mas avanzada (a pesar de que el acceso a elementos por indice sea mas costoso)
     }
 
     public String getTicketId() {return ticketId;}
@@ -74,7 +69,7 @@ public class Ticket {
     }
 
     public void addProductToTicket(int productID, int quantity, List<String> customTexts) {
-        if(estado != TicketState.CLOSED){
+        if(estado != TicketState.CLOSE){
             boolean productAdded = false;
             IProduct productToBeAdded = Catalog.getProduct(productID);
             if (productToBeAdded != null) {
@@ -85,7 +80,7 @@ public class Ticket {
                         canAdd = false;
                     }
 
-                    else if (productToBeAdded instanceof FoodProduct || productToBeAdded instanceof MeetingProduct) {
+                    else if (productToBeAdded instanceof Event) {
                         // No añadir reuniones/comidas repetidas
                         boolean alreadyInTicket = false;
                         for (IProduct p : productsList) {
@@ -141,8 +136,8 @@ public class Ticket {
                 }
                 if (productAdded) {
                     //Imprimimos el ticket actual despues de poner los productos
-                    if(estado != TicketState.ACTIVE){
-                        estado = TicketState.ACTIVE;
+                    if(estado != TicketState.OPEN){
+                        estado = TicketState.OPEN;
                     }
                     printCurrentTicket();
                     System.out.println("ticket add: ok");
@@ -160,13 +155,12 @@ public class Ticket {
         CategoryDiscountCalc categoryDiscount = new CategoryDiscountCalc();
         double[] totals = categoryDiscount.calculateTotals(this);
         Map<IProduct, Double> hasDiscount = categoryDiscount.discountPerProduct(this);
-        if (productsList.isEmpty()) {
-            System.out.println("Ticket is empty.");
-        } else {
+        if (!productsList.isEmpty()) {
             // Ordenamos los productos por nombre antes de imprimirlos
             sortProducts();
+            System.out.println("Ticket : " + this.getTicketId());
             for (IProduct currentProduct : productsList) {
-                System.out.print("{class:" + currentProduct.getClass().getSimpleName() +
+                System.out.print("\t{class:" + currentProduct.getClass().getSimpleName() +
                         ", id:" + currentProduct.getId() +
                         ", name:" + currentProduct.getName());
                 // Solo imprimimos la categoría si es un BasicProduct
@@ -186,10 +180,11 @@ public class Ticket {
                     System.out.println(); //Aplicamos salto de linea si no hay descuento
                 }
             }
-            System.out.printf("Total price: %.2f%n", totals[0]);
-            System.out.printf("Total discount: %.2f%n", totals[2]);
-            System.out.printf("Final price: %.2f%n", totals[1]);
         }
+        //Segun sale en el formato, el formato es US, el punto es el que marca el decimal.
+            System.out.printf(Locale.US,"\tTotal price: %s%n", PRICE_FORMAT.format(totals[0]));
+        System.out.printf(Locale.US,"\tTotal discount: %s%n", PRICE_FORMAT.format(totals[2]));
+        System.out.printf(Locale.US, "\tFinal price: %s%n", PRICE_FORMAT.format(totals[1]));
     }
 
     public void printFinalTicket() {
@@ -199,8 +194,8 @@ public class Ticket {
         printCurrentTicket();
     }
     private void closeTicket(){
-        if (estado != TicketState.CLOSED){
-            estado = TicketState.CLOSED;
+        if (estado != TicketState.CLOSE){
+            estado = TicketState.CLOSE;
             fechaCierre = LocalDateTime.now();
             // Añadir fecha de cierre al ID
             ticketId = ticketId + "-" + fechaCierre.format(TICKET_ID_FORMAT);
@@ -208,7 +203,7 @@ public class Ticket {
     }
 
     public void removeProductFromTicket(int productID) {
-        if(estado != TicketState.CLOSED){
+        if(estado != TicketState.CLOSE){
             Iterator<IProduct> it = productsList.iterator();
             while (it.hasNext()) {
                 IProduct p = it.next();
@@ -219,8 +214,10 @@ public class Ticket {
             if(productsList.isEmpty()){
                 estado = TicketState.EMPTY;
             }
+            this.printCurrentTicket();
         } else {
             System.out.println("This ticket has been closed. You can't add or remove products from it.");
         }
     }
+
 }

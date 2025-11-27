@@ -11,7 +11,7 @@ import java.util.List;
 public class CashTicketCommand extends Command {
 
     public CashTicketCommand() {
-        super("ticket");
+        super("tickets");
     }
 
     @Override

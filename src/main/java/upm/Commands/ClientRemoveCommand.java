@@ -24,7 +24,7 @@ public class ClientRemoveCommand extends Command {
                 String email = args[i++];
                 int cashierId = Integer.parseInt(args[i]);
 
-                Client client = new Client(name, dni, email, cashierId);
+                Client client = new Client(name, dni, email, String.valueOf(cashierId));
 
                 if (ClientsManager.removeClient(client)) {
                     System.out.println("client remove: ok");

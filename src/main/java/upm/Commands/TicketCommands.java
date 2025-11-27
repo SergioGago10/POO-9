@@ -5,16 +5,14 @@ import java.util.ArrayList;
 
 public class TicketCommands extends Command {
     private final ArrayList<Command> ticketcommands = new ArrayList<>();
-    protected final TicketManager ticketManager;
 
-    public TicketCommands(String text, TicketManager ticketManager) {
-        super(text);
-        this.ticketManager = ticketManager;
-        ticketcommands.add(new TicketNewCommand(ticketManager));
-        ticketcommands.add(new TicketAddCommand(ticketManager));
-        ticketcommands.add(new TicketRemoveCommand(ticketManager));
-        ticketcommands.add(new TicketPrintCommand(ticketManager));
-        ticketcommands.add(new TicketListCommand(ticketManager));
+    public TicketCommands() {
+        super("ticket");
+        ticketcommands.add(new TicketNewCommand());
+        ticketcommands.add(new TicketAddCommand());
+        ticketcommands.add(new TicketRemoveCommand());
+        ticketcommands.add(new TicketPrintCommand());
+        ticketcommands.add(new TicketListCommand());
     }
 
     @Override

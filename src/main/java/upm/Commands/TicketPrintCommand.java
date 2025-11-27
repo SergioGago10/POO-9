@@ -3,10 +3,10 @@ package upm.Commands;
 import upm.tickets.Ticket;
 import upm.tickets.TicketManager;
 
-public class TicketPrintCommand extends TicketCommand{
+public class TicketPrintCommand extends Command{
 
-    public TicketPrintCommand(TicketManager ticketManager){
-        super("print",ticketManager);
+    public TicketPrintCommand(){
+        super("print");
     }
 
     @Override
@@ -17,8 +17,8 @@ public class TicketPrintCommand extends TicketCommand{
                 System.err.println("Usage: ticket print <ticketId> <cashId>");
             } else{
                 String ticketId = args[2];
-                int cashId = Integer.parseInt(args[3]);
-                Ticket ticketAMostrar = ticketManager.getTicketById(ticketId);
+                int cashId = Integer.parseInt(args[3].substring(2));
+                Ticket ticketAMostrar = TicketManager.getTicketById(ticketId);
                 if(ticketAMostrar != null){
                     if(ticketAMostrar.getCashId() != cashId){
                         System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);

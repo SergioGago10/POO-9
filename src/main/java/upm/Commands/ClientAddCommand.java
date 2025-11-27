@@ -2,6 +2,9 @@ package upm.Commands;
 
 import upm.Users.Client;
 import upm.Users.ClientsManager;
+import upm.Utilities;
+
+import java.util.Iterator;
 
 public class ClientAddCommand extends Command {
     public ClientAddCommand(){
@@ -11,19 +14,27 @@ public class ClientAddCommand extends Command {
     public boolean apply(String[] args) {
         boolean applied;
 
-        if (args.length < 3) {
+        if (args.length < 6) {
             applied = false;
         } else {
-            String dni = args[2];
-            Client client = ClientsManager.getClientByDni(dni);
+            try {
+                int i = 2;
+                String name = args[i++];
+                String dni = args[i++];
+                String email = args[i++];
+                int cashierId = Integer.parseInt(args[i]);
 
-            if (client != null) {
-                System.out.println(client.toString());
-                ClientsManager.removeClientByDni(dni);
-                System.out.println("client remove: ok");
-                applied = true;
-            } else {
-                System.err.println("The client with DNI: " + dni + " couldn't be removed. Client not found.");
+                Client client = new Client(name, dni, email, String.valueOf(cashierId));
+
+                if (ClientsManager.addClient(client)) {
+                    System.out.println("client add: ok");
+                    applied = true;
+                } else {
+                    System.err.println("Client is null or couldn't be added.");
+                    applied = false;
+                }
+            } catch (NumberFormatException ex) {
+                System.err.println("CashierId must be an integer number.");
                 applied = false;
             }
         }
