@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 public class CommandEcho extends Command {
 
 
-    public CommandEcho(String text) {
-        super(text);
+    public CommandEcho() {
+        super("echo");
     }
 
     @Override
