@@ -33,6 +33,7 @@ public class App {
 
         // 1) Lista de comandos
         List<Command> commands = new ArrayList<>();
+        commands.add(new CashCommands());
         commands.add(new ProdCommands());
         commands.add(new CommandHelp());
         commands.add(new CommandEcho());
