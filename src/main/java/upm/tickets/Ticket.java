@@ -1,5 +1,6 @@
 package upm.tickets;
 
+import upm.CLI;
 import upm.Products.Catalog;
 import upm.Products.*;
 
@@ -89,7 +90,7 @@ public class Ticket {
                             }
                         }
                         if (alreadyInTicket) {
-                            System.out.println("This product (Meal/Meeting) is already in the ticket. It can not be added again.");
+                            System.out.println("This product (Food/Meeting) is already in the ticket. It can not be added again.");
                             canAdd = false;
                         } else {
                             productsList.add(productToBeAdded);
@@ -160,15 +161,7 @@ public class Ticket {
             sortProducts();
             System.out.println("Ticket : " + this.getTicketId());
             for (IProduct currentProduct : productsList) {
-                System.out.print("\t{class:" + currentProduct.getClass().getSimpleName() +
-                        ", id:" + currentProduct.getId() +
-                        ", name:" + currentProduct.getName());
-                // Solo imprimimos la categoría si es un BasicProduct
-                if (currentProduct instanceof BasicProduct) {
-                    BasicProduct bp = (BasicProduct) currentProduct;
-                    System.out.print(", category:" + bp.getCategory());
-                }
-                System.out.print(", price:" + currentProduct.getPrice() + "}");
+                CLI.printText(currentProduct.toString());
                 // Si el descuento no es igual a 1.0, el producto tiene descuento
                 boolean hasAnyDiscount = (hasDiscount.get(currentProduct)!=1.0);
                 if (hasAnyDiscount) {

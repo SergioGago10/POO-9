@@ -45,7 +45,7 @@ public class BasicProduct implements IProduct {
     @Override
     public String toString(){
         StringBuilder sb= new StringBuilder();
-        sb.append("  {class: Product");
+        sb.append("  {class:Product");
         sb.append(",id: ").append(id);
         sb.append(",name:").append(name);
         sb.append(",Category:").append(category);
