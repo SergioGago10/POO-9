@@ -1,7 +1,10 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Products.*;
+import upm.Products.Catalog;
+import upm.Products.Event;
+import upm.Products.IProduct;
+import upm.Products.TypeEvent;
 import upm.Utilities;
 
 import java.time.LocalDate;
@@ -41,6 +44,10 @@ public class ProdAddFoodCommand extends Command {
                 LocalDate date = LocalDate.of(expirationYear, expirationMonth, expirationDay);
                 i++;
                 int maxPeople = Integer.parseInt(args[i]);
+                if (maxPeople > 100) {
+                    CLI.print("Error processing ->prod addFood ->Error adding product");
+                    return false;
+                }
                 i++;
                 if (Utilities.isValidProd(id, name, price)) {
                     if (i == args.length - 1) {
@@ -57,7 +64,7 @@ public class ProdAddFoodCommand extends Command {
                             return false;
                         }
 
-                        product = new Event(id, name, price, creationDate, date, maxPeople,TypeEvent.FOOD);
+                        product = new Event(id, name, price, creationDate, date, maxPeople, TypeEvent.FOOD);
                     } else {
                         if (LocalDateTime.now().plusDays(3).isAfter(date.atStartOfDay())) {
                             CLI.print("The meeting should be planned at least 3 days before");
