@@ -1,5 +1,6 @@
 package upm.Commands;
 
+import upm.CLI;
 import upm.Users.Cash;
 import upm.Users.CashManager;
 
@@ -20,12 +21,12 @@ public class CashRemoveCommand extends Command {
                 System.out.println(cashRemoved.toString());
 
                 if (CashManager.removeCashById(id)) {
-                    System.out.println("cash remove: ok");
+                    CLI.print("cash remove: ok");
                     applied = true;
                 }
 
             } else {
-                System.err.println("The cashier with id: " + id + " couldn't be removed. Cashier not found.");
+                CLI.print("The cashier with id: " + id + " couldn't be removed. Cashier not found.");
             }
         }
 

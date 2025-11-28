@@ -23,6 +23,6 @@ public class Cash extends User {
 
     @Override
     public String toString() {
-        return String.format("- %s | DNI: %s | Email: %s | CashierId: %s", name, email, cashId);
+        return String.format("- %s | Email: %s | CashierId: %s", name, email, cashId);
     }
 }

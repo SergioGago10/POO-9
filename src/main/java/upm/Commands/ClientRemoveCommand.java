@@ -1,5 +1,6 @@
 package upm.Commands;
 
+import upm.CLI;
 import upm.Users.Client;
 import upm.Users.ClientsManager;
 import upm.Utilities;
@@ -15,7 +16,6 @@ public class ClientRemoveCommand extends Command {
         boolean applied;
 
         if (args.length < 3) {
-
             System.out.println("Format must be: client remove <DNI>");
             applied = false;
         } else {
@@ -23,10 +23,10 @@ public class ClientRemoveCommand extends Command {
             Client client = ClientsManager.getClientByDni(dni);
 
             if (ClientsManager.removeClient(client)) {
-                System.out.println("client remove: ok");
+                CLI.print("client remove: ok");
                 applied = true;
             } else {
-                System.err.println("Client not found or couldn't be removed.");
+                CLI.print("Client not found or couldn't be removed.");
                 applied = false;
             }
         }

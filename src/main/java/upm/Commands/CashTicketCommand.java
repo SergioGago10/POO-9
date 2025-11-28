@@ -1,5 +1,6 @@
 package upm.Commands;
 
+import upm.CLI;
 import upm.Users.Cash;
 import upm.Users.CashManager;
 import upm.tickets.Ticket;
@@ -25,21 +26,21 @@ public class CashTicketCommand extends Command {
 
             Cash cash = CashManager.getCashById(cashId);
             if (cash == null) {
-                System.out.println("Cash not found.");
+                CLI.print("Cash not found.");
                 return false;
             }
 
             List<Ticket> tickets = TicketManager.printTicketsByCashier(cashId);
 
-            System.out.println("Tickets: ");
+            CLI.print("Tickets: ");
             if (tickets != null && !tickets.isEmpty()) {
                 tickets.sort(Comparator.comparing(Ticket::getTicketId));
                 for (Ticket ticket : tickets) {
-                    System.out.println("  " + ticket.getTicketId() + "->" + ticket.getEstado().name());
+                    CLI.print("  " + ticket.getTicketId() + "->" + ticket.getEstado().name());
                 }
             }
 
-            System.out.println("cash tickets: ok");
+            CLI.print("cash tickets: ok");
             return true;
 
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package upm.Commands;
 
+import upm.CLI;
 import upm.Users.Cash;
 import upm.Users.CashManager;
 import upm.Users.Client;
@@ -17,13 +18,13 @@ public class ClientListCommand extends Command {
     public boolean apply(String[] args) {
         boolean applied = true;
         if (ClientsManager.getClientsList().size()==0) {
-            System.out.println("No clients found.");
+            CLI.print("No clients found.");
             return applied;
         }
         else {
-            System.out.println("Clients:");
+            CLI.print("Clients:");
             for (Client client : ClientsManager.getClientsList()) {
-                System.out.println("  " + client.toString());
+                CLI.print("  " + client.toString());
             }
             return applied;
         }
