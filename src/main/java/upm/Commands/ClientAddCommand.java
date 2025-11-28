@@ -1,5 +1,6 @@
 package upm.Commands;
 
+import upm.Users.CashManager;
 import upm.Users.Client;
 import upm.Users.ClientsManager;
 import upm.Utilities;
@@ -15,26 +16,32 @@ public class ClientAddCommand extends Command {
         boolean applied;
 
         if (args.length < 6) {
+            System.out.println("Format must be: client add \"<name>\" <DNI> <email> <cashId> ");
             applied = false;
         } else {
             try {
-                int i = 2;
-                String name = args[i++];
-                String dni = args[i++];
-                String email = args[i++];
-                int cashierId = Integer.parseInt(args[i]);
+                for (int i = 0; i < args.length; i++) {
+                    args[i] = args[i].replace("\"", "")
+                            .replace("“", "")
+                            .replace("”", "")
+                            .trim();
+                }
+                String name = args[2];
+                String dni = args[3];
+                String email = args[4];
+                String cashierId = args[5];
 
-                Client client = new Client(name, dni, email, String.valueOf(cashierId));
+                Client client = new Client(name, dni, email, cashierId);
 
-                if (ClientsManager.addClient(client)) {
+                if (CashManager.idExists(cashierId) && ClientsManager.addClient(client)) {
                     System.out.println("client add: ok");
                     applied = true;
                 } else {
-                    System.err.println("Client is null or couldn't be added.");
+                    System.err.println("Client is null or couldn't be added. Check the cashier ID.");
                     applied = false;
                 }
             } catch (NumberFormatException ex) {
-                System.err.println("CashierId must be an integer number.");
+                System.err.println("CashierId must be an integer number and must already exist.");
                 applied = false;
             }
         }

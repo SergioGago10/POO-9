@@ -2,72 +2,63 @@ package upm.Users;
 
 import java.util.*;
 
-public class ClientsManager {
-    public static ArrayList<Client> clientsList = new ArrayList();
+public final class ClientsManager {
 
-    public ClientsManager() {
-        clientsList = new ArrayList<>();
-    }
+    public static final ArrayList<Client> clientsList = new ArrayList<>();
+    private ClientsManager() { }
 
-    public ArrayList<Client> getClients() {
-        return clientsList;
+    public static List<Client> getClientsList() {
+        return new ArrayList<>(clientsList); // devolvemos copia para no exponer la interna
     }
 
     public static boolean addClient(Client client) {
-        boolean added = false;
-        if (client == null) return added;
-        ListIterator<Client> it = clientsList.listIterator();
-        while (it.hasNext()) {
-            String currentDni = it.next().getDni();
-            if (currentDni.equals(client.getDni())) {
-                return added;
+        if (client == null) return false;
+
+        // Evitar duplicados por DNI
+        for (Client c : clientsList) {
+            if (c.getDni().equals(client.getDni())) {
+                return false;
             }
         }
-        return ClientsManager.clientsList.add(client);
+        return clientsList.add(client);
     }
 
     public static boolean removeClient(Client client) {
+        if (client == null) return false;
+
         Iterator<Client> it = clientsList.iterator();
-        boolean removed = false;
-        while (it.hasNext() && !removed) {
-            String currentDni = it.next().getDni();
-            if (currentDni.equals(client.getDni())) {
+        while (it.hasNext()) {
+            Client current = it.next();
+            if (current.getDni().equals(client.getDni())) {
                 it.remove();
-                removed = true;
+                return true;
             }
         }
-        return removed;
+        return false;
     }
 
-    public static StringBuilder showClients(ArrayList<Client> clientsList) {
-        StringBuilder sb = new StringBuilder();
-        if (clientsList.isEmpty()) {
-            sb.append("No hay clientes registrados en el sistema.");
-            return sb;
-        }
-        Collections.sort(clientsList, Comparator.comparing(Client::getName, String.CASE_INSENSITIVE_ORDER));
-        sb.append("Lista de clientes:\n");
+    public static Client getClientByDni(String dni) {
+        if (dni == null) return null;
         for (Client client : clientsList) {
-            sb.append(client.toString());
-        }
-        return sb;
-    }
-    public static Client getClientByDni (String dni){
-        for (Client client : clientsList){
-            if (client.getDni().equals(dni)){
+            if (client.getDni().equals(dni)) {
                 return client;
             }
         }
         return null;
     }
-    public static boolean removeClientByDni (String dni){
-        boolean done = false;
-        for (Client client : clientsList){
-            if (client.getDni().equals(dni)){
-                clientsList.remove(client);
-                done=true;
+
+    public static boolean removeClientByDni(String dni) {
+        if (dni == null) return false;
+
+        Iterator<Client> it = clientsList.iterator();
+        while (it.hasNext()) {
+            Client current = it.next();
+            if (current.getDni().equals(dni)) {
+                it.remove();
+                return true;
             }
         }
-        return done;
+        return false;
     }
 }
+

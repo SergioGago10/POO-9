@@ -14,7 +14,7 @@ public class CashAddCommand extends Command {
     public boolean apply(String[] args) {
         boolean applied = false;
         if (args.length < 4) {
-            CLI.print("Format must be: prod add [<id>] \"<name>\" [<email>]");
+            CLI.print("Format must be: cash add [<id>] \"<name>\" [<email>]");
             return false;
         } else {
             try {

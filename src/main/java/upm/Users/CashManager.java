@@ -45,7 +45,15 @@ public class CashManager {
         }
         return null;
     }
-
+    public static boolean idExists (String cashId){
+        boolean exists=false;
+        for (Cash c: cashList){
+            if(c.getCashId().equals(cashId)){
+                exists=true;
+            }
+        }
+        return exists;
+    }
     public static String generateRandomId() {
         Random random = new Random();
         int number = 1_000_000 + random.nextInt(9_000_000);

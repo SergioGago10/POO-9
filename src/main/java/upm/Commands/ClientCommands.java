@@ -15,15 +15,16 @@ public class ClientCommands extends Command {
     @Override
     public boolean apply(String[] message) {
         boolean applied = false;
-        if (message.length > 0) {
+        if (message.length > 1 && message[0].equalsIgnoreCase(text)) {
             String subCommand = message[1];
             for (Command cmd : clientcommands) {
-                if (!applied || cmd.getText().equalsIgnoreCase(subCommand)) {
-                    applied = cmd.apply(message);
+                if (!applied && cmd.getText().equalsIgnoreCase(subCommand)) {
+                    cmd.apply(message);   // ignoramos el boolean interno para el "handled"
+                    applied = true;
                 }
             }
         }
         return applied;
-
     }
+
 }
