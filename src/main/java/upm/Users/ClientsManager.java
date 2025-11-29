@@ -9,34 +9,18 @@ public final class ClientsManager {
     public static final ArrayList<Client> clientsList = new ArrayList<>();
     private ClientsManager() { }
 
-    public static List<Client> getClientsList() {
+    public static ArrayList<Client> getClientsList() {
         return new ArrayList<>(clientsList); // devolvemos copia para no exponer la interna
     }
 
     public static boolean addClient(Client client) {
         if (client == null) return false;
-
-        // Evitar duplicados por DNI
         for (Client c : clientsList) {
             if (c.getDni().equals(client.getDni())) {
                 return false;
             }
         }
         return clientsList.add(client);
-    }
-
-    public static boolean removeClient(Client client) {
-        if (client == null) return false;
-
-        Iterator<Client> it = clientsList.iterator();
-        while (it.hasNext()) {
-            Client current = it.next();
-            if (current.getDni().equals(client.getDni())) {
-                it.remove();
-                return true;
-            }
-        }
-        return false;
     }
 
     public static Client getClientByDni(String dni) {
@@ -61,10 +45,6 @@ public final class ClientsManager {
             }
         }
         return false;
-    }
-
-    public static void sortClients(){
-        clientsList.sort(Comparator.comparing(Client::getName));
     }
 }
 

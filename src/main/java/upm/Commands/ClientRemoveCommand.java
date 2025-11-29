@@ -3,14 +3,12 @@ package upm.Commands;
 import upm.CLI;
 import upm.Users.Client;
 import upm.Users.ClientsManager;
-import upm.Utilities;
-
-import java.util.Iterator;
 
 public class ClientRemoveCommand extends Command {
-    public ClientRemoveCommand(){
+    public ClientRemoveCommand() {
         super("remove");
     }
+
     @Override
     public boolean apply(String[] args) {
         boolean applied;
@@ -22,18 +20,19 @@ public class ClientRemoveCommand extends Command {
             String dni = args[2];
             Client client = ClientsManager.getClientByDni(dni);
 
-            if (ClientsManager.removeClient(client)) {
-                ClientsManager.sortClients();
+            if (client == null) {
+                CLI.print("Client not found.");
+                applied = false;
+            } else if (ClientsManager.removeClientByDni(dni)) {
                 CLI.print(client.toString());
                 CLI.print("client remove: ok");
                 applied = true;
             } else {
-                CLI.print("Client not found or couldn't be removed.");
+                CLI.print("Client couldn't be removed.");
                 applied = false;
             }
         }
+
         return applied;
     }
-
-
 }

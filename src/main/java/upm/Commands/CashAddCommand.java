@@ -13,42 +13,69 @@ public class CashAddCommand extends Command {
     public boolean apply(String[] args) {
         boolean applied = false;
 
-        if (args.length < 3) {
-            System.out.println("Format must be: cash add [<identifier>] \"<name>\" [<email>]");
+        if (args.length < 4) {
+            System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
+            return false;
+        }
+
+        String identifier;
+        String rawName;
+        String email = "";
+
+        int i = 2;
+
+        if (args[i].startsWith("\"") && args[i].endsWith("\"")) {
+            identifier = CashManager.generateRandomIdentifier();
+            rawName = args[i];
+            i++;
+            if (i < args.length) {
+                email = args[i];
+            }
+            else {
+                System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
+                return false;
+            }
+        } else {
+            identifier = args[i];
+            i++;
+            if (i >= args.length) {
+                System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
+                return false;
+            }
+            rawName = args[i];
+            i++;
+            if (i >= args.length) {
+                System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
+                return false;
+            }
+            email = args[i];
+        }
+
+        if (!(rawName.startsWith("\"") && rawName.endsWith("\""))) {
+            CLI.print("The name must be enclosed in quotes.");
             return false;
         }
 
         try {
-            int i = 2;
-            String identifier;
-            String name;
-            String email = "";
+            identifier = identifier.replace("\"", "")
+                    .replace("“", "")
+                    .replace("”", "")
+                    .trim();
 
-            if (args[i].startsWith("\"")) {
-                identifier = CashManager.generateRandomIdentifier();
-                name = args[i];
-                i++;
-                if (i < args.length) email = args[i];
-            } else {
-                identifier = args[i];
-                i++;
-                if (i >= args.length) {
-                    System.out.println("Format must be: cash add [<identifier>] \"<name>\" [<email>]");
-                    return false;
-                }
-                name = args[i];
-                i++;
-                if (i < args.length) email = args[i];
-            }
+            String name = rawName.replace("\"", "")
+                    .replace("“", "")
+                    .replace("”", "")
+                    .trim();
 
-            if (!(name.startsWith("\"") && name.endsWith("\""))) {
-                System.out.println("The name must be enclosed in quotes.");
+            email = email.replace("\"", "")
+                    .replace("“", "")
+                    .replace("”", "")
+                    .trim();
+
+            if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+                CLI.print("Invalid email format.");
                 return false;
             }
-
-            identifier = identifier.replace("\"", "").trim();
-            name = name.replace("\"", "").trim();
-            email = email.replace("\"", "").trim();
 
             Cash cash = new Cash(identifier, name, email);
 

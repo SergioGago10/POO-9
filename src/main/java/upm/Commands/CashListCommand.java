@@ -1,10 +1,10 @@
 package upm.Commands;
+
 import upm.CLI;
 import upm.Users.Cash;
 import upm.Users.CashManager;
-import upm.Users.Client;
-import upm.Users.ClientsManager;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -15,23 +15,24 @@ public class CashListCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied = true;
-        if (CashManager.getCashList().size()==0) {
+
+        ArrayList<Cash> list = new ArrayList<>(CashManager.getCashList());
+
+        if (list.isEmpty()) {
             CLI.print("No cashiers found.");
-            return applied;
+            return true;
         }
-        else {
-            CLI.print("Cashiers:");
-            Collections.sort(CashManager.getCashList(), Comparator.comparing(Cash::getName));
-            for (Cash cash : CashManager.getCashList()) {
-                CLI.print("  " + cash.toString());
-            }
-            return applied;
+
+        Collections.sort(list, Comparator.comparing(Cash::getName));
+
+        CLI.print("Cashiers:");
+        for (Cash cash : list) {
+            CLI.print("  " + cash.toString());
         }
+
+        return true;
     }
 }
-
-
 
 
 
