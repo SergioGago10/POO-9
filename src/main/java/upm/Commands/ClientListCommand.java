@@ -23,6 +23,7 @@ public class ClientListCommand extends Command {
         }
         else {
             CLI.print("Clients:");
+            Collections.sort(ClientsManager.getClientsList(),Comparator.comparing(Client::getName));
             for (Client client : ClientsManager.getClientsList()) {
                 CLI.print("  " + client.toString());
             }
