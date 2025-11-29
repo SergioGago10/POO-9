@@ -14,26 +14,26 @@ public class CashAddCommand extends Command {
         boolean applied = false;
 
         if (args.length < 3) {
-            System.out.println("Format must be: cash add [<id>] \"<name>\" [<email>]");
+            System.out.println("Format must be: cash add [<identifier>] \"<name>\" [<email>]");
             return false;
         }
 
         try {
             int i = 2;
-            String id;
+            String identifier;
             String name;
             String email = "";
 
             if (args[i].startsWith("\"")) {
-                id = CashManager.generateRandomId();
+                identifier = CashManager.generateRandomIdentifier();
                 name = args[i];
                 i++;
                 if (i < args.length) email = args[i];
             } else {
-                id = args[i];
+                identifier = args[i];
                 i++;
                 if (i >= args.length) {
-                    System.out.println("Format must be: cash add [<id>] \"<name>\" [<email>]");
+                    System.out.println("Format must be: cash add [<identifier>] \"<name>\" [<email>]");
                     return false;
                 }
                 name = args[i];
@@ -46,11 +46,11 @@ public class CashAddCommand extends Command {
                 return false;
             }
 
-            id = id.replace("\"", "").trim();
+            identifier = identifier.replace("\"", "").trim();
             name = name.replace("\"", "").trim();
             email = email.replace("\"", "").trim();
 
-            Cash cash = new Cash(id, name, email);
+            Cash cash = new Cash(identifier, name, email);
 
             if (CashManager.addCash(cash)) {
                 System.out.println(cash.toString());

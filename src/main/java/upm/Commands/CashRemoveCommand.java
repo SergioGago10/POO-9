@@ -15,18 +15,18 @@ public class CashRemoveCommand extends Command {
         boolean applied = false;
 
         if (args.length == 3) {
-            String id = args[2];
-            Cash cashRemoved = CashManager.getCashById(id);
+            String identifier = args[2];
+            Cash cashRemoved = CashManager.getCashByIdentifier(identifier);
             if (cashRemoved != null) {
                 System.out.println(cashRemoved.toString());
 
-                if (CashManager.removeCashById(id)) {
+                if (CashManager.removeCashByIdentifier(identifier)) {
                     CLI.print("cash remove: ok");
                     applied = true;
                 }
 
             } else {
-                CLI.print("The cashier with id: " + id + " couldn't be removed. Cashier not found.");
+                CLI.print("The cashier with id: " + identifier + " couldn't be removed. Cashier not found.");
             }
         }
 

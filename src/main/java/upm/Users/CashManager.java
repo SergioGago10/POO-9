@@ -18,18 +18,18 @@ public class CashManager {
     public static boolean addCash(Cash cash) {
         if (cash == null) return false;
         for (Cash c : cashList) {
-            if (c.getId().equals(cash.getId())) {
+            if (c.getIdentifier().equals(cash.getIdentifier())) {
                 return false;
             }
         }
         return cashList.add(cash);
     }
 
-    public static boolean removeCashById(String id) {
+    public static boolean removeCashByIdentifier(String identifier) {
         Iterator<Cash> it = cashList.iterator();
         boolean removed = false;
         while (it.hasNext() && !removed) {
-            if (it.next().getId().equals(id)) {
+            if (it.next().getIdentifier().equals(identifier)) {
                 it.remove();
                 removed = true;
             }
@@ -37,24 +37,24 @@ public class CashManager {
         return removed;
     }
 
-    public static Cash getCashById(String id) {
+    public static Cash getCashByIdentifier(String identifier) {
         for (Cash cash : cashList) {
-            if (cash.getId().equals(id)) {
+            if (cash.getIdentifier().equals(identifier)) {
                 return cash;
             }
         }
         return null;
     }
-    public static boolean idExists (String cashId){
+    public static boolean idExists (String cashIdentifier){
         boolean exists=false;
         for (Cash c: cashList){
-            if(c.getCashId().equals(cashId)){
+            if(c.getIdentifier().equals(cashIdentifier)){
                 exists=true;
             }
         }
         return exists;
     }
-    public static String generateRandomId() {
+    public static String generateRandomIdentifier() {
         Random random = new Random();
         int number = 1_000_000 + random.nextInt(9_000_000);
         return "UW" + number;

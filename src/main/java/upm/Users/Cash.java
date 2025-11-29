@@ -1,28 +1,29 @@
 package upm.Users;
 
-import static upm.Users.CashManager.generateRandomId;
+import static upm.Users.CashManager.generateRandomIdentifier;
+
 
 public class Cash extends User {
-    private String id;
+    private String identifier;
 
-    public Cash(String id, String name, String email) {
-        super(name, email, id);
-        this.id = id;
+    public Cash(String identifier, String name, String email) {
+        super(name, email, identifier);
+        this.identifier = identifier;
     }
 
 
     public Cash(String name, String email) {
-        super(name, email, generateRandomId());
-        this.id = getCashId();
+        super(name, email, generateRandomIdentifier());
+        this.identifier = getCashId();
     }
 
 
-    public String getId() {
-        return id;
+    public String getIdentifier() {
+        return identifier;
     }
 
     @Override
     public String toString() {
-        return String.format("- %s | Email: %s | CashierId: %s", name, email, cashId);
+        return "Cash{identifier='" + identifier + "', name='" + name + "', email='" + email + "'}";
     }
 }

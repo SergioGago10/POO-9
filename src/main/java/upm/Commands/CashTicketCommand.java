@@ -22,22 +22,19 @@ public class CashTicketCommand extends Command {
         }
 
         try {
-            String cashId = args[2];
+            String cashIdentifier = args[2];
 
-            Cash cash = CashManager.getCashById(cashId);
+            Cash cash = CashManager.getCashByIdentifier(cashIdentifier);
             if (cash == null) {
                 CLI.print("Cash not found.");
                 return false;
             }
 
-            List<Ticket> tickets = TicketManager.printTicketsByCashier(cashId);
+            List<Ticket> tickets = TicketManager.printTicketsByCashier(cashIdentifier);
 
             CLI.print("Tickets: ");
             if (tickets != null && !tickets.isEmpty()) {
                 tickets.sort(Comparator.comparing(Ticket::getTicketId));
-                for (Ticket ticket : tickets) {
-                    CLI.print("  " + ticket.getTicketId() + "->" + ticket.getEstado().name());
-                }
             }
 
             CLI.print("cash tickets: ok");

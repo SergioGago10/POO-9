@@ -10,14 +10,17 @@ public class CashListCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
+        try {
+            CLI.print("Cash:");
+            for (Cash cash : CashManager.getCashList()) {
+                CLI.print("  " + cash.toString());
+            }
+            CLI.print("cash list: ok");
+            return true;
 
-        CLI.print("Cash:");
-
-        for (Cash cash : CashManager.getCashList()) {
-            CLI.print("  " + cash.toString());
+        } catch (Exception e){
+            return false;
         }
-
-        return true;
     }
 }
 
