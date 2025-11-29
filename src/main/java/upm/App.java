@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class App {
-    //Para controlar Exit
-    private boolean running = true;
-
 
     public static void main(String[] args) {
         App app = new App();
@@ -23,7 +20,8 @@ public class App {
     }
 
     private void run(String[] args) {
-        CLI cli=new CLI(args);
+        CLI cli = new CLI(args);
+        boolean running = true;
         boolean isInteractive = (args.length != 0); // true si se pasa archivo, false si escribimos por la consola
         System.setErr(System.out);
 
@@ -33,6 +31,7 @@ public class App {
 
         // 1) Lista de comandos
         List<Command> commands = new ArrayList<>();
+        commands.add(new CashCommands());
         commands.add(new ProdCommands());
         commands.add(new CommandHelp());
         commands.add(new CommandEcho());
@@ -48,26 +47,30 @@ public class App {
                 // Ignoramos líneas vacías
                 continue;
             }
-            boolean handled = false; // indica si algún comando ha gestionado la entrada
+            if (userInput[0].equals("exit"))
+                running = false;
+            else {
+                boolean handled = false; // indica si algún comando ha gestionado la entrada
 
-            for (Command command : commands) {
-                try {
-                    if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
-                        handled = true;
-                        break; // ya hay un comando que ha ejecutado esta línea
+                for (Command command : commands) {
+                    try {
+                        if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
+                            handled = true;
+                            break; // ya hay un comando que ha ejecutado esta línea
+                        }
+                    } catch (Exception e) {
+                        System.err.print("Error: " + e.getMessage());
+                        handled = true; // consideramos la línea “gestionada” aunque sea con error
+                        break;
                     }
-                } catch (Exception e) {
-                    System.err.println("Unexpected error: " + e.getMessage());
-                    handled = true; // consideramos la línea “gestionada” aunque sea con error
-                    break;
                 }
-            }
 
-            if (!handled) {
-                System.err.println("Command not found. Type 'help' to see the command list.");
-            }
+                if (!handled) {
+                    System.err.println("Command not found. Type 'help' to see the command list.");
+                }
 
-            System.out.println();
+                System.out.println();
+            }
         }
     }
 

@@ -1,4 +1,5 @@
 package upm.Commands;
+import upm.CLI;
 import upm.Users.Cash;
 import upm.Users.CashManager;
 
@@ -9,14 +10,17 @@ public class CashListCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
+        try {
+            CLI.print("Cash:");
+            for (Cash cash : CashManager.getCashList()) {
+                CLI.print("  " + cash.toString());
+            }
+            CLI.print("cash list: ok");
+            return true;
 
-        System.out.println("Cash:");
-
-        for (Cash cash : CashManager.getCashList()) {
-            System.out.println("  " + cash.toString());
+        } catch (Exception e){
+            return false;
         }
-
-        return true;
     }
 }
 

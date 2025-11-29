@@ -1,5 +1,6 @@
 package upm.Commands;
 
+import upm.CLI;
 import upm.Users.Client;
 import upm.Users.ClientsManager;
 import upm.Utilities;
@@ -14,31 +15,21 @@ public class ClientRemoveCommand extends Command {
     public boolean apply(String[] args) {
         boolean applied;
 
-        if (args.length < 6) {
+        if (args.length < 3) {
+            System.out.println("Format must be: client remove <DNI>");
             applied = false;
         } else {
-            try {
-                int i = 2;
-                String name = args[i++];
-                String dni = args[i++];
-                String email = args[i++];
-                int cashierId = Integer.parseInt(args[i]);
+            String dni = args[2];
+            Client client = ClientsManager.getClientByDni(dni);
 
-                Client client = new Client(name, dni, email, String.valueOf(cashierId));
-
-                if (ClientsManager.removeClient(client)) {
-                    System.out.println("client remove: ok");
-                    applied = true;
-                } else {
-                    System.err.println("Client not found or couldn't be removed.");
-                    applied = false;
-                }
-            } catch (NumberFormatException ex) {
-                System.err.println("CashierId must be an integer number.");
+            if (ClientsManager.removeClient(client)) {
+                CLI.print("client remove: ok");
+                applied = true;
+            } else {
+                CLI.print("Client not found or couldn't be removed.");
                 applied = false;
             }
         }
-
         return applied;
     }
 

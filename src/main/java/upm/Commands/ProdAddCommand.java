@@ -12,7 +12,7 @@ public class ProdAddCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied=false;
+        boolean applied = false;
         if (args.length < 5) {
             CLI.print("Format must be: prod add [<id>] \"<name>\" <category> <price> [<maxPers>]");
         } else {
@@ -53,14 +53,15 @@ public class ProdAddCommand extends Command {
                         product = new CustomizableProduct(id, name, category, price, maxPers);
                     } else
                         product = new BasicProduct(id, name, category, price);
-                    Catalog.addProduct(product);
-                    CLI.print(product.toString());
-                    applied = true;
-                    CLI.print("prod add:ok");
+                    if (Catalog.addProduct(product)) {
+                        CLI.print(product.toString());
+                        applied = true;
+                        CLI.print("prod add:ok");
+                    }
                 }
             } catch (NumberFormatException ex) {
                 CLI.print("Id and max personalization must be integer and price must be double");
-            }catch(IllegalArgumentException exc){
+            } catch (IllegalArgumentException exc) {
                 CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
             }
         }

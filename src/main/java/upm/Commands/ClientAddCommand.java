@@ -15,16 +15,20 @@ public class ClientAddCommand extends Command {
         boolean applied;
 
         if (args.length < 6) {
+            System.out.println("Format must be: client add \"<name>\" <DNI> <email> <CashierId> ");
             applied = false;
         } else {
             try {
                 int i = 2;
-                String name = args[i++];
-                String dni = args[i++];
-                String email = args[i++];
-                int cashierId = Integer.parseInt(args[i]);
+                String name = args[i];
+                i++;
+                String dni = args[i];
+                i++;
+                String email = args[i];
+                i++;
+                String cashierId = args[i];
 
-                Client client = new Client(name, dni, email, String.valueOf(cashierId));
+                Client client = new Client(name, dni, email, cashierId);
 
                 if (ClientsManager.addClient(client)) {
                     System.out.println("client add: ok");
