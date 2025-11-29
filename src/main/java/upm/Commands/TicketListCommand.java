@@ -18,6 +18,7 @@ public class TicketListCommand extends Command{
                 TicketManager.printListTickets();
                 applied=true;
                 System.out.println("ticket list: ok");
+                applied = true;
             }
         } catch (Exception e) {
             System.err.println("Error printing all tickets: " + e.getMessage());
