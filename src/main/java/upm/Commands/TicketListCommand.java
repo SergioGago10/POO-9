@@ -16,7 +16,6 @@ public class TicketListCommand extends Command{
                 System.err.println("Usage: ticket list");
             }else{
                 TicketManager.printListTickets();
-                applied=true;
                 System.out.println("ticket list: ok");
                 applied = true;
             }

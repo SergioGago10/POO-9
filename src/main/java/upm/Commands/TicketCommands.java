@@ -1,6 +1,5 @@
 package upm.Commands;
 
-import upm.tickets.TicketManager;
 import java.util.ArrayList;
 
 public class TicketCommands extends Command {

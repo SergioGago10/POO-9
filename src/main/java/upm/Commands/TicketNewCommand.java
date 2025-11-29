@@ -15,7 +15,6 @@ public class TicketNewCommand extends Command {
             System.out.println("Usage: ticket new [<id>] <cashId> <userId> ");
         } else if (args.length == 4) {
             TicketManager.newTicket(Integer.parseInt(args[2].substring(2)),Integer.parseInt(args[3].substring(0, args[3].length() - 1)));
-
             applied = true;
         } else{
             TicketManager.newTicket(args[2],Integer.parseInt(args[3].substring(2)),Integer.parseInt(args[4].substring(0, args[4].length()-1)),false);
