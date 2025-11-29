@@ -29,6 +29,9 @@ public class CashRemoveCommand extends Command {
                 CLI.print("The cashier with id: " + identifier + " couldn't be removed. Cashier not found.");
             }
         }
+        else {
+            System.out.println("Format must be: cash remove <cashierId>");
+        }
 
         return applied;
     }

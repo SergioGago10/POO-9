@@ -15,6 +15,7 @@ public class ClientAddCommand extends Command {
         boolean applied;
 
         if (args.length < 6) {
+            System.out.println("Format must be: client add \"<name>\" <DNI> <email> <CashierId> ");
             applied = false;
         } else {
             try {
