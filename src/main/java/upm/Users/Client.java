@@ -10,6 +10,6 @@ public class Client extends User {
         return dni;
     }
     public String toString() {
-        return String.format("- %s | DNI: %s | Email: %s | CashierId: %s", name, dni, email, cashId);
+        return String.format("Client{identifier='%s', name=%s, email: %s, cash: %s", dni, name, email, cashId);
     }
 }
