@@ -72,8 +72,7 @@ public class ProdAddFoodCommand extends Command {
                         } else
                             product = new Event(id, name, price, date, maxPeople, TypeEvent.FOOD);
                     }
-                    if (Utilities.isValidProd(id, name, price)) {
-                        Catalog.addProduct(product);
+                    if (Utilities.isValidProd(id, name, price) && Catalog.addProduct(product)) {
                         CLI.print(product.toString());
                         applied = true;
                         CLI.print("prod addFood: ok");

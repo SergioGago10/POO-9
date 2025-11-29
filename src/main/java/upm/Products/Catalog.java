@@ -1,5 +1,7 @@
 package upm.Products;
 
+import upm.CLI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +11,19 @@ public class Catalog {
     private static List<IProduct> catalog = new ArrayList<>();
     private static int newId = 0;
 
-    public static void addProduct(IProduct product) {
+    public static boolean addProduct(IProduct product) {
+        boolean added = false;
         if (catalog.size() < MAX_DIF_PRODUCTS) {
-            catalog.add(product);
+            if (!idExists(product.getId())) {
+                catalog.add(product);
+                added=true;
+            } else {
+                CLI.print("Product or Event with id: " + product.getId() + " already exist.");
+            }
         } else {
-            System.out.println("Maximum products reached.");
+            CLI.print("Maximum products reached.");
         }
+        return added;
     }
 
     public static IProduct getProduct(int id) {

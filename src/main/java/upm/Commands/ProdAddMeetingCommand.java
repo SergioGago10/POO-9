@@ -70,10 +70,12 @@ public class ProdAddMeetingCommand extends Command {
                         }
                         product = new Event(id, name, price, date, maxPeople, TypeEvent.MEETING);
                     }
-                    Catalog.addProduct(product);
-                    CLI.print(product.toString());
-                    applied = true;
-                    CLI.print("prod addMeeting: ok");
+                    if (Catalog.addProduct(product)) {
+                        Catalog.addProduct(product);
+                        CLI.print(product.toString());
+                        applied = true;
+                        CLI.print("prod addMeeting: ok");
+                    }
                 }
 
             } catch (NumberFormatException ex) {
