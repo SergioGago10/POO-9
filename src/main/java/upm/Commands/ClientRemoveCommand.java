@@ -23,6 +23,8 @@ public class ClientRemoveCommand extends Command {
             Client client = ClientsManager.getClientByDni(dni);
 
             if (ClientsManager.removeClient(client)) {
+                ClientsManager.sortClients();
+                CLI.print(client.toString());
                 CLI.print("client remove: ok");
                 applied = true;
             } else {

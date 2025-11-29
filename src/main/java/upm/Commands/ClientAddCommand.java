@@ -1,5 +1,6 @@
 package upm.Commands;
 
+import upm.CLI;
 import upm.Users.Client;
 import upm.Users.ClientsManager;
 import upm.Utilities;
@@ -31,6 +32,8 @@ public class ClientAddCommand extends Command {
                 Client client = new Client(name, dni, email, cashierId);
 
                 if (ClientsManager.addClient(client)) {
+                    ClientsManager.sortClients();
+                    CLI.print(client.toString());
                     System.out.println("client add: ok");
                     applied = true;
                 } else {

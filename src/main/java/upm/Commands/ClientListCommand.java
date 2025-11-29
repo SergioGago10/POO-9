@@ -17,7 +17,7 @@ public class ClientListCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         boolean applied = true;
-        if (ClientsManager.getClientsList().size()==0) {
+        if (ClientsManager.getClientsList().isEmpty()) {
             CLI.print("No clients found.");
             return applied;
         }
