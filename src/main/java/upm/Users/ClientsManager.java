@@ -1,5 +1,7 @@
 package upm.Users;
 
+import upm.tickets.Ticket;
+
 import java.util.*;
 
 public final class ClientsManager {
@@ -59,6 +61,10 @@ public final class ClientsManager {
             }
         }
         return false;
+    }
+
+    public static void sortClients(){
+        clientsList.sort(Comparator.comparing(Client::getName));
     }
 }
 

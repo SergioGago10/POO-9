@@ -1,7 +1,7 @@
 package upm.Users;
 
 public class Client extends User {
-    public String dni;
+    private String dni;
     public Client(String name, String dni, String email, String cashId){
         super(name,email,cashId);
         this.dni=dni;

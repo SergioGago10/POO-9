@@ -1,9 +1,9 @@
 package upm.Users;
 
 public abstract class User {
-    public String name;
-    public String email;
-    public String cashId;
+    protected String name;
+    protected String email;
+    protected String cashId;
 
     public User(String name, String email, String cashId){
         this.name = name;
