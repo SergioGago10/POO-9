@@ -24,7 +24,7 @@ public class ClientRemoveCommand extends Command {
                 CLI.print("Client not found.");
                 applied = false;
             } else if (ClientsManager.removeClientByDni(dni)) {
-                CLI.print(client.toString());
+                //CLI.print(client.toString()); no queremos que se haga print
                 CLI.print("client remove: ok");
                 applied = true;
             } else {

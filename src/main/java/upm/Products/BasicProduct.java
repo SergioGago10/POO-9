@@ -8,7 +8,8 @@ public class BasicProduct implements IProduct {
 
     public BasicProduct(int id, String name, Category category, double price) {
         this.id = id;
-        this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
+        this.name = "'" + name.replace("\"", "").replace("'", "") + "'";
+        //Quitamos comillas y ponemos comillas simples por formato
         this.price = price;
         this.category = category;
     }
@@ -23,7 +24,7 @@ public class BasicProduct implements IProduct {
         return category;
     }
     public void setName(String name) {
-        this.name = name;
+        this.name = "'" + name.replace("\"", "").replace("'", "") + "'";;
     }
 
     public void setPrice(double price) {

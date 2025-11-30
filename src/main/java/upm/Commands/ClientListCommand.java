@@ -29,6 +29,7 @@ public class ClientListCommand extends Command {
             CLI.print("  " + client.toString());
         }
 
+        CLI.print("Client list: ok.");
         return true;
     }
 }

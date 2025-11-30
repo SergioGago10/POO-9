@@ -19,7 +19,8 @@ public class Event implements IProduct {
         this.creationDate = creationDate;
         this.plannedDate = plannedDate;
         this.id = id;
-        this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
+        this.name = "'" + name.replace("\"", "").replace("'", "") + "'";
+        //Quitamos comillas para que en la comparacion por nombre alfabetico no de error + poner simples para formato
         this.price = pricePerson;
         this.maxParticipants = maxParticipants;
         this.typeEvent=typeEvent;
@@ -31,7 +32,7 @@ public class Event implements IProduct {
 
 
     public void setName(String name) {
-        this.name = name;
+        this.name = "'" + name.replace("\"", "").replace("'", "") + "'";;
     }
 
     public void setPrice(double price) {

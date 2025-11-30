@@ -69,17 +69,14 @@ public class TicketManager {
     }
 
 
-    public static List<Ticket> printTicketsByCashier(String cashId) {
+    public static  void printTicketsByCashier(String cashId) {
         List<Ticket> list = ticketsByCashId.get(cashId);
         if (list != null && !list.isEmpty()) {
             list.sort(Comparator.comparing(Ticket::getTicketId));
-            System.out.println("Tickets for cashier " + cashId + ":");
+            System.out.println("Tickets:");
             for (Ticket t : list) {
-                System.out.println("{ticketId: " + t.getTicketId() +
-                        ", userId: " + t.getUserId() +
-                        ", closed: " + t.isClosed() + "}");
+                System.out.println(t.getTicketId() + "->" + t.getEstado());
             }
         }
-        return list;
     }
 }

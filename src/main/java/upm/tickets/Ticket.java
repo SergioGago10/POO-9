@@ -21,7 +21,7 @@ public class Ticket {
     private LocalDateTime fechaApertura;
     private LocalDateTime fechaCierre;
     private List<String> customTexts; //Para saber que personalizacion tiene cada producto personalizable
-    private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("#.##");
+    private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("#.0######");
 
     public Ticket(String ticketId, String cashId, String userId, boolean isTicketIdAutoGen) {
         this.fechaApertura = LocalDateTime.now();
@@ -168,16 +168,16 @@ public class Ticket {
                     //Si el discount es 1.0, significa que no tiene
                     double priceAfterDiscount = currentProduct.getPrice() * hasDiscount.get(currentProduct);
                     double discountAmount = currentProduct.getPrice() - priceAfterDiscount;
-                    System.out.printf(" **Discount -%.2f%n", discountAmount);
+                    System.out.printf(" **Discount -%s%n", PRICE_FORMAT.format(discountAmount));
                 } else {
                     System.out.println(); //Aplicamos salto de linea si no hay descuento
                 }
             }
         }
         //Segun sale en el formato, el formato es US, el punto es el que marca el decimal.
-        System.out.printf(Locale.US,"\tTotal price: %s%n", PRICE_FORMAT.format(totals[0]));
-        System.out.printf(Locale.US,"\tTotal discount: %s%n", PRICE_FORMAT.format(totals[2]));
-        System.out.printf(Locale.US, "\tFinal price: %s%n", PRICE_FORMAT.format(totals[1]));
+        System.out.printf("\tTotal price: %s%n", PRICE_FORMAT.format(totals[0]));
+        System.out.printf("\tTotal discount: %s%n", PRICE_FORMAT.format(totals[2]));
+        System.out.printf("\tFinal price: %s%n", PRICE_FORMAT.format(totals[1]));
     }
 
     public void printFinalTicket() {

@@ -30,13 +30,7 @@ public class CashTicketCommand extends Command {
                 return false;
             }
 
-            List<Ticket> tickets = TicketManager.printTicketsByCashier(cashIdentifier);
-
-            CLI.print("Tickets: ");
-            if (tickets != null && !tickets.isEmpty()) {
-                tickets.sort(Comparator.comparing(Ticket::getTicketId));
-            }
-
+            TicketManager.printTicketsByCashier(cashIdentifier);
             CLI.print("cash tickets: ok");
             return true;
 
