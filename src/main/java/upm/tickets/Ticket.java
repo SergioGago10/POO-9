@@ -69,7 +69,7 @@ public class Ticket {
         productsList.sort(Comparator.comparing(IProduct::getName, String.CASE_INSENSITIVE_ORDER));
     }
 
-    public void addProductToTicket(String productID, int quantity, List<String> customTexts) {
+    public void addProductToTicket(int productID, int quantity, List<String> customTexts) {
         if(estado != TicketState.CLOSE){
             boolean productAdded = false;
             IProduct productToBeAdded = Catalog.getProduct(productID);
@@ -85,7 +85,7 @@ public class Ticket {
                         // No añadir reuniones/comidas repetidas
                         boolean alreadyInTicket = false;
                         for (IProduct p : productsList) {
-                            if (p.getId().equals(productID)) {
+                            if (p.getId() == productID) {
                                 alreadyInTicket = true;
                             }
                         }
@@ -195,12 +195,12 @@ public class Ticket {
         }
     }
 
-    public void removeProductFromTicket(String productID) {
+    public void removeProductFromTicket(int productID) {
         if(estado != TicketState.CLOSE){
             Iterator<IProduct> it = productsList.iterator();
             while (it.hasNext()) {
                 IProduct p = it.next();
-                if (p.getId().equals(productID)) {
+                if (p.getId() == productID) {
                     it.remove();
                 }
             }

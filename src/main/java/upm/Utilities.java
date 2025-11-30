@@ -23,9 +23,9 @@ public class Utilities {
         int num = 1000000 + random.nextInt(9000000);
         return "UW" + num;
     }
-    public static boolean isValidProd(String id, String name, double price) {
+    public static boolean isValidProd(int id, String name, double price) {
         boolean resul = true;
-        if (id == null || id.isBlank()) {
+        if (id <= 0 ) {
             CLI.print("Id must be positive.");
             return false;
         }

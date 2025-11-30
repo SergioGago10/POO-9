@@ -18,7 +18,7 @@ public class ProdAddCommand extends Command {
         } else {
             try {
                 int i = 2;
-                String id;
+                int id;
                 String name;
                 Category category;
                 double price;
@@ -26,7 +26,7 @@ public class ProdAddCommand extends Command {
                 if (args[i].contains("\"")) {
                     id = Catalog.generateNewProductId();
                 } else {
-                    id = args[i];
+                    id = Integer.parseInt(args[i]);
                     i++;
                 }
                 name = args[i].replace("\"", "");

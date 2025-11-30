@@ -5,6 +5,6 @@ public interface IProduct {
     void setPrice(double price);
     double getPrice();
     String getName();
-    String getId();
+    int getId();
     String toString();
 }

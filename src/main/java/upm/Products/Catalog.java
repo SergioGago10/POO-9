@@ -26,9 +26,9 @@ public class Catalog {
         return added;
     }
 
-    public static IProduct getProduct(String id) {
+    public static IProduct getProduct(int id) {
         for (IProduct p : catalog) {
-            if (p.getId().equals(id)) {
+            if (p.getId() == id) {
                 return p;
             }
         }
@@ -44,10 +44,10 @@ public class Catalog {
     }
 
 
-    public static boolean remove(String id) {
+    public static boolean remove(int id) {
         int index = -1;
         for (int i = 0; i < catalog.size(); i++) {
-            if (catalog.get(i).getId().equals(id)) {
+            if (catalog.get(i).getId() == id) {
                 index = i;
                 break;
             }
@@ -59,16 +59,16 @@ public class Catalog {
         return false;
     }
 
-    public static int indexOfProduct(String id) {
+    public static int indexOfProduct(int id) {
         for (int i = 0; i < catalog.size(); i++) {
-            if (catalog.get(i).getId().equals(id)) {
+            if (catalog.get(i).getId() == id) {
                 return i;
             }
         }
         return -1;
     }
 
-    public static boolean idExists(String id) {
+    public static boolean idExists(int id) {
         return indexOfProduct(id) != -1;
     }
 
@@ -76,10 +76,10 @@ public class Catalog {
         return catalog.isEmpty();
     }
 
-    public static String generateNewProductId() {
-        while (idExists(String.valueOf(newId)))
+    public static int generateNewProductId() {
+        while (idExists(newId))
             newId++;
-        return String.valueOf(newId);
+        return newId;
     }
 }
 

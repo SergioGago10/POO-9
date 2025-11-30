@@ -16,7 +16,7 @@ public class ProdUpdateCommand extends Command {
         boolean applied = false;
         if (args.length == 5) {
             try {
-                String id = args[2];
+                int id = Integer.parseInt(args[2]);
                 IProduct product;
                 product = Catalog.getProduct(id);
                 if (product != null) {

@@ -24,12 +24,12 @@ public class ProdAddMeetingCommand extends Command {
         } else {
             try {
                 int i = 2;
-                String id;
+                int id;
                 IProduct product;
                 if (args[i].contains("\"")) {
                     id = Catalog.generateNewProductId();
                 } else {
-                    id = args[i];
+                    id = Integer.parseInt(args[i]);
                     i++;
                 }
                 String name = args[i].replace("\"", "");
