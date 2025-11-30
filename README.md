@@ -135,6 +135,7 @@ Todas las funcionalidades de la Entrega E1 se mantienen y se extienden en esta v
 ### Ampliación de productos
 
 Se mantienen todos los requisitos de producto de E1 (ID único, nombre, categoría, precio y máximo de 200 productos) y se incorporan nuevas variantes:
+Los **descuentos por categoría** de la Entrega E1 (MERCH, PAPELERÍA, ROPA, LIBRO, ELECTRÓNICA) siguen aplicándose automáticamente cuando hay más de un producto de la misma categoría.
 
 #### Productos personalizables
 
@@ -164,8 +165,6 @@ Se mantienen todos los requisitos de producto de E1 (ID único, nombre, categor�
     - Precio por persona.
 - Requieren una **anticipación mínima de 12 horas**.
 - En un ticket no puede añadirse **dos veces la misma reunión**.
-
-- Los **descuentos por categoría** de la Entrega E1 (MERCH, PAPELERÍA, ROPA, LIBRO, ELECTRÓNICA) siguen aplicándose automáticamente cuando hay más de un producto de la misma categoría.
 
 ---
 
@@ -197,6 +196,7 @@ En los productos de tipo comida y reunión:
 - No se permite añadir el mismo producto de comida/reunión más de una vez por ticket.
 
 ---
+## COMANDOS
 
 CLIENTES Y CAJEROS
 
