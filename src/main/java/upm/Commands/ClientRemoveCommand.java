@@ -15,21 +15,21 @@ public class ClientRemoveCommand extends Command {
 
         if (args.length < 3) {
             System.out.println("Format must be: client remove <DNI>");
-            applied = false;
+            applied = true;
         } else {
             String dni = args[2];
             Client client = ClientsManager.getClientByDni(dni);
 
             if (client == null) {
                 CLI.print("Client not found.");
-                applied = false;
+                applied = true;
             } else if (ClientsManager.removeClientByDni(dni)) {
                 //CLI.print(client.toString()); no queremos que se haga print
                 CLI.print("client remove: ok");
                 applied = true;
             } else {
                 CLI.print("Client couldn't be removed.");
-                applied = false;
+                applied = true;
             }
         }
 

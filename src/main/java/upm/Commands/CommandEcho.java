@@ -15,12 +15,12 @@ public class CommandEcho extends Command {
     public boolean apply(String[] args) {
         // Validaciones básicas
         if (args == null || args.length < 2) {
-            return false;
+            return true;
         }
 
         // El primer token debe ser "echo"
         if (!args[0].equalsIgnoreCase("echo")) {
-            return false;
+            return true;
         }
 
         // Segundo argumento: texto con comillas
@@ -34,7 +34,7 @@ public class CommandEcho extends Command {
         }
 
         // Si no viene con comillas, comando mal formado
-        return false;
+        return true;
     }
 
 }

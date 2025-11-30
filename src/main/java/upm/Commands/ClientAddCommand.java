@@ -16,13 +16,13 @@ public class ClientAddCommand extends Command {
 
         if (args.length < 6) {
             System.out.println("Format must be: client add \"<name>\" <DNI> <email> <cashId>");
-            return false;
+            return true;
         }
 
         String rawName = args[2];
         if (!(rawName.startsWith("\"") && rawName.endsWith("\""))) {
             CLI.print("The name must be enclosed in quotes.");
-            return false;
+            return true;
         }
 
         try {
@@ -41,12 +41,12 @@ public class ClientAddCommand extends Command {
 
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 CLI.print("Invalid email format.");
-                return false;
+                return true;
             }
 
             if (!CashManager.idExists(cashierId)) {
                 CLI.print("Cashier ID does not exist.");
-                return false;
+                return true;
             }
 
             Client client = new Client(name, dni, email, cashierId);
@@ -57,12 +57,12 @@ public class ClientAddCommand extends Command {
                 applied = true;
             } else {
                 CLI.print("Client could not be added.");
-                applied = false;
+                applied = true;
             }
 
         } catch (Exception ex) {
             CLI.print("Error adding client.");
-            applied = false;
+            applied = true;
         }
 
         return applied;

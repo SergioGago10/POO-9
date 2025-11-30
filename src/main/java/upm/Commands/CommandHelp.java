@@ -12,12 +12,12 @@ public class CommandHelp extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args == null || args.length == 0) {
-            return false;
+            return true;
         }
 
         //  "help" sin más argumentos
         if (args.length != 1 || !args[0].equalsIgnoreCase(text)) {
-            return false;
+            return true;
         }
 
         printHelp();

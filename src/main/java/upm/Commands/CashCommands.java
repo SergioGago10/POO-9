@@ -28,6 +28,5 @@ public class CashCommands extends Command {
             }
         }
         return applied;
-
     }
 }

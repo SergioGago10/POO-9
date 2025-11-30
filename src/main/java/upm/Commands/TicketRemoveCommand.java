@@ -12,7 +12,6 @@ public class TicketRemoveCommand  extends Command{
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied = false;
         if (args.length != 5) {
             System.err.println("Usage: ticket remove <ticketId> <cashId> <prodId>");
         } else {
@@ -40,7 +39,7 @@ public class TicketRemoveCommand  extends Command{
                 System.err.println("Error removing product from ticket: " + e.getMessage());
             }
         }
-        return applied;
+        return true;
     }
 
 }

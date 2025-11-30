@@ -18,7 +18,6 @@ public class ProdAddFoodCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied = false;
         if (args.length < 6) {
             CLI.print("Format must be: " +
                     "prod addFood [<id>] \"< name>\" <price> <expiration: yyyy-MM-dd> <max_people>");
@@ -46,7 +45,7 @@ public class ProdAddFoodCommand extends Command {
                 int maxPeople = Integer.parseInt(args[i]);
                 if (maxPeople > 100) {
                     CLI.print("Error processing ->prod addFood ->Error adding product");
-                    return false;
+                    return true;
                 }
                 i++;
                 if (Utilities.isValidProd(id, name, price)) {
@@ -61,20 +60,19 @@ public class ProdAddFoodCommand extends Command {
                                 creationHour, creationMinute);
                         if (creationDate.plusDays(3).isAfter(date.atStartOfDay())) {
                             CLI.print("The meeting should be planned at least 3 days before");
-                            return false;
+                            return true;
                         }
 
                         product = new Event(id, name, price, creationDate, date, maxPeople, TypeEvent.FOOD);
                     } else {
                         if (LocalDateTime.now().plusDays(3).isAfter(date.atStartOfDay())) {
                             CLI.print("The meeting should be planned at least 3 days before");
-                            return false;
+                            return true;
                         } else
                             product = new Event(id, name, price, date, maxPeople, TypeEvent.FOOD);
                     }
                     if (Utilities.isValidProd(id, name, price) && Catalog.addProduct(product)) {
                         CLI.print(product.toString());
-                        applied = true;
                         CLI.print("prod addFood: ok");
                     }
                 }
@@ -84,6 +82,6 @@ public class ProdAddFoodCommand extends Command {
                         "date format: yyyy-MM-dd");
             }
         }
-        return applied;
+        return true;
     }
 }

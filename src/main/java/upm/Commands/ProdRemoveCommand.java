@@ -25,11 +25,9 @@ public class ProdRemoveCommand extends Command {
                 }
             } catch (NumberFormatException exception) {
                 CLI.print("Id must be an integer number.");
-                applied = false;
             }
         } else {
             CLI.print("Format must be: prod remove <id>");
-            applied = false;
         }
         return applied;
     }

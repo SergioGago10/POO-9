@@ -12,27 +12,24 @@ public class CashRemoveCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         boolean applied;
-
         if (args.length < 3) {
             System.out.println("Format must be: cash remove <cashierId>");
-            applied = false;
+            applied = true;
         } else {
             String identifier = args[2];
             Cash cash = CashManager.getCashByIdentifier(identifier);
-
             if (cash == null) {
                 CLI.print("Cashier not found.");
-                applied = false;
+                applied = true;
             } else if (CashManager.removeCashByIdentifier(identifier)) {
                 CLI.print(cash.toString());
                 CLI.print("cash remove: ok");
                 applied = true;
             } else {
                 CLI.print("Cashier couldn't be removed.");
-                applied = false;
+                applied = true;
             }
         }
-
         return applied;
     }
 }

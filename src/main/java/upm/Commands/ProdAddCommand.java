@@ -12,7 +12,6 @@ public class ProdAddCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied = false;
         if (args.length < 5) {
             CLI.print("Format must be: prod add [<id>] \"<name>\" <category> <price> [<maxPers>]");
         } else {
@@ -32,7 +31,7 @@ public class ProdAddCommand extends Command {
                 name = args[i].replace("\"", "");
                 if (name.length() > Catalog.MAX_CHAR_NAME) {
                     CLI.print("name length must be lower than" + Catalog.MAX_CHAR_NAME);
-                    return false;
+                    return true;
                 }
                 i++;
                 category = Category.valueOf(args[i]);
@@ -40,7 +39,7 @@ public class ProdAddCommand extends Command {
                 price = Double.parseDouble(args[i]);
                 if (price < 0) {
                     CLI.print("Price must be positive");
-                    return false;
+                    return true;
                 }
                 i++;
                 if (Utilities.isValidProd(id, name, price)) {
@@ -51,7 +50,6 @@ public class ProdAddCommand extends Command {
                         product = new BasicProduct(id, name, category, price);
                     if (Catalog.addProduct(product)) {
                         CLI.print(product.toString());
-                        applied = true;
                         CLI.print("prod add:ok");
                     }
                 }
@@ -61,6 +59,6 @@ public class ProdAddCommand extends Command {
                 CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
             }
         }
-        return applied;
+        return true;
     }
 }

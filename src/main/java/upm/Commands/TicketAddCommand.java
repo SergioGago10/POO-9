@@ -16,7 +16,7 @@ public class TicketAddCommand extends Command {
     public boolean apply(String[] args) {
         if (args.length < 6) {
             System.err.println("ticket add <ticketId> <cashId> <prodId> <amount> [--p<txt> --p<txt>]");
-            return false;
+            return true;
         }
 
         try {
@@ -28,7 +28,7 @@ public class TicketAddCommand extends Command {
             // Validación del producto
             if (!Catalog.idExists(prodId)) {
                 System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
-                return false;
+                return true;
             }
 
             // Buscar ticket
@@ -36,13 +36,13 @@ public class TicketAddCommand extends Command {
 
             if (ticketAModificar == null) {
                 System.err.println("Error: Ticket " + ticketId + " does not exist.");
-                return false;
+                return true;
             }
 
             // Comprobar que pertenece al mismo cashId
             if (!ticketAModificar.getCashId().equals(cashId)) {
                 System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
-                return false;
+                return true;
             }
 
             // Customizaciones

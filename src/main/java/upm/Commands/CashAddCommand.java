@@ -11,11 +11,10 @@ public class CashAddCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied = false;
-
+    boolean applied;
         if (args.length < 4) {
             System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
-            return false;
+            return true;
         }
 
         String identifier;
@@ -33,27 +32,27 @@ public class CashAddCommand extends Command {
             }
             else {
                 System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
-                return false;
+                return true;
             }
         } else {
             identifier = args[i];
             i++;
             if (i >= args.length) {
                 System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
-                return false;
+                return true;
             }
             rawName = args[i];
             i++;
             if (i >= args.length) {
                 System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
-                return false;
+                return true;
             }
             email = args[i];
         }
 
         if (!(rawName.startsWith("\"") && rawName.endsWith("\""))) {
             CLI.print("The name must be enclosed in quotes.");
-            return false;
+            return true;
         }
 
         try {
@@ -74,7 +73,7 @@ public class CashAddCommand extends Command {
 
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 CLI.print("Invalid email format.");
-                return false;
+                return true;
             }
 
             Cash cash = new Cash(identifier, name, email);
@@ -85,11 +84,11 @@ public class CashAddCommand extends Command {
                 applied = true;
             } else {
                 System.err.println("Cashier couldn't be added.");
-                applied = false;
+                applied = true;
             }
         } catch (Exception ex) {
             System.out.println("Error: Invalid parameters.");
-            applied = false;
+            applied = true;
         }
 
         return applied;

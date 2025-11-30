@@ -18,7 +18,7 @@ public class CashTicketCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length < 3) {
-            return false;
+            return true;
         }
 
         try {
@@ -27,7 +27,7 @@ public class CashTicketCommand extends Command {
             Cash cash = CashManager.getCashByIdentifier(cashIdentifier);
             if (cash == null) {
                 CLI.print("Cash not found.");
-                return false;
+                return true;
             }
 
             TicketManager.printTicketsByCashier(cashIdentifier);
@@ -35,7 +35,7 @@ public class CashTicketCommand extends Command {
             return true;
 
         } catch (Exception e) {
-            return false;
+            return true;
         }
     }
 }

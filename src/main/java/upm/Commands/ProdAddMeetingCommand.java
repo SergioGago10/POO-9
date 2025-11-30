@@ -17,7 +17,6 @@ public class ProdAddMeetingCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied = false;
         if (args.length < 6) {
             CLI.print("Format must be: " +
                     "prod addMeeting [<id>] \"<name>\" <price> < expiration: yyyy-MM-dd> <\n max_people >");
@@ -45,7 +44,7 @@ public class ProdAddMeetingCommand extends Command {
                 int maxPeople = Integer.parseInt(args[i]);
                 if (maxPeople > 100) {
                     CLI.print("Error processing ->prod addMeeting ->Error adding product");
-                    return false;
+                    return true;
                 }
                 i++;
                 if (Utilities.isValidProd(id, name, price)) {
@@ -60,28 +59,28 @@ public class ProdAddMeetingCommand extends Command {
                                 creationHour, creationMinute);
                         if (creationDate.plusHours(12).isAfter(date.atStartOfDay())) {
                             CLI.print("The meeting should be planned at least 12 hours before");
-                            return false;
+                            return true;
                         }
                         product = new Event(id, name, price, creationDate, date, maxPeople, TypeEvent.MEETING);
                     } else {
                         if (LocalDateTime.now().plusHours(12).isAfter(date.atStartOfDay())) {
                             CLI.print("The meeting should be planned at least 12 hours before");
-                            return false;
+                            return true;
                         }
                         product = new Event(id, name, price, date, maxPeople, TypeEvent.MEETING);
                     }
                     if (Catalog.addProduct(product)) {
                         Catalog.addProduct(product);
                         CLI.print(product.toString());
-                        applied = true;
                         CLI.print("prod addMeeting: ok");
                     }
                 }
 
             } catch (NumberFormatException ex) {
-                applied = false;
+                CLI.print("NumberFormat Error" + ex);
+                return true;
             }
         }
-        return applied;
+        return true;
     }
 }

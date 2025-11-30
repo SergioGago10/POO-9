@@ -49,6 +49,6 @@ public class ProdUpdateCommand extends Command {
                 CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
             }
         }
-        return applied;
+        return true;
     }
 }

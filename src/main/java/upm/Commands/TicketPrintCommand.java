@@ -11,7 +11,6 @@ public class TicketPrintCommand extends Command{
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied = false;
         try {
             if(args.length!= 4){
                 System.err.println("Usage: ticket print <ticketId> <cashId>");
@@ -25,7 +24,6 @@ public class TicketPrintCommand extends Command{
                     } else{
                         ticketAMostrar.printFinalTicket();
                         System.out.println("ticket print: ok");
-                        applied = true;
                     }
                 } else{
                     System.err.println("Error: Ticket " + ticketId + " does not exist.");
@@ -34,7 +32,7 @@ public class TicketPrintCommand extends Command{
         } catch (Exception e) {
             System.err.println("Error printing ticket: " + e.getMessage());
         }
-        return applied;
+        return true;
     }
 
 }
