@@ -5,10 +5,12 @@ import upm.tickets.TicketManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class App {
 
     public static void main(String[] args) {
+        Locale.setDefault(Locale.US); //Queremos que se ponga con pnuto los numeros por el formato que nos dan
         App app = new App();
         app.init();
         app.run(args);

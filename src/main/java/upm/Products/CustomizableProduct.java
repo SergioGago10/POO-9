@@ -44,7 +44,7 @@ public class CustomizableProduct extends BasicProduct {
         sb.append("  {class:ProductPersonalized");
         sb.append(", id: ").append(id);
         sb.append(", name:").append(name);
-        sb.append(",category:").append(category);
+        sb.append(", category:").append(category);
         sb.append(", price:").append(String.format("%.2f", price));
         sb.append(", maxPersonal: ").append(maxCustomTexts);
         if (!customTexts.isEmpty()) {

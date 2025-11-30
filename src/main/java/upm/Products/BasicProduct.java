@@ -46,10 +46,10 @@ public class BasicProduct implements IProduct {
     public String toString(){
         StringBuilder sb= new StringBuilder();
         sb.append("  {class:Product");
-        sb.append(",id: ").append(id);
-        sb.append(",name:").append(name);
-        sb.append(",Category:").append(category);
-        sb.append(",price:").append(String.format("%.2f", price)).append("}");
+        sb.append(", id: ").append(id);
+        sb.append(", name:").append(name);
+        sb.append(", Category:").append(category);
+        sb.append(", price:").append(String.format("%.2f", price)).append("}");
         return sb.toString();
     }
 }
