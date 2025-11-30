@@ -4,7 +4,7 @@ import java.util.*;
 
 public class TicketManager {
     private static Map<String, Ticket> ticketsByTicketId;
-    private static Map<Integer,List<Ticket>> ticketsByCashId;
+    private static Map<String,List<Ticket>> ticketsByCashId;
 
     public TicketManager() {
         ticketsByTicketId = new HashMap<>();
@@ -19,20 +19,18 @@ public class TicketManager {
         return String.format("%05d", num);
     }
 
-    //Guardamos el ticket en el ticketmanager y en el ticketCashier.
-    public static Ticket newTicket(int cashId, int userId) {
+    public static Ticket newTicket(String cashId, String userId) {
         String ticketId = generateTicketId();
-        while (exists(ticketId)) { //En caso de que exista ya esa clave (bastante raro)
+        while (exists(ticketId)) {
             ticketId = generateTicketId();
         }
         return newTicket(ticketId,cashId,userId,true);
     }
-    public static Ticket newTicket(String ticketId, int cashId, int userId, boolean isTicketIdAutoGen) {
-       //El ticket ya tendrá el id valido, si no pues el handler se ocupará de ello.
+    public static Ticket newTicket(String ticketId, String cashId, String userId, boolean isTicketIdAutoGen) {
         Ticket ticket = new Ticket(ticketId, cashId, userId,isTicketIdAutoGen);
         ticketsByTicketId.put(ticketId, ticket);
         List<Ticket> list = ticketsByCashId.get(cashId);
-        if (list == null) { //si es null significa que no hay ningun cashier con ese id y que tenga tickets.
+        if (list == null) {
             list = new ArrayList<>();
             ticketsByCashId.put(cashId, list);
         }
@@ -46,8 +44,6 @@ public class TicketManager {
         return ticketsByTicketId.get(ticketId);
     }
 
-    //false - no se encontro el id del ticket o no existe
-    //true - eliminado correctamente
     public boolean removeTicket(String ticketId) {
         Ticket ticket = ticketsByTicketId.get(ticketId);
         if (ticket == null) return false;
@@ -65,9 +61,8 @@ public class TicketManager {
 
     public static void printListTickets() {
         System.out.println("Ticket list : ");
-        // Convertimos el map a lista y ordenamos por cashId
         List<Ticket> ticketList = new ArrayList<>(ticketsByTicketId.values());
-        ticketList.sort(Comparator.comparingInt(Ticket::getCashId));
+        ticketList.sort(Comparator.comparing(Ticket::getCashId));
         for (Ticket t : ticketList) {
             System.out.println("  " + t.getTicketId() + " - " + t.getEstado());
         }
@@ -79,7 +74,7 @@ public class TicketManager {
         if (list == null || list.isEmpty()) {
             System.out.println("Cashier " + cashId + " has no tickets.");
         } else{
-            list.sort(Comparator.comparing(Ticket::getTicketId)); //Ordenamos por ticketId
+            list.sort(Comparator.comparing(Ticket::getTicketId));
             System.out.println("Tickets for cashier " + cashId + ":");
             for (Ticket t : list) {
                 System.out.println("{ticketId: " + t.getTicketId() +
@@ -90,5 +85,3 @@ public class TicketManager {
         return null;
     }
 }
-
-

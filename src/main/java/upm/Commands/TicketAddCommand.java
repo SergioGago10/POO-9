@@ -18,55 +18,63 @@ public class TicketAddCommand extends Command {
             System.err.println("ticket add <ticketId> <cashId> <prodId> <amount> [--p<txt> --p<txt>]");
             return false;
         }
+
         try {
             String ticketId = args[2];
-            int cashId = Integer.parseInt(args[3].substring(2));
-            int prodId = Integer.parseInt(args[4]);
+            String cashId = args[3];
+            String prodId = args[4];
             int amount = Integer.parseInt(args[5]);
 
+            // Validación del producto
             if (!Catalog.idExists(prodId)) {
                 System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
                 return false;
             }
 
+            // Buscar ticket
             Ticket ticketAModificar = TicketManager.getTicketById(ticketId);
 
-            if(ticketAModificar == null){
-                System.err.println("Error: Ticket "  + ticketId + " does not exist.");
+            if (ticketAModificar == null) {
+                System.err.println("Error: Ticket " + ticketId + " does not exist.");
                 return false;
             }
 
-            if(ticketAModificar.getCashId() != cashId){
+            // Comprobar que pertenece al mismo cashId
+            if (!ticketAModificar.getCashId().equals(cashId)) {
                 System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
                 return false;
             }
 
+            // Customizaciones
             ArrayList<String> customTexts = parseCustomizations(args);
-            ticketAModificar.addProductToTicket(prodId,amount, customTexts);
+            ticketAModificar.addProductToTicket(prodId, amount, customTexts);
 
         } catch (NumberFormatException e) {
-            System.err.println("prodId and cantidad must be integers.");
+            System.err.println("amount must be an integer.");
         } catch (Exception e) {
             System.err.println("Error adding product to ticket: " + e.getMessage());
         }
+
         return true;
     }
 
-    private ArrayList<String> parseCustomizations(String[] args){
-        if(args.length<=6) return null; //Caso base, no hay productos customizados, devolvemos null.
+    private ArrayList<String> parseCustomizations(String[] args) {
+        if (args.length <= 6) return null;
 
         ArrayList<String> customizations = new ArrayList<>();
         boolean correctFormat = true;
+
         for (int i = 6; i < args.length && correctFormat; i++) {
             String s = args[i];
             if (!s.startsWith("--p")) {
                 System.err.println("Error: expected --p<txt>, found: " + s);
                 correctFormat = false;
             }
-            if(correctFormat){
+            if (correctFormat) {
                 customizations.add(s.substring(3));
             }
         }
-        return correctFormat? customizations : null;
+
+        return correctFormat ? customizations : null;
     }
 }

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 //hay que poner minutos
 public class Event implements IProduct {
-    private int id;
+    private String id;
     private String name;
     private double price;
     private int maxParticipants;
@@ -14,7 +14,7 @@ public class Event implements IProduct {
     private TypeEvent typeEvent;
 
 
-    public Event(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDate plannedDate,
+    public Event(String id, String name, double pricePerson, LocalDateTime creationDate, LocalDate plannedDate,
                  int maxParticipants, TypeEvent typeEvent) {
         this.creationDate = creationDate;
         this.plannedDate = plannedDate;
@@ -25,7 +25,7 @@ public class Event implements IProduct {
         this.typeEvent=typeEvent;
     }
 
-    public Event(int id, String name, double pricePerson, LocalDate plannedDate, int maxParticipants, TypeEvent typeEvent) {
+    public Event(String id, String name, double pricePerson, LocalDate plannedDate, int maxParticipants, TypeEvent typeEvent) {
         this(id, name, pricePerson, LocalDateTime.now(), plannedDate, maxParticipants,typeEvent);
     }
 
@@ -46,7 +46,7 @@ public class Event implements IProduct {
         return name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

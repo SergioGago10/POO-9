@@ -16,7 +16,7 @@ public class Catalog {
         if (catalog.size() < MAX_DIF_PRODUCTS) {
             if (!idExists(product.getId())) {
                 catalog.add(product);
-                added=true;
+                added = true;
             } else {
                 CLI.print("Product or Event with id: " + product.getId() + " already exist.");
             }
@@ -26,15 +26,14 @@ public class Catalog {
         return added;
     }
 
-    public static IProduct getProduct(int id) {
-        int index = indexOfProduct(id);
-        if (index != -1) {
-            return catalog.get(index);
-        } else {
-            return null;
+    public static IProduct getProduct(String id) {
+        for (IProduct p : catalog) {
+            if (p.getId().equals(id)) {
+                return p;
+            }
         }
+        return null;
     }
-
 
     public static List<IProduct> getCatalog() {
         return catalog;
@@ -45,34 +44,31 @@ public class Catalog {
     }
 
 
-    public static boolean remove(int id) { //Déjalo en boolean, puede ser util luego
-        int index = indexOfProduct(id);
-        boolean removed = false;
-        if (index != -1) {
-            catalog.remove(index);
-            removed = true;
-        }
-        return removed;
-    }
-
-    //busca el producto y, devuelve su índice, o -1 si no lo encuentra
-    public static int indexOfProduct(int id) {
+    public static boolean remove(String id) {
         int index = -1;
-        boolean found = false;
-        int i = 0;
-        while (i < catalog.size() && !found) {
-            if (catalog.get(i).getId() == id) {
+        for (int i = 0; i < catalog.size(); i++) {
+            if (catalog.get(i).getId().equals(id)) {
                 index = i;
-                found = true;
-            } else {
-                i++;
+                break;
             }
         }
-        return index;
+        if (index != -1) {
+            catalog.remove(index);
+            return true;
+        }
+        return false;
     }
 
-    //true=exist false=doesn't exist
-    public static boolean idExists(int id) {
+    public static int indexOfProduct(String id) {
+        for (int i = 0; i < catalog.size(); i++) {
+            if (catalog.get(i).getId().equals(id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static boolean idExists(String id) {
         return indexOfProduct(id) != -1;
     }
 
@@ -80,10 +76,10 @@ public class Catalog {
         return catalog.isEmpty();
     }
 
-    public static int generateNewProductId() {
-        while (idExists(newId))
+    public static String generateNewProductId() {
+        while (idExists(String.valueOf(newId)))
             newId++;
-        return newId;
+        return String.valueOf(newId);
     }
-
 }
+

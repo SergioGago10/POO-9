@@ -13,8 +13,8 @@ public class Ticket {
     private final static int MAX_PRODUCTOS = 100;
     private List<IProduct> productsList;
     private String ticketId;
-    private int cashId;
-    private int userId;
+    private String cashId;
+    private String userId;
     private boolean closed;
     private TicketState estado;
     private static final DateTimeFormatter TICKET_ID_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
@@ -23,7 +23,7 @@ public class Ticket {
     private List<String> customTexts; //Para saber que personalizacion tiene cada producto personalizable
     private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("#.##");
 
-    public Ticket(String ticketId, int cashId, int userId, boolean isTicketIdAutoGen) {
+    public Ticket(String ticketId, String cashId, String userId, boolean isTicketIdAutoGen) {
         this.fechaApertura = LocalDateTime.now();
         this.ticketId = isTicketIdAutoGen ? fechaApertura.format(TICKET_ID_FORMAT) + "-" + ticketId : ticketId;
         this.cashId = cashId;
@@ -35,8 +35,8 @@ public class Ticket {
 
     public String getTicketId() {return ticketId;}
     public boolean isClosed() {return closed;}
-    public int getUserId() {return userId;}
-    public int getCashId() {return cashId;}
+    public String getUserId() {return userId;}
+    public String getCashId() {return cashId;}
     public TicketState getEstado(){return estado;}
     public List<IProduct> getProductsList() {
         return Collections.unmodifiableList(productsList); //No queremos que se modifique el ticket, por lo que pasamos una copia solo para lectura
@@ -69,7 +69,7 @@ public class Ticket {
         productsList.sort(Comparator.comparing(IProduct::getName, String.CASE_INSENSITIVE_ORDER));
     }
 
-    public void addProductToTicket(int productID, int quantity, List<String> customTexts) {
+    public void addProductToTicket(String productID, int quantity, List<String> customTexts) {
         if(estado != TicketState.CLOSE){
             boolean productAdded = false;
             IProduct productToBeAdded = Catalog.getProduct(productID);
@@ -85,7 +85,7 @@ public class Ticket {
                         // No añadir reuniones/comidas repetidas
                         boolean alreadyInTicket = false;
                         for (IProduct p : productsList) {
-                            if (p.getId() == productID) {
+                            if (p.getId().equals(productID)) {
                                 alreadyInTicket = true;
                             }
                         }
@@ -175,7 +175,7 @@ public class Ticket {
             }
         }
         //Segun sale en el formato, el formato es US, el punto es el que marca el decimal.
-            System.out.printf(Locale.US,"\tTotal price: %s%n", PRICE_FORMAT.format(totals[0]));
+        System.out.printf(Locale.US,"\tTotal price: %s%n", PRICE_FORMAT.format(totals[0]));
         System.out.printf(Locale.US,"\tTotal discount: %s%n", PRICE_FORMAT.format(totals[2]));
         System.out.printf(Locale.US, "\tFinal price: %s%n", PRICE_FORMAT.format(totals[1]));
     }
@@ -195,12 +195,12 @@ public class Ticket {
         }
     }
 
-    public void removeProductFromTicket(int productID) {
+    public void removeProductFromTicket(String productID) {
         if(estado != TicketState.CLOSE){
             Iterator<IProduct> it = productsList.iterator();
             while (it.hasNext()) {
                 IProduct p = it.next();
-                if (p.getId() == productID) {
+                if (p.getId().equals(productID)) {
                     it.remove();
                 }
             }

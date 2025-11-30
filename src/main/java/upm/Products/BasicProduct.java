@@ -1,12 +1,12 @@
 package upm.Products;
 
 public class BasicProduct implements IProduct {
-    protected int id;
+    protected String id;
     protected String name;
     protected double price;
     protected Category category;
 
-    public BasicProduct(int id, String name, Category category, double price) {
+    public BasicProduct(String id, String name, Category category, double price) {
         this.id = id;
         this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
         this.price = price;
@@ -38,7 +38,7 @@ public class BasicProduct implements IProduct {
         return name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

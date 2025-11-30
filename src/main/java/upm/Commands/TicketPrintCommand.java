@@ -17,10 +17,10 @@ public class TicketPrintCommand extends Command{
                 System.err.println("Usage: ticket print <ticketId> <cashId>");
             } else{
                 String ticketId = args[2];
-                int cashId = Integer.parseInt(args[3].substring(2));
+                String cashId = args[3];
                 Ticket ticketAMostrar = TicketManager.getTicketById(ticketId);
                 if(ticketAMostrar != null){
-                    if(ticketAMostrar.getCashId() != cashId){
+                    if(!ticketAMostrar.getCashId().equals(cashId)){
                         System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
                     } else{
                         ticketAMostrar.printFinalTicket();

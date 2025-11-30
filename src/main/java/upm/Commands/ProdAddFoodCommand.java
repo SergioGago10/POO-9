@@ -25,12 +25,12 @@ public class ProdAddFoodCommand extends Command {
         } else {
             try {
                 int i = 2;
-                int id;
+                String id;
                 IProduct product;
                 if (args[i].contains("\"")) {
                     id = Catalog.generateNewProductId();
                 } else {
-                    id = Integer.parseInt(args[i]);
+                    id = args[i];
                     i++;
                 }
                 String name = args[i].replace("\"", "");

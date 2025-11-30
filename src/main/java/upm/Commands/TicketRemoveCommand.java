@@ -18,14 +18,14 @@ public class TicketRemoveCommand  extends Command{
         } else {
             try {
                 String ticketId = args[2];
-                int cashId = Integer.parseInt(args[3].substring(2));
-                int prodId = Integer.parseInt(args[4]);
+                String cashId = args[3];
+                String prodId = args[4];
                 if (Catalog.idExists(prodId)) {
                     Ticket ticketAModificar = TicketManager.getTicketById(ticketId); //Si es null es que no existe dicho ticketId!
                     if(ticketAModificar == null){
                         System.err.println("Error: Ticket " + ticketId + " does not exist.");
                     } else {
-                        if(ticketAModificar.getCashId() != cashId){
+                        if(!ticketAModificar.getCashId().equals(cashId)){
                             System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
                         }else {
                             ticketAModificar.removeProductFromTicket(prodId);

@@ -1,7 +1,5 @@
 package upm.Users;
 
-import upm.tickets.Ticket;
-
 import java.util.*;
 
 public final class ClientsManager {
@@ -45,6 +43,9 @@ public final class ClientsManager {
             }
         }
         return false;
+    }
+    public static boolean dniExists(String dni) {
+        return getClientByDni(dni) != null;
     }
 }
 

@@ -1,28 +1,54 @@
 package upm.Commands;
 
+import upm.CLI;
+import upm.Users.CashManager;
+import upm.Users.ClientsManager;
 import upm.tickets.TicketManager;
 
 public class TicketNewCommand extends Command {
 
-    public TicketNewCommand(){
+    public TicketNewCommand() {
         super("new");
     }
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied = false;
-        if(args.length<4 || args.length>5){
-            System.out.println("Usage: ticket new [<id>] <cashId> <userId> ");
-        } else if (args.length == 4) {
-            TicketManager.newTicket(Integer.parseInt(args[2].substring(2)),Integer.parseInt(args[3].substring(0, args[3].length() - 1)));
-            applied = true;
-        } else{
-            TicketManager.newTicket(args[2],Integer.parseInt(args[3].substring(2)),Integer.parseInt(args[4].substring(0, args[4].length()-1)),false);
 
-            applied = true;
+        if (args.length < 4 || args.length > 5) {
+            System.out.println("Usage: ticket new [<id>] <cashId> <userDni>");
+            return true;
         }
-        System.out.println("ticket new: ok");
-        return applied;
-    }
 
+        String ticketId = null;
+        String cashId;
+        String userDni;
+
+        if (args.length == 4) {
+            cashId = args[2];
+            userDni = args[3];
+        } else {
+            ticketId = args[2];
+            cashId = args[3];
+            userDni = args[4];
+        }
+
+        if (!CashManager.idExists(cashId)) {
+            CLI.print("Cashier ID does not exist: " + cashId);
+            return true;
+        }
+
+        if (!ClientsManager.dniExists(userDni)) {
+            CLI.print("Client DNI does not exist: " + userDni);
+            return true;
+        }
+
+        if (ticketId == null) {
+            TicketManager.newTicket(ticketId, cashId, userDni, true);
+        } else {
+            TicketManager.newTicket(ticketId, cashId, userDni, false);
+        }
+
+        CLI.print("ticket new: ok");
+        return true;
+    }
 }

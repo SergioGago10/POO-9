@@ -18,7 +18,7 @@ public class ProdAddCommand extends Command {
         } else {
             try {
                 int i = 2;
-                int id;
+                String id;
                 String name;
                 Category category;
                 double price;
@@ -26,11 +26,7 @@ public class ProdAddCommand extends Command {
                 if (args[i].contains("\"")) {
                     id = Catalog.generateNewProductId();
                 } else {
-                    id = Integer.parseInt(args[i]);
-                    if (id < 0) {
-                        CLI.print("Id must be positive");
-                        return false;
-                    }
+                    id = args[i];
                     i++;
                 }
                 name = args[i].replace("\"", "");
@@ -60,7 +56,7 @@ public class ProdAddCommand extends Command {
                     }
                 }
             } catch (NumberFormatException ex) {
-                CLI.print("Id and max personalization must be integer and price must be double");
+                CLI.print("Max personalization must be integer and price must be double");
             } catch (IllegalArgumentException exc) {
                 CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
             }
