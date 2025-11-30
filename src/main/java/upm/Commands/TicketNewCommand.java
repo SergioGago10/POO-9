@@ -43,7 +43,7 @@ public class TicketNewCommand extends Command {
         }
 
         if (ticketId == null) {
-            TicketManager.newTicket(ticketId, cashId, userDni, true);
+            TicketManager.newTicket(cashId, userDni);
         } else {
             TicketManager.newTicket(ticketId, cashId, userDni, false);
         }

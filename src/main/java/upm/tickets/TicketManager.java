@@ -71,9 +71,7 @@ public class TicketManager {
 
     public static List<Ticket> printTicketsByCashier(String cashId) {
         List<Ticket> list = ticketsByCashId.get(cashId);
-        if (list == null || list.isEmpty()) {
-            System.out.println("Cashier " + cashId + " has no tickets.");
-        } else{
+        if (list != null && !list.isEmpty()) {
             list.sort(Comparator.comparing(Ticket::getTicketId));
             System.out.println("Tickets for cashier " + cashId + ":");
             for (Ticket t : list) {
@@ -82,6 +80,6 @@ public class TicketManager {
                         ", closed: " + t.isClosed() + "}");
             }
         }
-        return null;
+        return list;
     }
 }
