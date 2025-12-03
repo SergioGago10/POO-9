@@ -2,7 +2,7 @@ package upm.Commands;
 
 import upm.CLI;
 import upm.Products.Catalog;
-import upm.Products.IProduct;
+import upm.Products.Product;
 
 import java.util.List;
 
@@ -18,13 +18,13 @@ public class ProdListCommand extends Command {
             CLI.print("Format must be: prod list");
             return true;
         }
-        List<IProduct> catalog = Catalog.getCatalog();
+        List<Product> catalog = Catalog.getCatalog();
         if (catalog.isEmpty()){
             CLI.print("Catalog is empty");
             return true;
         }
         CLI.print("Catalog:");
-        for (IProduct product : catalog){
+        for (Product product : catalog){
             CLI.print(product.toString());
             CLI.print("prod list: ok");
         }

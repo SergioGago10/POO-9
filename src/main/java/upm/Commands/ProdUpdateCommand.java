@@ -4,7 +4,7 @@ import upm.CLI;
 import upm.Products.BasicProduct;
 import upm.Products.Catalog;
 import upm.Products.Category;
-import upm.Products.IProduct;
+import upm.Products.Product;
 
 public class ProdUpdateCommand extends Command {
     public ProdUpdateCommand() {
@@ -17,7 +17,7 @@ public class ProdUpdateCommand extends Command {
         if (args.length == 5) {
             try {
                 int id = Integer.parseInt(args[2]);
-                IProduct product;
+                Product product;
                 product = Catalog.getProduct(id);
                 if (product != null) {
                     switch (args[3].toUpperCase()) {

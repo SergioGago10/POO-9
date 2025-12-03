@@ -21,7 +21,7 @@ public class ProdAddCommand extends Command {
                 String name;
                 Category category;
                 double price;
-                IProduct product;
+                Product product;
                 if (args[i].contains("\"")) {
                     id = Catalog.generateNewProductId();
                 } else {

@@ -3,7 +3,7 @@ package upm.Commands;
 import upm.CLI;
 import upm.Products.Catalog;
 import upm.Products.Event;
-import upm.Products.IProduct;
+import upm.Products.Product;
 import upm.Products.TypeEvent;
 import upm.Utilities;
 
@@ -25,7 +25,7 @@ public class ProdAddFoodCommand extends Command {
             try {
                 int i = 2;
                 int id;
-                IProduct product;
+                Product product;
                 if (args[i].contains("\"")) {
                     id = Catalog.generateNewProductId();
                 } else {

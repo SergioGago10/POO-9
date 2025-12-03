@@ -8,10 +8,10 @@ import java.util.List;
 public class Catalog {
     private final static int MAX_DIF_PRODUCTS = 200;
     public final static int MAX_CHAR_NAME = 100;
-    private static List<IProduct> catalog = new ArrayList<>();
+    private static List<Product> catalog = new ArrayList<>();
     private static int newId = 1;
 
-    public static boolean addProduct(IProduct product) {
+    public static boolean addProduct(Product product) {
         boolean added = false;
         if (catalog.size() < MAX_DIF_PRODUCTS) {
             if (!idExists(product.getId())) {
@@ -26,8 +26,8 @@ public class Catalog {
         return added;
     }
 
-    public static IProduct getProduct(int id) {
-        for (IProduct p : catalog) {
+    public static Product getProduct(int id) {
+        for (Product p : catalog) {
             if (p.getId() == id) {
                 return p;
             }
@@ -35,7 +35,7 @@ public class Catalog {
         return null;
     }
 
-    public static List<IProduct> getCatalog() {
+    public static List<Product> getCatalog() {
         return catalog;
     }
 

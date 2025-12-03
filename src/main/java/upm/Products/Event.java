@@ -1,10 +1,9 @@
 package upm.Products;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 //hay que poner minutos
-public class Event extends IProduct {
+public class Event extends Product {
     private int maxParticipants;
     private LocalDateTime creationDate;
     private LocalDateTime plannedDate;

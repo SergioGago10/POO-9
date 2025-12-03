@@ -1,6 +1,6 @@
 package upm.Products;
 
-public class BasicProduct extends IProduct {
+public class BasicProduct extends Product {
     protected Category category;
 
     public BasicProduct(int id, String name, Category category, double price) {

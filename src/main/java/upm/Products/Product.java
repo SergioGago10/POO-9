@@ -1,6 +1,6 @@
 package upm.Products;
 
-public abstract class IProduct {
+public abstract class Product {
     protected int id;
     protected String name;
     protected double price;

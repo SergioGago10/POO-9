@@ -1,7 +1,7 @@
     package upm.tickets;
 
     import upm.Products.BasicProduct;
-    import upm.Products.IProduct;
+    import upm.Products.Product;
     import upm.Products.Category;
 
     import java.util.EnumMap;
@@ -20,11 +20,11 @@
         }
 
         @Override
-        public Map<IProduct, Double> discountPerProduct(Ticket ticket) {
-            List<IProduct> products = ticket.getProductsList();
+        public Map<Product, Double> discountPerProduct(Ticket ticket) {
+            List<Product> products = ticket.getProductsList();
             Map<Category, Integer> categoryCounter = countProductsByCategory(products);
-            Map<IProduct, Double> discountMap = new HashMap<>();
-            for (IProduct product : products) {
+            Map<Product, Double> discountMap = new HashMap<>();
+            for (Product product : products) {
                 double factor = 1.0; // Valor por defecto
                 if (product instanceof BasicProduct) {
                     BasicProduct bp = (BasicProduct) product;
@@ -42,10 +42,10 @@
 
         @Override
         public double[] calculateTotals(Ticket ticket) {
-            Map<IProduct, Double> discounts = discountPerProduct(ticket);
+            Map<Product, Double> discounts = discountPerProduct(ticket);
             double totalWithout = 0.0;
             double totalWith = 0.0;
-            for (IProduct product : ticket.getProductsList()) {
+            for (Product product : ticket.getProductsList()) {
                 double price = product.getPrice();
                 totalWithout += price;
                 totalWith += price * discounts.get(product);
@@ -54,12 +54,12 @@
             return new double[]{totalWithout, totalWith, totalDiscount};
         }
 
-        private Map<Category, Integer> countProductsByCategory(List<IProduct> products) {
+        private Map<Category, Integer> countProductsByCategory(List<Product> products) {
             Map<Category, Integer> counter = new EnumMap<>(Category.class);
             for (Category category : Category.values()) {
                 counter.put(category, 0);
             }
-            for (IProduct product : products) {
+            for (Product product : products) {
                 if (product instanceof BasicProduct) {
                     Category category = ((BasicProduct) product).getCategory();
                     counter.put(category, counter.get(category) + 1);

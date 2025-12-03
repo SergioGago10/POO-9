@@ -5,15 +5,13 @@ import upm.Products.Catalog;
 import upm.Products.*;
 
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Ticket {
     private final static int MAX_PRODUCTOS = 100;
-    private List<IProduct> productsList;
+    private List<Product> productsList;
     private String ticketId;
     private String cashId;
     private String userId;
@@ -40,7 +38,7 @@ public class Ticket {
     public String getUserId() {return userId;}
     public String getCashId() {return cashId;}
     public TicketState getEstado(){return estado;}
-    public List<IProduct> getProductsList() {
+    public List<Product> getProductsList() {
         return Collections.unmodifiableList(productsList); //No queremos que se modifique el ticket, por lo que pasamos una copia solo para lectura
     }
     public List<String> getCustomTexts() {return Collections.unmodifiableList(customTexts);}
@@ -68,13 +66,13 @@ public class Ticket {
          * https://docs.oracle.com/javase/8/docs/api/java/util/List.html#sort-java.util.Comparator-
          * https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html
          */
-        productsList.sort(Comparator.comparing(IProduct::getName, String.CASE_INSENSITIVE_ORDER));
+        productsList.sort(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER));
     }
 
     public void addProductToTicket(int productID, int quantity, List<String> customTexts) {
         if(estado != TicketState.CLOSE){
             boolean productAdded = false;
-            IProduct productToBeAdded = Catalog.getProduct(productID);
+            Product productToBeAdded = Catalog.getProduct(productID);
             if (productToBeAdded != null) {
                 boolean canAdd = true;
                 for (int i = 0; (i < quantity) && (canAdd); i++) {
@@ -86,7 +84,7 @@ public class Ticket {
                     else if (productToBeAdded instanceof Event) {
                         // No añadir reuniones/comidas repetidas
                         boolean alreadyInTicket = false;
-                        for (IProduct p : productsList) {
+                        for (Product p : productsList) {
                             if (p.getId() == productID) {
                                 alreadyInTicket = true;
                             }
@@ -172,12 +170,12 @@ public class Ticket {
     public void printCurrentTicket() {
         CategoryDiscountCalc categoryDiscount = new CategoryDiscountCalc();
         double[] totals = categoryDiscount.calculateTotals(this);
-        Map<IProduct, Double> hasDiscount = categoryDiscount.discountPerProduct(this);
+        Map<Product, Double> hasDiscount = categoryDiscount.discountPerProduct(this);
         if (!productsList.isEmpty()) {
             // Ordenamos los productos por nombre antes de imprimirlos
             sortProducts();
             System.out.println("Ticket : " + this.getTicketId());
-            for (IProduct currentProduct : productsList) {
+            for (Product currentProduct : productsList) {
                 CLI.printText(currentProduct.toString());
                 // Si el descuento no es igual a 1.0, el producto tiene descuento
                 boolean hasAnyDiscount = (hasDiscount.get(currentProduct)!=1.0);
@@ -214,9 +212,9 @@ public class Ticket {
 
     public void removeProductFromTicket(int productID) {
         if(estado != TicketState.CLOSE){
-            Iterator<IProduct> it = productsList.iterator();
+            Iterator<Product> it = productsList.iterator();
             while (it.hasNext()) {
-                IProduct p = it.next();
+                Product p = it.next();
                 if (p.getId() == productID) {
                     it.remove();
                 }
