@@ -23,14 +23,14 @@ public class ProdAddCommand extends Command {
                 double price;
                 Product product;
                 if (args[i].contains("\"")) {
-                    id = Catalog.generateNewProductId();
+                    id = ProductManager.generateNewProductId();
                 } else {
                     id = Integer.parseInt(args[i]);
                     i++;
                 }
                 name = args[i].replace("\"", "");
-                if (name.length() > Catalog.MAX_CHAR_NAME) {
-                    CLI.print("name length must be lower than" + Catalog.MAX_CHAR_NAME);
+                if (name.length() > ProductManager.MAX_CHAR_NAME) {
+                    CLI.print("name length must be lower than" + ProductManager.MAX_CHAR_NAME);
                     return true;
                 }
                 i++;
@@ -48,7 +48,7 @@ public class ProdAddCommand extends Command {
                         product = new CustomizableProduct(id, name, category, price, maxPers);
                     } else
                         product = new BasicProduct(id, name, category, price);
-                    if (Catalog.addProduct(product)) {
+                    if (ProductManager.addProduct(product)) {
                         CLI.print(product.toString());
                         CLI.print("prod add:ok");
                     }

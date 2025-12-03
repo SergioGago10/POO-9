@@ -2,7 +2,7 @@ package upm.Commands;
 
 import upm.CLI;
 import upm.Products.BasicProduct;
-import upm.Products.Catalog;
+import upm.Products.ProductManager;
 import upm.Products.Category;
 import upm.Products.Product;
 
@@ -18,12 +18,12 @@ public class ProdUpdateCommand extends Command {
             try {
                 int id = Integer.parseInt(args[2]);
                 Product product;
-                product = Catalog.getProduct(id);
+                product = ProductManager.getProduct(id);
                 if (product != null) {
                     switch (args[3].toUpperCase()) {
                         case "NAME":
-                            if(args[4].length()>Catalog.MAX_CHAR_NAME)
-                                CLI.print("Name length must be between 0 and " + Catalog.MAX_CHAR_NAME);
+                            if(args[4].length()> ProductManager.MAX_CHAR_NAME)
+                                CLI.print("Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
                             product.setName(args[4]);
                             applied = true;
                             break;

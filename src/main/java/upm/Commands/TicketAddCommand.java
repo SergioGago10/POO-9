@@ -1,6 +1,6 @@
 package upm.Commands;
 
-import upm.Products.Catalog;
+import upm.Products.ProductManager;
 import upm.tickets.Ticket;
 import upm.tickets.TicketManager;
 
@@ -26,7 +26,7 @@ public class TicketAddCommand extends Command {
             int amount = Integer.parseInt(args[5]);
 
             // Validación del producto
-            if (!Catalog.idExists(prodId)) {
+            if (!ProductManager.idExists(prodId)) {
                 System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
                 return true;
             }

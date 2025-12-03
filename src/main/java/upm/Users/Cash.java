@@ -7,14 +7,13 @@ public class Cash extends User {
     private String identifier;
 
     public Cash(String identifier, String name, String email) {
-        super(name, email, identifier);
+        super(name, email);
         this.identifier = identifier;
     }
 
 
     public Cash(String name, String email) {
-        super(name, email, generateRandomIdentifier());
-        this.identifier = getCashId();
+        this(generateRandomIdentifier(),name,email);
     }
 
 

@@ -5,7 +5,7 @@ import upm.CLI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Catalog {
+public class ProductManager {
     private final static int MAX_DIF_PRODUCTS = 200;
     public final static int MAX_CHAR_NAME = 100;
     private static List<Product> catalog = new ArrayList<>();

@@ -1,7 +1,7 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Products.Catalog;
+import upm.Products.ProductManager;
 import upm.Products.Product;
 
 public class ProdRemoveCommand extends Command {
@@ -15,9 +15,9 @@ public class ProdRemoveCommand extends Command {
         if (args.length == 3) {
             try {
                 int id = Integer.parseInt(args[2]);
-                Product productRemoved = Catalog.getProduct(id);
+                Product productRemoved = ProductManager.getProduct(id);
                 if (productRemoved != null) { //Esto ya directamente comprueba si se puede eliminar o no por lo que no importa no comprobarlo antes
-                    Catalog.remove(id);
+                    ProductManager.remove(id);
                     CLI.print(productRemoved.toString());
                     CLI.print("prod remove:ok");
                 } else {

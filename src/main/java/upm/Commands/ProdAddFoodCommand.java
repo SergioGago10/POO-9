@@ -1,7 +1,7 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Products.Catalog;
+import upm.Products.ProductManager;
 import upm.Products.Event;
 import upm.Products.Product;
 import upm.Products.TypeEvent;
@@ -27,7 +27,7 @@ public class ProdAddFoodCommand extends Command {
                 int id;
                 Product product;
                 if (args[i].contains("\"")) {
-                    id = Catalog.generateNewProductId();
+                    id = ProductManager.generateNewProductId();
                 } else {
                     id = Integer.parseInt(args[i]);
                     i++;
@@ -71,7 +71,7 @@ public class ProdAddFoodCommand extends Command {
                         } else
                             product = new Event(id, name, price, date, maxPeople, TypeEvent.FOOD);
                     }
-                    if (Utilities.isValidProd(id, name, price) && Catalog.addProduct(product)) {
+                    if (Utilities.isValidProd(id, name, price) && ProductManager.addProduct(product)) {
                         CLI.print(product.toString());
                         CLI.print("prod addFood: ok");
                     }

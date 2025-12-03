@@ -1,7 +1,7 @@
 package upm;
 
 import upm.Products.BasicProduct;
-import upm.Products.Catalog;
+import upm.Products.ProductManager;
 
 import java.util.Random;
 
@@ -33,8 +33,8 @@ public class Utilities {
             CLI.print("Price must be positive.");
             return false;
         }
-        if (name.isBlank() || name.length() > Catalog.MAX_CHAR_NAME) {
-            CLI.print("Name length must be between 0 and " + Catalog.MAX_CHAR_NAME);
+        if (name.isBlank() || name.length() > ProductManager.MAX_CHAR_NAME) {
+            CLI.print("Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
             return false;
         }
         return resul;

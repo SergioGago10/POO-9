@@ -1,7 +1,7 @@
 package upm.tickets;
 
 import upm.CLI;
-import upm.Products.Catalog;
+import upm.Products.ProductManager;
 import upm.Products.*;
 
 import java.text.DecimalFormat;
@@ -72,7 +72,7 @@ public class Ticket {
     public void addProductToTicket(int productID, int quantity, List<String> customTexts) {
         if(estado != TicketState.CLOSE){
             boolean productAdded = false;
-            Product productToBeAdded = Catalog.getProduct(productID);
+            Product productToBeAdded = ProductManager.getProduct(productID);
             if (productToBeAdded != null) {
                 boolean canAdd = true;
                 for (int i = 0; (i < quantity) && (canAdd); i++) {
