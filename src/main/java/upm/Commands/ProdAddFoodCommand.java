@@ -40,7 +40,7 @@ public class ProdAddFoodCommand extends Command {
                 int expirationYear = Integer.parseInt(dateStr[0]);
                 int expirationMonth = Integer.parseInt(dateStr[1]);
                 int expirationDay = Integer.parseInt(dateStr[2]);
-                LocalDate date = LocalDate.of(expirationYear, expirationMonth, expirationDay);
+                LocalDateTime date = LocalDate.of(expirationYear, expirationMonth, expirationDay).atStartOfDay();
                 i++;
                 int maxPeople = Integer.parseInt(args[i]);
                 if (maxPeople > 100) {
@@ -58,14 +58,14 @@ public class ProdAddFoodCommand extends Command {
                         int creationMinute = Integer.parseInt(creationDateStr[4]);
                         LocalDateTime creationDate = LocalDateTime.of(creationYear, creationMonth, creationDay,
                                 creationHour, creationMinute);
-                        if (creationDate.plusDays(3).isAfter(date.atStartOfDay())) {
+                        if (creationDate.plusDays(3).isAfter(date)) {
                             CLI.print("The meeting should be planned at least 3 days before");
                             return true;
                         }
 
                         product = new Event(id, name, price, creationDate, date, maxPeople, TypeEvent.FOOD);
                     } else {
-                        if (LocalDateTime.now().plusDays(3).isAfter(date.atStartOfDay())) {
+                        if (LocalDateTime.now().plusDays(3).isAfter(date)) {
                             CLI.print("The meeting should be planned at least 3 days before");
                             return true;
                         } else

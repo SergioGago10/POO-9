@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 public class Event extends IProduct {
     private int maxParticipants;
     private LocalDateTime creationDate;
-    private LocalDate plannedDate;
+    private LocalDateTime plannedDate;
     private TypeEvent typeEvent;
 
 
-    public Event(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDate plannedDate,
+    public Event(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDateTime plannedDate,
                  int maxParticipants, TypeEvent typeEvent) {
         this.creationDate = creationDate;
         this.plannedDate = plannedDate;
@@ -22,7 +22,7 @@ public class Event extends IProduct {
         this.typeEvent=typeEvent;
     }
 
-    public Event(int id, String name, double pricePerson, LocalDate plannedDate, int maxParticipants, TypeEvent typeEvent) {
+    public Event(int id, String name, double pricePerson, LocalDateTime plannedDate, int maxParticipants, TypeEvent typeEvent) {
         this(id, name, pricePerson, LocalDateTime.now(), plannedDate, maxParticipants,typeEvent);
     }
 
@@ -36,5 +36,17 @@ public class Event extends IProduct {
         sb.append(", date of Event: ").append(plannedDate);
         sb.append(", max people allowed:").append(maxParticipants).append("}");
         return sb.toString();
+    }
+
+    public int getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public LocalDateTime getPlannedDate() {
+        return plannedDate;
+    }
+
+    public TypeEvent getTypeEvent() {
+        return typeEvent;
     }
 }

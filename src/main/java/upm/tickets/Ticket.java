@@ -5,7 +5,9 @@ import upm.Products.Catalog;
 import upm.Products.*;
 
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -93,8 +95,23 @@ public class Ticket {
                             System.out.println("This product (Food/Meeting) is already in the ticket. It can not be added again.");
                             canAdd = false;
                         } else {
-                            productsList.add(productToBeAdded);
-                            productAdded = true;
+                            TypeEvent type=((Event) productToBeAdded).getTypeEvent();
+                            LocalDateTime plannedDate=((Event) productToBeAdded).getPlannedDate();
+                            if(type.equals(TypeEvent.FOOD)){
+                                if(plannedDate.isAfter(LocalDateTime.now().plusDays(3))){
+                                    productsList.add(productToBeAdded);
+                                    productAdded = true;
+                                }else
+                                    CLI.print("Foods must be planned at least 3 days before.");
+                            }else{
+                                if(plannedDate.isAfter(LocalDateTime.now().plusHours(12))){
+                                    productsList.add(productToBeAdded);
+                                    productAdded = true;
+                                }else
+                                    CLI.print("Foods must be planned at least 12 hours before.");
+                            }
+
+
                         }
                     }
 
