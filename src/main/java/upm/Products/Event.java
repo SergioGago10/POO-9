@@ -4,10 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 //hay que poner minutos
-public class Event implements IProduct {
-    private int id;
-    private String name;
-    private double price;
+public class Event extends IProduct {
     private int maxParticipants;
     private LocalDateTime creationDate;
     private LocalDate plannedDate;
@@ -19,8 +16,7 @@ public class Event implements IProduct {
         this.creationDate = creationDate;
         this.plannedDate = plannedDate;
         this.id = id;
-        this.name = "'" + name.replace("\"", "").replace("'", "") + "'";
-        //Quitamos comillas para que en la comparacion por nombre alfabetico no de error + poner simples para formato
+        this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error
         this.price = pricePerson;
         this.maxParticipants = maxParticipants;
         this.typeEvent=typeEvent;
@@ -28,27 +24,6 @@ public class Event implements IProduct {
 
     public Event(int id, String name, double pricePerson, LocalDate plannedDate, int maxParticipants, TypeEvent typeEvent) {
         this(id, name, pricePerson, LocalDateTime.now(), plannedDate, maxParticipants,typeEvent);
-    }
-
-
-    public void setName(String name) {
-        this.name = "'" + name.replace("\"", "").replace("'", "") + "'";;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getId() {
-        return id;
     }
 
     @Override

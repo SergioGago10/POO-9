@@ -9,7 +9,7 @@ public class Catalog {
     private final static int MAX_DIF_PRODUCTS = 200;
     public final static int MAX_CHAR_NAME = 100;
     private static List<IProduct> catalog = new ArrayList<>();
-    private static int newId = 0;
+    private static int newId = 1;
 
     public static boolean addProduct(IProduct product) {
         boolean added = false;

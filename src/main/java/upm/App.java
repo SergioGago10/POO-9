@@ -82,21 +82,4 @@ public class App {
         System.exit(0);
     }
 
-    private void helpCommand() {
-        System.out.println("Commands:\n prod add <id> \"<name>\" <category> <price>\n" +
-                " prod list\n" +
-                " prod update <id> NAME|CATEGORY|PRICE <value>\n" +
-                " prod remove <id>\n" +
-                " ticket new\n" +
-                " ticket add <prodId> <quantity>\n" +
-                " ticket remove <prodId>\n" +
-                " ticket print\n" +
-                " echo \"<texto>\"\n" +
-                " help\n" +
-                " exit\n\n" + "Categories: MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS\n" +
-                "Discounts if there are ≥2 units in the category: MERCH 0%," +
-                " STATIONERY 5%, CLOTHES 7%, BOOK 10%,\n" +
-                "ELECTRONICS 3%.");
-    }
-
 }
