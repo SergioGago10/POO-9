@@ -1,8 +1,11 @@
 package upm.Commands;
 
 import upm.CLI;
+import upm.Users.Cash;
 import upm.Users.CashManager;
+import upm.Users.Client;
 import upm.Users.ClientsManager;
+import upm.tickets.Ticket;
 import upm.tickets.TicketManager;
 
 public class TicketNewCommand extends Command {
@@ -22,6 +25,7 @@ public class TicketNewCommand extends Command {
         String ticketId = null;
         String cashId;
         String userDni;
+        Ticket ticket;
 
         if (args.length == 4) {
             cashId = args[2];
@@ -43,11 +47,14 @@ public class TicketNewCommand extends Command {
         }
 
         if (ticketId == null) {
-            TicketManager.newTicket(cashId, userDni);
+            ticket=TicketManager.newTicket(cashId, userDni);
         } else {
-            TicketManager.newTicket(ticketId, cashId, userDni, false);
+            ticket=TicketManager.newTicket(ticketId, cashId, userDni, false);
         }
-
+        Cash cashier=CashManager.getCashByIdentifier(cashId);
+        Client client=ClientsManager.getClientByDni(userDni);
+        cashier.addTicket(ticket);
+        client.addTicket(ticket);
         CLI.print("ticket new: ok");
         return true;
     }
