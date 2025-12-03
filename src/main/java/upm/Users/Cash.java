@@ -4,11 +4,10 @@ import static upm.Users.CashManager.generateRandomIdentifier;
 
 
 public class Cash extends User {
-    private String identifier;
+    private String cashId;
 
     public Cash(String identifier, String name, String email) {
-        super(name, email);
-        this.identifier = identifier;
+        super(name, email,identifier);
     }
 
 
@@ -17,12 +16,8 @@ public class Cash extends User {
     }
 
 
-    public String getIdentifier() {
-        return identifier;
-    }
-
     @Override
     public String toString() {
-        return " Cash{identifier='" + identifier + "', name='" + name + "', email='" + email + "'}";
+        return " Cash{identifier='" + id + "', name='" + name + "', email='" + email + "'}";
     }
 }
