@@ -1,9 +1,8 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Users.CashManager;
 import upm.Users.Client;
-import upm.Users.ClientsManager;
+import upm.Users.UserManager;
 
 public class ClientAddCommand extends Command {
     public ClientAddCommand() {
@@ -12,17 +11,15 @@ public class ClientAddCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied;
-
+        boolean applied=false;
+        UserManager userManager=UserManager.getInstance();
         if (args.length < 6) {
             System.out.println("Format must be: client add \"<name>\" <DNI> <email> <cashId>");
-            return true;
         }
 
         String rawName = args[2];
         if (!(rawName.startsWith("\"") && rawName.endsWith("\""))) {
             CLI.print("The name must be enclosed in quotes.");
-            return true;
         }
 
         try {
@@ -41,28 +38,24 @@ public class ClientAddCommand extends Command {
 
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 CLI.print("Invalid email format.");
-                return true;
             }
 
-            if (!CashManager.idExists(cashierId)) {
+            if (!userManager.idExists(cashierId)) {
                 CLI.print("Cashier ID does not exist.");
-                return true;
             }
 
             Client client = new Client(name, dni, email, cashierId);
 
-            if (ClientsManager.addClient(client)) {
+            if (userManager.addClient(client)) {
                 System.out.println(client.toString());
                 System.out.println("client add: ok");
                 applied = true;
             } else {
                 CLI.print("Client could not be added.");
-                applied = true;
             }
 
         } catch (Exception ex) {
             CLI.print("Error adding client.");
-            applied = true;
         }
 
         return applied;

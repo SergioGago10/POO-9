@@ -2,7 +2,7 @@ package upm.Commands;
 
 import upm.CLI;
 import upm.Users.Client;
-import upm.Users.ClientsManager;
+import upm.Users.UserManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +15,7 @@ public class ClientListCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        ArrayList<Client> clientsList = ClientsManager.getClientsList();
+        ArrayList<Client> clientsList = UserManager.getClients();
 
         if (clientsList.isEmpty()) {
             CLI.print("No clients found.");

@@ -2,7 +2,7 @@ package upm.Commands;
 
 import upm.CLI;
 import upm.Users.Cash;
-import upm.Users.CashManager;
+import upm.Users.UserManager;
 
 public class CashAddCommand extends Command {
     public CashAddCommand() {
@@ -11,36 +11,26 @@ public class CashAddCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-    boolean applied;
+        boolean applied = false;
         if (args.length < 4) {
             System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
-            return true;
+            return false;
         }
 
         String identifier;
         String rawName;
         String email = "";
-
+        UserManager userManager=UserManager.getInstance();
         int i = 2;
 
         if (args[i].startsWith("\"") && args[i].endsWith("\"")) {
-            identifier = CashManager.generateRandomIdentifier();
+            identifier = userManager.generateRandomIdentifier();
             rawName = args[i];
             i++;
-            if (i < args.length) {
-                email = args[i];
-            }
-            else {
-                System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
-                return true;
-            }
+            email = args[i];
         } else {
             identifier = args[i];
             i++;
-            if (i >= args.length) {
-                System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
-                return true;
-            }
             rawName = args[i];
             i++;
             if (i >= args.length) {
@@ -73,22 +63,20 @@ public class CashAddCommand extends Command {
 
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 CLI.print("Invalid email format.");
-                return true;
+                return false;
             }
 
             Cash cash = new Cash(identifier, name, email);
 
-            if (CashManager.addCash(cash)) {
+            if (userManager.addCash(cash)) {
                 System.out.println(cash.toString());
                 System.out.println("cash add: ok");
                 applied = true;
             } else {
                 System.err.println("Cashier couldn't be added.");
-                applied = true;
             }
         } catch (Exception ex) {
             System.out.println("Error: Invalid parameters.");
-            applied = true;
         }
 
         return applied;

@@ -1,10 +1,7 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Users.Cash;
-import upm.Users.CashManager;
-import upm.Users.Client;
-import upm.Users.ClientsManager;
+import upm.Users.*;
 import upm.tickets.Ticket;
 import upm.tickets.TicketManager;
 
@@ -19,7 +16,7 @@ public class TicketNewCommand extends Command {
 
         if (args.length < 4 || args.length > 5) {
             System.out.println("Usage: ticket new [<id>] <cashId> <userDni>");
-            return true;
+            return false;
         }
 
         String ticketId = null;
@@ -35,27 +32,33 @@ public class TicketNewCommand extends Command {
             cashId = args[3];
             userDni = args[4];
         }
-
-        if (!CashManager.idExists(cashId)) {
+        UserManager userManager=UserManager.getInstance();
+        if (!userManager.idExists(cashId)) {
             CLI.print("Cashier ID does not exist: " + cashId);
-            return true;
+            return false;
         }
 
-        if (!ClientsManager.dniExists(userDni)) {
+        if (!userManager.idExists(userDni)) {
             CLI.print("Client DNI does not exist: " + userDni);
+            return false;
+        }
+        try {
+            Cash cashier = (Cash) userManager.getUserByID(cashId);
+            Client client = (Client) userManager.getUserByID(userDni);
+            if (ticketId == null) {
+                ticket = TicketManager.newTicket(cashId, userDni);
+            } else {
+                ticket = TicketManager.newTicket(ticketId, cashId, userDni, false);
+            }
+
+            cashier.addTicket(ticket);
+            client.addTicket(ticket);
+            CLI.print("ticket new: ok");
             return true;
+        }catch (ClassCastException ex){
+            CLI.print("First id must be a cash id and second id must be a client DNI.");
+            return false;
         }
 
-        if (ticketId == null) {
-            ticket=TicketManager.newTicket(cashId, userDni);
-        } else {
-            ticket=TicketManager.newTicket(ticketId, cashId, userDni, false);
-        }
-        Cash cashier=CashManager.getCashByIdentifier(cashId);
-        Client client=ClientsManager.getClientByDni(userDni);
-        cashier.addTicket(ticket);
-        client.addTicket(ticket);
-        CLI.print("ticket new: ok");
-        return true;
     }
 }

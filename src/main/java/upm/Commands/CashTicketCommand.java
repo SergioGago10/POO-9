@@ -2,12 +2,8 @@ package upm.Commands;
 
 import upm.CLI;
 import upm.Users.Cash;
-import upm.Users.CashManager;
-import upm.tickets.Ticket;
+import upm.Users.UserManager;
 import upm.tickets.TicketManager;
-
-import java.util.Comparator;
-import java.util.List;
 
 public class CashTicketCommand extends Command {
 
@@ -18,24 +14,26 @@ public class CashTicketCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length < 3) {
-            return true;
+            CLI.print("Format of instruction: cash list");
+            return false;
         }
 
         try {
             String cashIdentifier = args[2];
-
-            Cash cash = CashManager.getCashByIdentifier(cashIdentifier);
+            UserManager userManager=UserManager.getInstance();
+            Cash cash = (Cash) userManager.getUserByID(cashIdentifier);
             if (cash == null) {
                 CLI.print("Cash not found.");
-                return true;
+                return false;
             }
 
             TicketManager.printTicketsByCashier(cashIdentifier);
             CLI.print("cash tickets: ok");
             return true;
 
-        } catch (Exception e) {
-            return true;
+        } catch (ClassCastException ex) {
+            CLI.print("Id doesnt belong to a cahier, it belongs to a Client.");
+            return false;
         }
     }
 }

@@ -2,7 +2,7 @@ package upm.Commands;
 
 import upm.CLI;
 import upm.Users.Client;
-import upm.Users.ClientsManager;
+import upm.Users.UserManager;
 
 public class ClientRemoveCommand extends Command {
     public ClientRemoveCommand() {
@@ -11,28 +11,29 @@ public class ClientRemoveCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied;
-
-        if (args.length < 3) {
-            System.out.println("Format must be: client remove <DNI>");
-            applied = true;
-        } else {
-            String dni = args[2];
-            Client client = ClientsManager.getClientByDni(dni);
-
-            if (client == null) {
-                CLI.print("Client not found.");
-                applied = true;
-            } else if (ClientsManager.removeClientByDni(dni)) {
-                //CLI.print(client.toString()); no queremos que se haga print
-                CLI.print("client remove: ok");
-                applied = true;
+        boolean applied=false;
+        try {
+            if (args.length < 3) {
+                System.out.println("Format must be: client remove <DNI>");
             } else {
-                CLI.print("Client couldn't be removed.");
-                applied = true;
-            }
-        }
+                UserManager userManager=UserManager.getInstance();
+                String dni = args[2];
+                Client client = (Client) userManager.getUserByID(dni);
 
+                if (client == null) {
+                    CLI.print("Client not found.");
+                } else if (UserManager.removeUserByDni(dni)) {
+                    //CLI.print(client.toString()); no queremos que se haga print
+                    CLI.print("client remove: ok");
+                    applied = true;
+                } else {
+                    CLI.print("Client couldn't be removed.");
+                }
+            }
+
+        } catch (ClassCastException ex) {
+            CLI.print("Id doesnt belong to a Client, it belongs to a cashier.");
+        }
         return applied;
     }
 }
