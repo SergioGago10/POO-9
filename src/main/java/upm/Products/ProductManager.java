@@ -8,12 +8,12 @@ import java.util.List;
 public class ProductManager {
     private final static int MAX_DIF_PRODUCTS = 200;
     public final static int MAX_CHAR_NAME = 100;
-    private static List<Product> catalog;
-    private static int newId = 1;
+    private List<Product> catalog;
+    private int newId = 1;
     private static ProductManager instance;
 
     private ProductManager() {
-        ProductManager.catalog = new ArrayList<>();
+        this.catalog = new ArrayList<>();
     }
 
     public static ProductManager getInstance() {
