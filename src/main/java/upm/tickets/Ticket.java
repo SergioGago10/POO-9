@@ -72,7 +72,8 @@ public class Ticket {
     public void addProductToTicket(int productID, int quantity, List<String> customTexts) {
         if(estado != TicketState.CLOSE){
             boolean productAdded = false;
-            Product productToBeAdded = ProductManager.getProduct(productID);
+            ProductManager productManager=ProductManager.getInstance();
+            Product productToBeAdded = productManager.getProduct(productID);
             if (productToBeAdded != null) {
                 boolean canAdd = true;
                 for (int i = 0; (i < quantity) && (canAdd); i++) {

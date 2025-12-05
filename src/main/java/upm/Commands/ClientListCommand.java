@@ -1,6 +1,7 @@
 package upm.Commands;
 
 import upm.CLI;
+import upm.Products.ProductManager;
 import upm.Users.Client;
 import upm.Users.UserManager;
 
@@ -15,7 +16,8 @@ public class ClientListCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        ArrayList<Client> clientsList = UserManager.getClients();
+        UserManager userManager=UserManager.getInstance();
+        ArrayList<Client> clientsList = userManager.getClients();
 
         if (clientsList.isEmpty()) {
             CLI.print("No clients found.");

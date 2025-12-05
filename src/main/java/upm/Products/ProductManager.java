@@ -8,10 +8,21 @@ import java.util.List;
 public class ProductManager {
     private final static int MAX_DIF_PRODUCTS = 200;
     public final static int MAX_CHAR_NAME = 100;
-    private static List<Product> catalog = new ArrayList<>();
+    private static List<Product> catalog;
     private static int newId = 1;
+    private static ProductManager instance;
 
-    public static boolean addProduct(Product product) {
+    private ProductManager() {
+        ProductManager.catalog = new ArrayList<>();
+    }
+
+    public static ProductManager getInstance() {
+        if (instance == null)
+            instance = new ProductManager();
+        return instance;
+    }
+
+    public boolean addProduct(Product product) {
         boolean added = false;
         if (catalog.size() < MAX_DIF_PRODUCTS) {
             if (!idExists(product.getId())) {
@@ -26,7 +37,7 @@ public class ProductManager {
         return added;
     }
 
-    public static Product getProduct(int id) {
+    public Product getProduct(int id) {
         for (Product p : catalog) {
             if (p.getId() == id) {
                 return p;
@@ -35,16 +46,16 @@ public class ProductManager {
         return null;
     }
 
-    public static List<Product> getCatalog() {
+    public List<Product> getCatalog() {
         return catalog;
     }
 
-    public static int getAmountProducts() {
+    public int getAmountProducts() {
         return catalog.size();
     }
 
 
-    public static boolean remove(int id) {
+    public boolean remove(int id) {
         int index = -1;
         for (int i = 0; i < catalog.size(); i++) {
             if (catalog.get(i).getId() == id) {
@@ -59,7 +70,7 @@ public class ProductManager {
         return false;
     }
 
-    public static int indexOfProduct(int id) {
+    public int indexOfProduct(int id) {
         for (int i = 0; i < catalog.size(); i++) {
             if (catalog.get(i).getId() == id) {
                 return i;
@@ -68,15 +79,15 @@ public class ProductManager {
         return -1;
     }
 
-    public static boolean idExists(int id) {
-        return indexOfProduct(id) != -1;
+    public boolean idExists(int id) {
+        return this.indexOfProduct(id) != -1;
     }
 
-    public static boolean isEmpty() {
+    public boolean isEmpty() {
         return catalog.isEmpty();
     }
 
-    public static int generateNewProductId() {
+    public int generateNewProductId() {
         while (idExists(newId))
             newId++;
         return newId;

@@ -6,28 +6,26 @@ import java.util.Random;
 
 public class UserManager {
     private static UserManager instance;
-    private static ArrayList<Client> clientsList;
-    private static ArrayList<Cash> cashList;
+    private final ArrayList<Client> clientsList;
+    private final ArrayList<Cash> cashList;
 
-    private UserManager(ArrayList<Client> clientsList, ArrayList<Cash> cashList) {
-        if (clientsList == null)
-            UserManager.clientsList = new ArrayList<>();
-        if (cashList == null)
-            UserManager.cashList = new ArrayList<>();
+    private UserManager() {
+        this.clientsList = new ArrayList<>();
+        this.cashList = new ArrayList<>();
     }
 
     public static UserManager getInstance(){
         if (instance==null){
-            instance=new UserManager(clientsList,cashList);
+            instance=new UserManager();
         }
         return instance;
     }
 
-    public static ArrayList<Client> getClients() {
+    public ArrayList<Client> getClients() {
         return new ArrayList<>(clientsList); // devolvemos copia para no exponer la interna
     }
 
-    public static ArrayList<Cash> getCash() {
+    public ArrayList<Cash> getCash() {
         return new ArrayList<>(cashList); // devolvemos copia para no exponer la interna
     }
 
@@ -68,7 +66,7 @@ public class UserManager {
         return null;
     }
 
-    public static boolean removeUserByDni(String dni) {
+    public boolean removeUserByDni(String dni) {
         if (dni == null) return false;
 
         if (dni.startsWith("UW")) {

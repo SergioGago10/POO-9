@@ -24,9 +24,9 @@ public class TicketAddCommand extends Command {
             String cashId = args[3];
             int prodId = Integer.parseInt(args[4]);
             int amount = Integer.parseInt(args[5]);
-
+            ProductManager productManager=ProductManager.getInstance();
             // Validación del producto
-            if (!ProductManager.idExists(prodId)) {
+            if (!productManager.idExists(prodId)) {
                 System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
                 return true;
             }

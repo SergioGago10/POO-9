@@ -1,6 +1,7 @@
 package upm.Commands;
 
 import upm.CLI;
+import upm.Products.ProductManager;
 import upm.Users.Cash;
 import upm.Users.UserManager;
 
@@ -15,8 +16,8 @@ public class CashListCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-
-        ArrayList<Cash> list = new ArrayList<>(UserManager.getCash());
+        UserManager userManager=UserManager.getInstance();
+        ArrayList<Cash> list = new ArrayList<>(userManager.getCash());
 
         if (list.isEmpty()) {
             CLI.print("No cashiers found.");

@@ -21,7 +21,7 @@ public class CashRemoveCommand extends Command {
                 Cash cash = (Cash) userManager.getUserByID(identifier);
                 if (cash == null) {
                     CLI.print("Cashier not found.");
-                } else if (UserManager.removeUserByDni(identifier)) {
+                } else if (userManager.removeUserByDni(identifier)) {
                     CLI.print(cash.toString());
                     CLI.print("cash remove: ok");
                     applied = true;

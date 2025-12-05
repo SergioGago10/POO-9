@@ -25,8 +25,9 @@ public class ProdAddMeetingCommand extends Command {
                 int i = 2;
                 int id;
                 Product product;
+                ProductManager productManager=ProductManager.getInstance();
                 if (args[i].contains("\"")) {
-                    id = ProductManager.generateNewProductId();
+                    id = productManager.generateNewProductId();
                 } else {
                     id = Integer.parseInt(args[i]);
                     i++;
@@ -69,8 +70,7 @@ public class ProdAddMeetingCommand extends Command {
                         }
                         product = new Event(id, name, price, date, maxPeople, TypeEvent.MEETING);
                     }
-                    if (ProductManager.addProduct(product)) {
-                        ProductManager.addProduct(product);
+                    if (productManager.addProduct(product)) {
                         CLI.print(product.toString());
                         CLI.print("prod addMeeting: ok");
                     }

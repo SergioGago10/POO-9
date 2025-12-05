@@ -18,7 +18,8 @@ public class ProdListCommand extends Command {
             CLI.print("Format must be: prod list");
             return true;
         }
-        List<Product> catalog = ProductManager.getCatalog();
+        ProductManager productManager=ProductManager.getInstance();
+        List<Product> catalog = productManager.getCatalog();
         if (catalog.isEmpty()){
             CLI.print("Catalog is empty");
             return true;

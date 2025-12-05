@@ -22,8 +22,9 @@ public class ProdAddCommand extends Command {
                 Category category;
                 double price;
                 Product product;
+                ProductManager productManager=ProductManager.getInstance();
                 if (args[i].contains("\"")) {
-                    id = ProductManager.generateNewProductId();
+                    id = productManager.generateNewProductId();
                 } else {
                     id = Integer.parseInt(args[i]);
                     i++;
@@ -48,7 +49,7 @@ public class ProdAddCommand extends Command {
                         product = new CustomizableProduct(id, name, category, price, maxPers);
                     } else
                         product = new BasicProduct(id, name, category, price);
-                    if (ProductManager.addProduct(product)) {
+                    if (productManager.addProduct(product)) {
                         CLI.print(product.toString());
                         CLI.print("prod add:ok");
                     }
