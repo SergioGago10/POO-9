@@ -23,13 +23,13 @@ public class ProdAddMeetingCommand extends Command {
         } else {
             try {
                 int i = 2;
-                int id;
+                String id;
                 Product product;
                 ProductManager productManager=ProductManager.getInstance();
                 if (args[i].contains("\"")) {
                     id = productManager.generateNewProductId();
                 } else {
-                    id = Integer.parseInt(args[i]);
+                    id = args[i];
                     i++;
                 }
                 String name = args[i].replace("\"", "");
@@ -48,7 +48,7 @@ public class ProdAddMeetingCommand extends Command {
                     return true;
                 }
                 i++;
-                if (Utilities.isValidProd(id, name, price)) {
+                if (Utilities.isValidProd(Integer.parseInt(id), name, price)) {
                     if (i == args.length - 1) {
                         String[] creationDateStr = args[i].split("-");
                         int creationYear = Integer.parseInt(creationDateStr[0]);

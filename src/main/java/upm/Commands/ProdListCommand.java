@@ -1,8 +1,10 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Products.ProductManager;
+import upm.Products.IProduct;
 import upm.Products.Product;
+import upm.Products.ProductManager;
+import upm.Products.ProductService;
 
 import java.util.List;
 
@@ -19,14 +21,18 @@ public class ProdListCommand extends Command {
             return true;
         }
         ProductManager productManager=ProductManager.getInstance();
-        List<Product> catalog = productManager.getCatalog();
-        if (catalog.isEmpty()){
+        List<Product> catalog = productManager.getCatalogProducts();
+        List<ProductService> services=productManager.getCatalogServices();
+        if (catalog.isEmpty()&& services.isEmpty()){
             CLI.print("Catalog is empty");
-            return true;
-        }
-        CLI.print("Catalog:");
-        for (Product product : catalog){
-            CLI.print(product.toString());
+        }else {
+            CLI.print("Catalog:");
+            for (IProduct product : catalog) {
+                CLI.print(product.toString());
+            }
+            for (ProductService service : services) {
+                CLI.print(service.toString());
+            }
             CLI.print("prod list: ok");
         }
         return true;

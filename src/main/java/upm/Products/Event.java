@@ -10,7 +10,7 @@ public class Event extends Product {
     private TypeEvent typeEvent;
 
 
-    public Event(int id, String name, double pricePerson, LocalDateTime creationDate, LocalDateTime plannedDate,
+    public Event(String id, String name, double pricePerson, LocalDateTime creationDate, LocalDateTime plannedDate,
                  int maxParticipants, TypeEvent typeEvent) {
         this.creationDate = creationDate;
         this.plannedDate = plannedDate;
@@ -21,7 +21,7 @@ public class Event extends Product {
         this.typeEvent=typeEvent;
     }
 
-    public Event(int id, String name, double pricePerson, LocalDateTime plannedDate, int maxParticipants, TypeEvent typeEvent) {
+    public Event(String id, String name, double pricePerson, LocalDateTime plannedDate, int maxParticipants, TypeEvent typeEvent) {
         this(id, name, pricePerson, LocalDateTime.now(), plannedDate, maxParticipants,typeEvent);
     }
 

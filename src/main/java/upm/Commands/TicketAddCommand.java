@@ -22,7 +22,7 @@ public class TicketAddCommand extends Command {
         try {
             String ticketId = args[2];
             String cashId = args[3];
-            int prodId = Integer.parseInt(args[4]);
+            String prodId = args[4];
             int amount = Integer.parseInt(args[5]);
             ProductManager productManager=ProductManager.getInstance();
             // Validación del producto

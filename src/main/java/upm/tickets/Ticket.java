@@ -69,12 +69,12 @@ public class Ticket {
         productsList.sort(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER));
     }
 
-    public void addProductToTicket(int productID, int quantity, List<String> customTexts) {
+    public void addProductToTicket(String productID, int quantity, List<String> customTexts) {
         if(estado != TicketState.CLOSE){
             boolean productAdded = false;
             ProductManager productManager=ProductManager.getInstance();
-            Product productToBeAdded = productManager.getProduct(productID);
-            if (productToBeAdded != null) {
+            IProduct productToBeAdded = productManager.getProduct(productID);
+            if (productToBeAdded instanceof Product) {
                 boolean canAdd = true;
                 for (int i = 0; (i < quantity) && (canAdd); i++) {
                     if (productsList.size() >= MAX_PRODUCTOS) {
@@ -86,7 +86,7 @@ public class Ticket {
                         // No añadir reuniones/comidas repetidas
                         boolean alreadyInTicket = false;
                         for (Product p : productsList) {
-                            if (p.getId() == productID) {
+                            if (p.getId().equals(productID)) {
                                 alreadyInTicket = true;
                             }
                         }
@@ -98,13 +98,13 @@ public class Ticket {
                             LocalDateTime plannedDate=((Event) productToBeAdded).getPlannedDate();
                             if(type.equals(TypeEvent.FOOD)){
                                 if(plannedDate.isAfter(LocalDateTime.now().plusDays(3))){
-                                    productsList.add(productToBeAdded);
+                                    productsList.add((Event) productToBeAdded);
                                     productAdded = true;
                                 }else
                                     CLI.print("Foods must be planned at least 3 days before.");
                             }else{
                                 if(plannedDate.isAfter(LocalDateTime.now().plusHours(12))){
-                                    productsList.add(productToBeAdded);
+                                    productsList.add((Event) productToBeAdded);
                                     productAdded = true;
                                 }else
                                     CLI.print("Foods must be planned at least 12 hours before.");
@@ -147,7 +147,7 @@ public class Ticket {
                     }
 
                     else { // Producto normal (BasicProduct)
-                        productsList.add(productToBeAdded);
+                        productsList.add((BasicProduct) productToBeAdded);
                         productAdded = true;
                     }
                 }
@@ -211,12 +211,12 @@ public class Ticket {
         }
     }
 
-    public void removeProductFromTicket(int productID) {
+    public void removeProductFromTicket(String productID) {
         if(estado != TicketState.CLOSE){
             Iterator<Product> it = productsList.iterator();
             while (it.hasNext()) {
-                Product p = it.next();
-                if (p.getId() == productID) {
+                IProduct p = it.next();
+                if (p.getId().equals(productID)) {
                     it.remove();
                 }
             }

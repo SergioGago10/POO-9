@@ -24,13 +24,13 @@ public class ProdAddFoodCommand extends Command {
         } else {
             try {
                 int i = 2;
-                int id;
+                String id;
                 Product product;
                 ProductManager productManager=ProductManager.getInstance();
                 if (args[i].contains("\"")) {
                     id = productManager.generateNewProductId();
                 } else {
-                    id = Integer.parseInt(args[i]);
+                    id = args[i];
                     i++;
                 }
                 String name = args[i].replace("\"", "");
@@ -49,7 +49,7 @@ public class ProdAddFoodCommand extends Command {
                     return true;
                 }
                 i++;
-                if (Utilities.isValidProd(id, name, price)) {
+                if (Utilities.isValidProd(Integer.parseInt(id), name, price)) {
                     if (i == args.length - 1) {
                         String[] creationDateStr = args[i].split("-");
                         int creationYear = Integer.parseInt(creationDateStr[0]);
@@ -72,7 +72,7 @@ public class ProdAddFoodCommand extends Command {
                         } else
                             product = new Event(id, name, price, date, maxPeople, TypeEvent.FOOD);
                     }
-                    if (Utilities.isValidProd(id, name, price) && productManager.addProduct(product)) {
+                    if (productManager.addProduct(product)) {
                         CLI.print(product.toString());
                         CLI.print("prod addFood: ok");
                     }

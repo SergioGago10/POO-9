@@ -1,11 +1,11 @@
 package upm.Products;
 
-public abstract class Product {
-    protected int id;
+public abstract class Product implements IProduct{
+    protected String id;
     protected String name;
     protected double price;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

@@ -1,6 +1,7 @@
     package upm.tickets;
 
     import upm.Products.BasicProduct;
+    import upm.Products.IProduct;
     import upm.Products.Product;
     import upm.Products.Category;
 

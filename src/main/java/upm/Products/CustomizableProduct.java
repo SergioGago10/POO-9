@@ -9,7 +9,7 @@ public class CustomizableProduct extends BasicProduct {
     private List<String> customTexts;
 
 
-    public CustomizableProduct(int id, String name, Category category, double price, int maxCustomTexts) {
+    public CustomizableProduct(String id, String name, Category category, double price, int maxCustomTexts) {
         super(id, name, category, price);
         this.maxCustomTexts = maxCustomTexts;
         this.customTexts = new ArrayList<>();
