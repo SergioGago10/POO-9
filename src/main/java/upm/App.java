@@ -26,9 +26,6 @@ public class App {
         boolean running = true;
         boolean isInteractive = (args.length != 0); // true si se pasa archivo, false si escribimos por la consola
         System.setErr(System.out);
-
-        TicketManager ticketManager = new TicketManager(); // Antes de iniciar el programa se crea un ticketManager
-
         System.out.println("Ticket module. Type 'help' to see commands.");
 
         // 1) Lista de comandos

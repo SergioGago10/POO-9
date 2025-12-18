@@ -25,6 +25,7 @@ public class TicketAddCommand extends Command {
             String prodId = args[4];
             int amount = Integer.parseInt(args[5]);
             ProductManager productManager=ProductManager.getInstance();
+            TicketManager ticketManager=TicketManager.getInstance();
             // Validación del producto
             if (!productManager.idExists(prodId)) {
                 System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
@@ -32,7 +33,7 @@ public class TicketAddCommand extends Command {
             }
 
             // Buscar ticket
-            Ticket ticketAModificar = TicketManager.getTicketById(ticketId);
+            Ticket ticketAModificar = ticketManager.getTicketById(ticketId);
 
             if (ticketAModificar == null) {
                 System.err.println("Error: Ticket " + ticketId + " does not exist.");

@@ -4,30 +4,40 @@ import java.util.*;
 
 public class TicketManager {
     private static Map<String, Ticket> ticketsByTicketId;
-    private static Map<String,List<Ticket>> ticketsByCashId;
+    private static Map<String, List<Ticket>> ticketsByCashId;
+    private static TicketManager instance;
 
-    public TicketManager() {
+    private TicketManager() {
         ticketsByTicketId = new HashMap<>();
         ticketsByCashId = new HashMap<>();
     }
 
-    public static boolean exists(String ticketId) {return ticketsByTicketId.containsKey(ticketId);}
+    public static TicketManager getInstance() {
+        if (instance == null)
+            instance=new TicketManager();
+        return instance;
+    }
 
-    private static String generateTicketId() {
+    public boolean exists(String ticketId) {
+        return ticketsByTicketId.containsKey(ticketId);
+    }
+
+    private String generateTicketId() {
         Random rand = new Random();
         int num = rand.nextInt(100000); // [0 - 99999]
         return String.format("%05d", num);
     }
 
-    public static Ticket newTicket(String cashId, String userId) {
+    public Ticket newTicket(String cashId, String userId) {
         String ticketId = generateTicketId();
         while (exists(ticketId)) {
             ticketId = generateTicketId();
         }
-        return newTicket(ticketId,cashId,userId,true);
+        return newTicket(ticketId, cashId, userId, true);
     }
-    public static Ticket newTicket(String ticketId, String cashId, String userId, boolean isTicketIdAutoGen) {
-        Ticket ticket = new Ticket(ticketId, cashId, userId,isTicketIdAutoGen);
+
+    public Ticket newTicket(String ticketId, String cashId, String userId, boolean isTicketIdAutoGen) {
+        Ticket ticket = new Ticket(ticketId, cashId, userId, isTicketIdAutoGen);
         ticketsByTicketId.put(ticketId, ticket);
         List<Ticket> list = ticketsByCashId.get(cashId);
         if (list == null) {
@@ -40,7 +50,7 @@ public class TicketManager {
         return ticket;
     }
 
-    public static Ticket getTicketById(String ticketId) {
+    public Ticket getTicketById(String ticketId) {
         return ticketsByTicketId.get(ticketId);
     }
 
@@ -59,7 +69,7 @@ public class TicketManager {
         return true;
     }
 
-    public static void printListTickets() {
+    public void printListTickets() {
         System.out.println("Ticket list : ");
         List<Ticket> ticketList = new ArrayList<>(ticketsByTicketId.values());
         ticketList.sort(Comparator.comparing(Ticket::getCashId));
@@ -69,7 +79,7 @@ public class TicketManager {
     }
 
 
-    public static  void printTicketsByCashier(String cashId) {
+    public void printTicketsByCashier(String cashId) {
         List<Ticket> list = ticketsByCashId.get(cashId);
         if (list != null && !list.isEmpty()) {
             list.sort(Comparator.comparing(Ticket::getTicketId));

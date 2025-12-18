@@ -26,8 +26,8 @@ public class CashTicketCommand extends Command {
                 CLI.print("Cash not found.");
                 return false;
             }
-
-            TicketManager.printTicketsByCashier(cashIdentifier);
+            TicketManager ticketManager=TicketManager.getInstance();
+            ticketManager.printTicketsByCashier(cashIdentifier);
             CLI.print("cash tickets: ok");
             return true;
 

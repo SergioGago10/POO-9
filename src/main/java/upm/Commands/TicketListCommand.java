@@ -14,7 +14,8 @@ public class TicketListCommand extends Command{
             if(args.length!=2){
                 System.err.println("Usage: ticket list");
             }else{
-                TicketManager.printListTickets();
+                TicketManager ticketManager=TicketManager.getInstance();
+                ticketManager.printListTickets();
                 System.out.println("ticket list: ok");
             }
         } catch (Exception e) {

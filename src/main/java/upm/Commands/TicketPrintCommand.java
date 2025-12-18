@@ -17,7 +17,8 @@ public class TicketPrintCommand extends Command{
             } else{
                 String ticketId = args[2];
                 String cashId = args[3];
-                Ticket ticketAMostrar = TicketManager.getTicketById(ticketId);
+                TicketManager ticketManager=TicketManager.getInstance();
+                Ticket ticketAMostrar = ticketManager.getTicketById(ticketId);
                 if(ticketAMostrar != null){
                     if(!ticketAMostrar.getCashId().equals(cashId)){
                         System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
