@@ -3,8 +3,8 @@ package upm.tickets;
 import java.util.*;
 
 public class TicketManager {
-    private static Map<String, Ticket> ticketsByTicketId;
-    private static Map<String, List<Ticket>> ticketsByCashId;
+    private Map<String, Ticket> ticketsByTicketId;
+    private Map<String, List<Ticket>> ticketsByCashId;
     private static TicketManager instance;
 
     private TicketManager() {
