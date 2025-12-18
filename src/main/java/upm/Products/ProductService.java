@@ -11,7 +11,7 @@ public class ProductService implements IProduct{
     private LocalDateTime maxDate;
 
     public ProductService(String id, ServiceCategory category, LocalDateTime maxDate){
-        this.id=id+"s";
+        this.id=id;
         this.category=category;
         this.maxDate=maxDate;
     }
