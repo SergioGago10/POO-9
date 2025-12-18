@@ -11,6 +11,7 @@ public class ProductManager {
     private List<Product> catalogProducts;
     private List<ProductService> catalogServices;
     private int newId = 1;
+    private int serviceId=1;
     private static ProductManager instance;
 
     private ProductManager() {
@@ -50,7 +51,7 @@ public class ProductManager {
         return added;
     }
 
-    public IProduct getProduct(String id) {
+    public IProduct getIProduct(String id) {
         for (Product p : catalogProducts) {
             if (p.getId().equals(id)) {
                 return p;
@@ -72,7 +73,7 @@ public class ProductManager {
         return catalogServices;
     }
 
-    public int getAmountProducts() {
+    public int getAmountIProducts() {
         return catalogProducts.size() + catalogServices.size();
     }
 
@@ -105,7 +106,7 @@ public class ProductManager {
         return false;
     }
 
-    public int indexOfProduct(String id) {
+    public int indexOfIProduct(String id) {
         if (id.endsWith("s")) {
             for (int i = 0; i < catalogServices.size(); i++) {
                 if (catalogServices.get(i).getId().equals(id)) {
@@ -123,7 +124,7 @@ public class ProductManager {
     }
 
     public boolean idExists(String id) {
-        return this.indexOfProduct(id) != -1;
+        return this.indexOfIProduct(id) != -1;
     }
 
     public boolean isEmpty() {
@@ -134,6 +135,12 @@ public class ProductManager {
         while (idExists(Integer.toString(newId)))
             newId++;
         return Integer.toString(newId);
+    }
+
+    public String generateNewServiceId() {
+        while (idExists(Integer.toString(serviceId)))
+            serviceId++;
+        return serviceId+"S";
     }
 }
 

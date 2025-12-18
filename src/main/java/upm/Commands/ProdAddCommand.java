@@ -25,7 +25,7 @@ public class ProdAddCommand extends Command {
                 ProductService service;
                 ProductManager productManager = ProductManager.getInstance();
                 if (args[2].contains("-")) {
-                    id = productManager.generateNewProductId();
+                    id = productManager.generateNewServiceId();
                     String[] dateStr = args[2].split("-");
                     int expirationYear = Integer.parseInt(dateStr[0]);
                     int expirationMonth = Integer.parseInt(dateStr[1]);

@@ -14,9 +14,9 @@ public class UserManager {
         this.cashList = new ArrayList<>();
     }
 
-    public static UserManager getInstance(){
-        if (instance==null){
-            instance=new UserManager();
+    public static UserManager getInstance() {
+        if (instance == null) {
+            instance = new UserManager();
         }
         return instance;
     }
@@ -41,11 +41,12 @@ public class UserManager {
 
     public boolean addCash(Cash cash) {
         if (cash == null) {
-            System.out.println("Es nulo");
-            return false;};
+            System.out.println("Cashier couldn't be created");
+            return false;
+        }
         for (Cash c : cashList) {
             if (c.getId().equals(cash.getId())) {
-                System.out.println("existe ya");
+                System.out.println("Cashier already exist");
                 return false;
             }
         }
@@ -59,7 +60,7 @@ public class UserManager {
                 return user;
             }
         }
-        for(User user : cashList)
+        for (User user : cashList)
             if (user.getId().equals(id)) {
                 return user;
             }

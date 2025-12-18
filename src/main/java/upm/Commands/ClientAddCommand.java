@@ -2,6 +2,7 @@ package upm.Commands;
 
 import upm.CLI;
 import upm.Users.Client;
+import upm.Users.TypeClient;
 import upm.Users.UserManager;
 
 public class ClientAddCommand extends Command {
@@ -11,8 +12,8 @@ public class ClientAddCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied=false;
-        UserManager userManager=UserManager.getInstance();
+        boolean applied = false;
+        UserManager userManager = UserManager.getInstance();
         if (args.length < 6) {
             System.out.println("Format must be: client add \"<name>\" <DNI> <email> <cashId>");
         }
@@ -35,6 +36,7 @@ public class ClientAddCommand extends Command {
             String dni = args[3];
             String email = args[4];
             String cashierId = args[5];
+            TypeClient type;
 
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 CLI.print("Invalid email format.");
@@ -43,8 +45,11 @@ public class ClientAddCommand extends Command {
             if (!userManager.idExists(cashierId)) {
                 CLI.print("Cashier ID does not exist.");
             }
-
-            Client client = new Client(name, dni, email, cashierId);
+            if (Character.isDigit(dni.charAt(dni.length() - 1)))
+                type = TypeClient.COMPANY;
+            else
+                type = TypeClient.CLIENT;
+            Client client = new Client(name, dni, email, cashierId,type);
 
             if (userManager.addClient(client)) {
                 System.out.println(client.toString());

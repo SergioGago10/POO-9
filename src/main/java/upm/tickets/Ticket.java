@@ -73,7 +73,7 @@ public class Ticket {
         if(estado != TicketState.CLOSE){
             boolean productAdded = false;
             ProductManager productManager=ProductManager.getInstance();
-            IProduct productToBeAdded = productManager.getProduct(productID);
+            IProduct productToBeAdded = productManager.getIProduct(productID);
             if (productToBeAdded instanceof Product) {
                 boolean canAdd = true;
                 for (int i = 0; (i < quantity) && (canAdd); i++) {
