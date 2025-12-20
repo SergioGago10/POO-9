@@ -24,6 +24,7 @@ public class Ticket<T extends Product>{
     public List<T> getProductsList() {
         return Collections.unmodifiableList(productsList); //No queremos que se modifique el ticket, por lo que pasamos una copia solo para lectura
     }
+
     //todo borrar luego no se usa
     public List<String> getCustomTexts() {return Collections.unmodifiableList(customTexts);}
 
@@ -70,11 +71,11 @@ public class Ticket<T extends Product>{
     }
 
 
-    void closeTicket(){
+    public void closeTicket(){
         if (estado != TicketState.CLOSE){
             estado = TicketState.CLOSE;
-            String ticketIDCierre = TicketFormatter.ticketIDFinalFormat(this,LocalDateTime.now());
-            this.getTicketMetadata().setTicketID(ticketIDCierre);
+            String ticketIDFinal = TicketFormatter.ticketIDFinalFormat(this,LocalDateTime.now());
+            this.getTicketMetadata().setTicketID(ticketIDFinal);
         }
     }
 

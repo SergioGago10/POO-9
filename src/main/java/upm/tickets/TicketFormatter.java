@@ -14,6 +14,7 @@ import java.util.Map;
 public class TicketFormatter {
     private static final DateTimeFormatter TICKET_ID_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
     private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("#.0######");
+    private ITicketDiscountCalc discountCalc;
 
     public static String ticketIDFormatter(boolean isTicketIDAutoGen, String ticketID, LocalDateTime fechaApertura){
         return isTicketIDAutoGen ? fechaApertura.format(TICKET_ID_FORMAT) + "-" + ticketID : ticketID;
@@ -41,10 +42,11 @@ public class TicketFormatter {
     }
 
     public void printCurrentTicket(Ticket<? extends Product> ticket){
-        CategoryDiscountCalc categoryDiscount = new CategoryDiscountCalc();
-        double[] totals = categoryDiscount.calculateTotals(ticket);
+        this.discountCalc = new CategoryDiscountCalc(); //nuestra estrategia a aplicar es descuentos por categoria
+        CategoryDiscountCalc catCalc = (CategoryDiscountCalc) discountCalc; // Hacemos cast para poder "separar" el objeto de la interfaz
+        DiscountResult discountResult = catCalc.calculateTotals(ticket);
         List<? extends Product> prodList = ticket.getProductsList();
-        Map<Product, Double> hasDiscount = categoryDiscount.discountPerProduct(ticket);
+        Map<Product, Double> hasDiscount = catCalc.discountPerProduct(ticket);
         if (!prodList.isEmpty()) {
             // Ordenamos los productos por nombre antes de imprimirlos
             ticket.sortProducts();
@@ -64,15 +66,12 @@ public class TicketFormatter {
             }
         }
         //Segun sale en el formato, el formato es US, el punto es el que marca el decimal.
-        System.out.printf("\tTotal price: %s%n", PRICE_FORMAT.format(totals[0]));
-        System.out.printf("\tTotal discount: %s%n", PRICE_FORMAT.format(totals[2]));
-        System.out.printf("\tFinal price: %s%n", PRICE_FORMAT.format(totals[1]));
+        System.out.printf("\tTotal price: %s%n", PRICE_FORMAT.format(discountResult.getTotalWithout()));
+        System.out.printf("\tTotal discount: %s%n", PRICE_FORMAT.format(discountResult.getTotalDiscount()));
+        System.out.printf("\tFinal price: %s%n", PRICE_FORMAT.format(discountResult.getTotalWith()));
     }
 
     public void printFinalTicket(Ticket<? extends Product> ticket){
-        if(ticket.getEstado() != TicketState.EMPTY){
-            ticket.closeTicket();
-        }
         printCurrentTicket(ticket);
     }
 
