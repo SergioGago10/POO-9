@@ -27,7 +27,7 @@ public class CashTicketCommand extends Command {
                 return false;
             }
             TicketManager ticketManager=TicketManager.getInstance();
-            ticketManager.printTicketsByCashier(cashIdentifier);
+            ticketManager.getFormatter().printTicketsByCash(ticketManager,cashIdentifier);
             CLI.print("cash tickets: ok");
             return true;
 
