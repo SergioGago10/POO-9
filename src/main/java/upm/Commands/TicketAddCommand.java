@@ -1,14 +1,17 @@
 package upm.Commands;
 
+import upm.CLI;
 import upm.Products.ProductManager;
+import upm.tickets.ProdAdditionManager;
 import upm.tickets.Ticket;
 import upm.tickets.TicketManager;
+import upm.tickets.TicketState;
 
 import java.util.ArrayList;
 
 public class TicketAddCommand extends Command {
 
-    public TicketAddCommand(){
+    public TicketAddCommand() {
         super("add");
     }
 
@@ -24,8 +27,8 @@ public class TicketAddCommand extends Command {
             String cashId = args[3];
             String prodId = args[4];
             int amount = Integer.parseInt(args[5]);
-            ProductManager productManager=ProductManager.getInstance();
-            TicketManager ticketManager=TicketManager.getInstance();
+            ProductManager productManager = ProductManager.getInstance();
+            TicketManager ticketManager = TicketManager.getInstance();
             // Validación del producto
             if (!productManager.idExists(prodId)) {
                 System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
@@ -46,10 +49,30 @@ public class TicketAddCommand extends Command {
                 return true;
             }
 
+            if(ticketAModificar.getEstado()==TicketState.CLOSE){
+                System.err.println("Error: Ticket " + ticketId + " is closed, and no products can be added to it.");
+                return true;
+            }
+
             // Customizaciones
             ArrayList<String> customTexts = parseCustomizations(args);
-            ticketAModificar.addProductToTicket(prodId, amount, customTexts);
 
+
+            boolean prodAdded;
+
+            ProdAdditionManager additionManager = new ProdAdditionManager();
+            boolean handled = additionManager.process(ticketAModificar,productManager.getIProduct(prodId), amount, customTexts);
+
+            if(!handled){
+                System.err.println("Error: Product " + prodId + " has an unkown or invalid type, it can't be added.");
+                return true;
+            }
+            if (!ticketAModificar.getProductsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
+                //Ticket vacio que ahora no lo es, debe ser open y no empty
+                ticketAModificar.setEstado(TicketState.OPEN);
+            }
+            ticketAModificar.printCurrentTicket();
+            CLI.print("ticket add: ok");
         } catch (NumberFormatException e) {
             System.err.println("amount must be an integer.");
         } catch (Exception e) {
@@ -59,6 +82,11 @@ public class TicketAddCommand extends Command {
         return true;
     }
 
+    /**
+     *
+     * @param args personalizaciones si es que las hay
+     * @return null si no tiene personalizaciones o arraylist con las personalizaciones
+     */
     private ArrayList<String> parseCustomizations(String[] args) {
         if (args.length <= 6) return null;
 
