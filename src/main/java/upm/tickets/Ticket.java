@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class Ticket {
+public class Ticket<T extends IProduct>{
     private final static int MAX_PRODUCTOS = 100;
-    private List<Product> productsList;
+    private List<T> productsList;
     private String ticketId;
     private String cashId;
     private String userId;
@@ -33,12 +33,14 @@ public class Ticket {
         productsList = new ArrayList<>();
     }
 
+
+
     public String getTicketId() {return ticketId;}
     public boolean isClosed() {return closed;}
     public String getUserId() {return userId;}
     public String getCashId() {return cashId;}
     public TicketState getEstado(){return estado;}
-    public List<Product> getProductsList() {
+    public List<T> getProductsList() {
         return Collections.unmodifiableList(productsList); //No queremos que se modifique el ticket, por lo que pasamos una copia solo para lectura
     }
     public List<String> getCustomTexts() {return Collections.unmodifiableList(customTexts);}
@@ -50,6 +52,8 @@ public class Ticket {
             this.customTexts = new ArrayList<>(texts);
         }
     }
+
+    public void setEstado(TicketState estado) {this.estado = estado;}
 
     public void sortProducts() {
         /*
@@ -69,102 +73,17 @@ public class Ticket {
         productsList.sort(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER));
     }
 
-    public void addProductToTicket(String productID, int quantity, List<String> customTexts) {
-        if(estado != TicketState.CLOSE){
-            boolean productAdded = false;
-            ProductManager productManager=ProductManager.getInstance();
-            IProduct productToBeAdded = productManager.getIProduct(productID);
-            if (productToBeAdded instanceof Product) {
-                boolean canAdd = true;
-                for (int i = 0; (i < quantity) && (canAdd); i++) {
-                    if (productsList.size() >= MAX_PRODUCTOS) {
-                        System.out.println("You can't add more products to the ticket. Try to make a new one if needed.");
-                        canAdd = false;
-                    }
-
-                    else if (productToBeAdded instanceof Event) {
-                        // No añadir reuniones/comidas repetidas
-                        boolean alreadyInTicket = false;
-                        for (Product p : productsList) {
-                            if (p.getId().equals(productID)) {
-                                alreadyInTicket = true;
-                            }
-                        }
-                        if (alreadyInTicket) {
-                            System.out.println("This product (Food/Meeting) is already in the ticket. It can not be added again.");
-                            canAdd = false;
-                        } else {
-                            TypeEvent type=((Event) productToBeAdded).getTypeEvent();
-                            LocalDateTime plannedDate=((Event) productToBeAdded).getPlannedDate();
-                            if(type.equals(TypeEvent.FOOD)){
-                                if(plannedDate.isAfter(LocalDateTime.now().plusDays(3))){
-                                    productsList.add((Event) productToBeAdded);
-                                    productAdded = true;
-                                }else
-                                    CLI.print("Foods must be planned at least 3 days before.");
-                            }else{
-                                if(plannedDate.isAfter(LocalDateTime.now().plusHours(12))){
-                                    productsList.add((Event) productToBeAdded);
-                                    productAdded = true;
-                                }else
-                                    CLI.print("Foods must be planned at least 12 hours before.");
-                            }
-
-
-                        }
-                    }
-
-                    else if (productToBeAdded instanceof CustomizableProduct) {
-                        CustomizableProduct customProduct = (CustomizableProduct) productToBeAdded;
-                        List<String> textsToAdd;
-                        if (customTexts == null) {
-                            // No hay textos personalizados, usamos una lista vacía
-                            textsToAdd = new ArrayList<>();
-                        } else {
-                            // Copiamos la lista de textos pasada
-                            textsToAdd = new ArrayList<>(customTexts);
-                        }
-                        if (textsToAdd.size() > customProduct.getMaxCustomTexts()) {
-                            System.out.println("Too many custom texts for this product. Max allowed: " + customProduct.getMaxCustomTexts());
-                            canAdd = false;
-                        }  else {
-                            // Creamos la copia del producto con precio actualizado
-                            CustomizableProduct copy = new CustomizableProduct(
-                                    customProduct.getId(),
-                                    customProduct.getName(),
-                                    customProduct.getCategory(),
-                                    customProduct.getPrice(),
-                                    customProduct.getMaxCustomTexts()
-                            );
-                            // Guardamos los textos personalizados en el copy
-                            copy.setCustomTexts(textsToAdd);
-                            double finalPrice = copy.calculateFinalPrice();
-                            copy.setPrice(finalPrice);
-
-                            productsList.add(copy);
-                            productAdded = true;
-                        }
-                    }
-
-                    else { // Producto normal (BasicProduct)
-                        productsList.add((BasicProduct) productToBeAdded);
-                        productAdded = true;
-                    }
-                }
-                if (productAdded) {
-                    //Imprimimos el ticket actual despues de poner los productos
-                    if(estado != TicketState.OPEN){
-                        estado = TicketState.OPEN;
-                    }
-                    printCurrentTicket();
-                    System.out.println("ticket add: ok");
-                }
-            } else{
-                System.out.println("Product not found in catalog.");
-            }
-        }else {
-            System.out.println("This ticket has been closed. You can't add or remove products from it.");
+    /**
+     * Metodo que pone un producto en el ticket, el producto a poner y sus respectivos fallos
+     * son gestionados por la funcion que gestiona el comando, este metodo solamente agrega el producto al ticket
+     * @param product producto a poner
+     */
+    public boolean addProductToTicket(T product) {
+        if (productsList.size() >= MAX_PRODUCTOS) {
+            return false;
         }
+        productsList.add(product);
+        return true;
     }
 
 
