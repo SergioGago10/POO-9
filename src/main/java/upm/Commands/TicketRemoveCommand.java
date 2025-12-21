@@ -26,10 +26,11 @@ public class TicketRemoveCommand  extends Command{
                     if(ticketAModificar == null){
                         System.err.println("Error: Ticket " + ticketId + " does not exist.");
                     } else {
-                        if(!ticketAModificar.getCashId().equals(cashId)){
+                        if(!ticketAModificar.getTicketMetadata().getCashID().equals(cashId)){
                             System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
                         }else {
                             ticketAModificar.removeProductFromTicket(prodId);
+                            ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
                             System.out.println("ticket remove: ok");
                         }
                     }

@@ -44,7 +44,7 @@ public class TicketAddCommand extends Command {
             }
 
             // Comprobar que pertenece al mismo cashId
-            if (!ticketAModificar.getCashId().equals(cashId)) {
+            if (!ticketAModificar.getTicketMetadata().getCashID().equals(cashId)) {
                 System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
                 return true;
             }
@@ -71,7 +71,7 @@ public class TicketAddCommand extends Command {
                 //Ticket vacio que ahora no lo es, debe ser open y no empty
                 ticketAModificar.setEstado(TicketState.OPEN);
             }
-            ticketAModificar.printCurrentTicket();
+            ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
             CLI.print("ticket add: ok");
         } catch (NumberFormatException e) {
             System.err.println("amount must be an integer.");

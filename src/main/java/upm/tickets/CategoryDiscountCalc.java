@@ -1,7 +1,6 @@
     package upm.tickets;
 
     import upm.Products.BasicProduct;
-    import upm.Products.IProduct;
     import upm.Products.Product;
     import upm.Products.Category;
 
@@ -20,7 +19,26 @@
             CATEGORY_DISCOUNTS.put(Category.ELECTRONIC, 0.97);
         }
 
+
         @Override
+        public DiscountResult calculateTotals(Ticket<? extends Product> ticket) {
+            Map<Product, Double> discounts = discountPerProduct(ticket);
+            double totalWithout = 0.0;
+            double totalWith = 0.0;
+            for (Product product : ticket.getProductsList()) {
+                double price = product.getPrice();
+                totalWithout += price;
+                totalWith += price * discounts.get(product);
+            }
+            double totalDiscount = totalWithout - totalWith;
+            return new DiscountResult(totalWithout,totalWith,totalDiscount);
+        }
+
+        /**
+         * Esta funcion es específica para el descuento por productos, ya que en esta estrategia
+         * el descuento aplicado es por tipos de producto, donde se aplica un descuento u otro dependiendo de como sea
+         * el tipo de producto
+         */
         public Map<Product, Double> discountPerProduct(Ticket ticket) {
             List<Product> products = ticket.getProductsList();
             Map<Category, Integer> categoryCounter = countProductsByCategory(products);
@@ -39,20 +57,6 @@
             }
 
             return discountMap;
-        }
-
-        @Override
-        public double[] calculateTotals(Ticket ticket) {
-            Map<Product, Double> discounts = discountPerProduct(ticket);
-            double totalWithout = 0.0;
-            double totalWith = 0.0;
-            for (Product product : ticket.getProductsList()) {
-                double price = product.getPrice();
-                totalWithout += price;
-                totalWith += price * discounts.get(product);
-            }
-            double totalDiscount = totalWithout - totalWith;
-            return new double[]{totalWithout, totalWith, totalDiscount};
         }
 
         private Map<Category, Integer> countProductsByCategory(List<Product> products) {

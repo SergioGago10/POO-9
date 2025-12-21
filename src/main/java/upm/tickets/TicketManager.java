@@ -6,11 +6,18 @@ public class TicketManager {
     private Map<String, Ticket> ticketsByTicketId;
     private Map<String, List<Ticket>> ticketsByCashId;
     private static TicketManager instance;
+    private final TicketFormatter ticketFormatter;
 
     private TicketManager() {
         ticketsByTicketId = new HashMap<>();
         ticketsByCashId = new HashMap<>();
+        this.ticketFormatter = new TicketFormatter();
     }
+
+    public TicketFormatter getFormatter() {return ticketFormatter;}
+    public Ticket getTicketById(String ticketId) {return ticketsByTicketId.get(ticketId);}
+    public Map<String, Ticket> getTicketsById() {return ticketsByTicketId;}
+    public List getTicketByCashId(String cashID){return ticketsByCashId.get(cashID);}
 
     public static TicketManager getInstance() {
         if (instance == null)
@@ -45,48 +52,24 @@ public class TicketManager {
             ticketsByCashId.put(cashId, list);
         }
         list.add(ticket);
-        System.out.println("Ticket: " + ticket.getTicketId());
-        ticket.printCurrentTicket();
+        System.out.println("Ticket: " + ticket.getTicketMetadata().getTicketID());
+        this.getFormatter().printCurrentTicket(ticket);
         return ticket;
-    }
-
-    public Ticket getTicketById(String ticketId) {
-        return ticketsByTicketId.get(ticketId);
     }
 
     public boolean removeTicket(String ticketId) {
         Ticket ticket = ticketsByTicketId.get(ticketId);
         if (ticket == null) return false;
 
-        List<Ticket> list = ticketsByCashId.get(ticket.getCashId());
+        List<Ticket> list = ticketsByCashId.get(ticket.getTicketMetadata().getCashID());
         if (list != null) {
             list.remove(ticket);
             if (list.isEmpty()) {
-                ticketsByCashId.remove(ticket.getCashId());
+                ticketsByCashId.remove(ticket.getTicketMetadata().getCashID());
             }
         }
         ticketsByTicketId.remove(ticketId);
         return true;
     }
 
-    public void printListTickets() {
-        System.out.println("Ticket list : ");
-        List<Ticket> ticketList = new ArrayList<>(ticketsByTicketId.values());
-        ticketList.sort(Comparator.comparing(Ticket::getCashId));
-        for (Ticket t : ticketList) {
-            System.out.println("  " + t.getTicketId() + " - " + t.getEstado());
-        }
-    }
-
-
-    public void printTicketsByCashier(String cashId) {
-        List<Ticket> list = ticketsByCashId.get(cashId);
-        if (list != null && !list.isEmpty()) {
-            list.sort(Comparator.comparing(Ticket::getTicketId));
-            System.out.println("Tickets:");
-            for (Ticket t : list) {
-                System.out.println(t.getTicketId() + "->" + t.getEstado());
-            }
-        }
-    }
 }
