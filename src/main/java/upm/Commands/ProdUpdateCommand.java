@@ -41,6 +41,8 @@ public class ProdUpdateCommand extends Command {
                                 if (product instanceof ProductService) {
                                     ((ProductService) product).setCategory(ServiceCategory.valueOf(args[4]));
                                     applied = true;
+                                }else{
+                                    CLI.print("That type of product doesnt have category.");
                                 }
                             }
                     }
@@ -50,9 +52,10 @@ public class ProdUpdateCommand extends Command {
                     }
                 }
             } catch (IllegalArgumentException ignored) {
-                CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
+                CLI.print("Category must be: MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC in Basic/Custom Products," +
+                        "or: INSURANCE, TRANSPORT or SHOW in Services");
             }
         }
-        return true;
+        return applied;
     }
 }
