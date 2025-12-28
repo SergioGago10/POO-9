@@ -10,7 +10,7 @@ public abstract class ProdAdditionHandler<T extends IProduct>{
      * ticket con dicho metodo.
      */
     public boolean canHandle(IProduct product) {
-        return product instanceof IProduct;
+        return product != null;
     }
 
     /**

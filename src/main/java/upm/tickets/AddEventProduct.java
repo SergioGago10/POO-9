@@ -14,7 +14,6 @@ public class AddEventProduct extends ProdAdditionHandler<Event> {
     
     @Override
     public boolean canBeAdded(Ticket<? super Event> ticket, Event product, List<String> customTexts) {
-        boolean prodAdded = true, addedOnce = false;
         if(doesThisProdExistinTicket(ticket,product)){
             CLI.print("This product (Food/Meeting) is already in the ticket. It can not be added again.");
             return false;
@@ -26,7 +25,7 @@ public class AddEventProduct extends ProdAdditionHandler<Event> {
     }
 
     private boolean doesThisProdExistinTicket(Ticket<?>ticket,IProduct product){
-        return ticket.getProductsList().contains(product);
+        return ticket.getItemsList().contains(product);
     }
 
     private boolean isDateValid(Event product){

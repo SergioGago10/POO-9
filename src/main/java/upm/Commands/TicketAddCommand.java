@@ -57,9 +57,6 @@ public class TicketAddCommand extends Command {
             // Customizaciones
             ArrayList<String> customTexts = parseCustomizations(args);
 
-
-            boolean prodAdded;
-
             ProdAdditionManager additionManager = new ProdAdditionManager();
             boolean handled = additionManager.process(ticketAModificar,productManager.getIProduct(prodId), amount, customTexts);
 
@@ -67,7 +64,7 @@ public class TicketAddCommand extends Command {
                 System.err.println("Error: Product " + prodId + " has an unkown or invalid type, it can't be added.");
                 return true;
             }
-            if (!ticketAModificar.getProductsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
+            if (!ticketAModificar.getItemsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
                 //Ticket vacio que ahora no lo es, debe ser open y no empty
                 ticketAModificar.setEstado(TicketState.OPEN);
             }

@@ -1,28 +1,30 @@
 package upm.tickets;
 
-import upm.CLI;
 import upm.Products.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class Ticket<T extends Product>{
+public class Ticket<T extends IProduct>{
     private final static int MAX_PRODUCTOS = 100; // pasar luego como parametro al addmutipletimes!
-    private List<T> productsList;
+    private List<T> itemsList;
     private TicketMetadata ticketMetadata;
     private TicketState estado; //move
+    private TicketType type;
     private List<String> customTexts; //Para saber que personalizacion tiene cada producto personalizable
 
-    public Ticket(String ticketID, String cashID, String userID, boolean isTicketIdAutoGen) {
+    public Ticket(String ticketID, String cashID, String userID, TicketType type ,boolean isTicketIdAutoGen) {
         this.ticketMetadata = new TicketMetadata(ticketID,userID, cashID, isTicketIdAutoGen);
-        this.estado = TicketState.EMPTY; // cambiar luego a ticketState y ya o hacer algo con esto
-        productsList = new ArrayList<>();
+        this.estado = TicketState.EMPTY;
+        itemsList = new ArrayList<>();
+        this.type = type;
     }
 
+    public TicketType getTicketType(){return this.type;}
     public TicketMetadata getTicketMetadata() {return ticketMetadata;}
     public TicketState getEstado(){return estado;}
-    public List<T> getProductsList() {
-        return Collections.unmodifiableList(productsList); //No queremos que se modifique el ticket, por lo que pasamos una copia solo para lectura
+    public List<T> getItemsList() {
+        return Collections.unmodifiableList(itemsList); //No queremos que se modifique el ticket, por lo que pasamos una copia solo para lectura
     }
 
     //todo borrar luego no se usa
@@ -54,7 +56,7 @@ public class Ticket<T extends Product>{
          * https://docs.oracle.com/javase/8/docs/api/java/util/List.html#sort-java.util.Comparator-
          * https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html
          */
-        productsList.sort(Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER));
+        itemsList.sort((Comparator<? super T>) Comparator.comparing(Product::getName, String.CASE_INSENSITIVE_ORDER).reversed());
     }
 
     /**
@@ -63,10 +65,10 @@ public class Ticket<T extends Product>{
      * @param product producto a poner
      */
     public boolean addProductToTicket(T product) {
-        if (productsList.size() >= MAX_PRODUCTOS) {
+        if (itemsList.size() >= MAX_PRODUCTOS) {
             return false;
         }
-        productsList.add(product);
+        itemsList.add(product);
         return true;
     }
 
@@ -74,21 +76,21 @@ public class Ticket<T extends Product>{
     public void closeTicket(){
         if (estado != TicketState.CLOSE){
             estado = TicketState.CLOSE;
-            String ticketIDFinal = TicketFormatter.ticketIDFinalFormat(this,LocalDateTime.now());
+            String ticketIDFinal = TicketFormatter.ticketIDFinalFormat((Ticket<? extends Product>) this,LocalDateTime.now());
             this.getTicketMetadata().setTicketID(ticketIDFinal);
         }
     }
 
     public void removeProductFromTicket(String productID) {
         if(estado != TicketState.CLOSE){
-            Iterator<Product> it = (Iterator<Product>) productsList.iterator();
+            Iterator<Product> it = (Iterator<Product>) itemsList.iterator();
             while (it.hasNext()) {
                 IProduct p = it.next();
                 if (p.getId().equals(productID)) {
                     it.remove();
                 }
             }
-            if(productsList.isEmpty()){
+            if(itemsList.isEmpty()){
                 estado = TicketState.EMPTY;
             }
         } else {

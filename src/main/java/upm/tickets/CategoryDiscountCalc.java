@@ -1,6 +1,7 @@
     package upm.tickets;
 
     import upm.Products.BasicProduct;
+    import upm.Products.IProduct;
     import upm.Products.Product;
     import upm.Products.Category;
 
@@ -21,14 +22,17 @@
 
 
         @Override
-        public DiscountResult calculateTotals(Ticket<? extends Product> ticket) {
+        public DiscountResult calculateTotals(Ticket<? extends IProduct> ticket) {
             Map<Product, Double> discounts = discountPerProduct(ticket);
             double totalWithout = 0.0;
             double totalWith = 0.0;
-            for (Product product : ticket.getProductsList()) {
-                double price = product.getPrice();
-                totalWithout += price;
-                totalWith += price * discounts.get(product);
+            for (IProduct product : ticket.getItemsList()) {
+                if (product instanceof Product) {
+                    Product productAdder = (Product) product;
+                    double price = productAdder.getPrice();
+                    totalWithout += price;
+                    totalWith += price * discounts.get(productAdder);
+                }
             }
             double totalDiscount = totalWithout - totalWith;
             return new DiscountResult(totalWithout,totalWith,totalDiscount);
@@ -39,32 +43,34 @@
          * el descuento aplicado es por tipos de producto, donde se aplica un descuento u otro dependiendo de como sea
          * el tipo de producto
          */
-        public Map<Product, Double> discountPerProduct(Ticket ticket) {
-            List<Product> products = ticket.getProductsList();
-            Map<Category, Integer> categoryCounter = countProductsByCategory(products);
+        public Map<Product, Double> discountPerProduct(Ticket<? extends IProduct> ticket) {
+            List<? extends IProduct> itemList = ticket.getItemsList();
+            Map<Category, Integer> categoryCounter = countProductsByCategory(itemList);
             Map<Product, Double> discountMap = new HashMap<>();
-            for (Product product : products) {
-                double factor = 1.0; // Valor por defecto
-                if (product instanceof BasicProduct) {
-                    BasicProduct bp = (BasicProduct) product;
-                    Category category = bp.getCategory();
-                    if (categoryCounter.get(category) >= 2) {
-                        factor = whatDiscountToApply(category);
+            for (IProduct iProduct : itemList) {
+                if (iProduct instanceof Product) {
+                    Product product = (Product) iProduct;
+                    double factor = 1.0; // Valor por defecto
+                    if (product instanceof BasicProduct) {
+                        BasicProduct bp = (BasicProduct) product;
+                        Category category = bp.getCategory();
+                        if (categoryCounter.get(category) >= 2) {
+                            factor = whatDiscountToApply(category);
+                        }
                     }
+                    // Para productos que no sean BasicProduct, factor seguirá siendo 1.0
+                    discountMap.put(product, factor);
                 }
-                // Para productos que no sean BasicProduct, factor seguirá siendo 1.0
-                discountMap.put(product, factor);
             }
-
             return discountMap;
         }
 
-        private Map<Category, Integer> countProductsByCategory(List<Product> products) {
+        private Map<Category, Integer> countProductsByCategory(List<? extends IProduct> products) {
             Map<Category, Integer> counter = new EnumMap<>(Category.class);
             for (Category category : Category.values()) {
                 counter.put(category, 0);
             }
-            for (Product product : products) {
+            for (IProduct product : products) {
                 if (product instanceof BasicProduct) {
                     Category category = ((BasicProduct) product).getCategory();
                     counter.put(category, counter.get(category) + 1);
