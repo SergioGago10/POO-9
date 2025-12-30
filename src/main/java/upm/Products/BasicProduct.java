@@ -2,7 +2,7 @@ package upm.Products;
 
 public class BasicProduct extends Product {
     protected Category category;
-
+    public BasicProduct(){}
     public BasicProduct(String id, String name, Category category, double price) {
         this.id = id;
         this.name = name.replace("\"", ""); //Quitamos comillas para que en la comparacion por nombre alfabetico no de error

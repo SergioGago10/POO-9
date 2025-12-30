@@ -1,7 +1,7 @@
     package upm.tickets;
 
     import upm.Products.BasicProduct;
-    import upm.Products.IProduct;
+    import upm.Products.Item;
     import upm.Products.Product;
     import upm.Products.Category;
 
@@ -22,11 +22,11 @@
 
 
         @Override
-        public DiscountResult calculateTotals(Ticket<? extends IProduct> ticket) {
+        public DiscountResult calculateTotals(Ticket<? extends Item> ticket) {
             Map<Product, Double> discounts = discountPerProduct(ticket);
             double totalWithout = 0.0;
             double totalWith = 0.0;
-            for (IProduct product : ticket.getItemsList()) {
+            for (Item product : ticket.getItemsList()) {
                 if (product instanceof Product) {
                     Product productAdder = (Product) product;
                     double price = productAdder.getPrice();
@@ -43,13 +43,13 @@
          * el descuento aplicado es por tipos de producto, donde se aplica un descuento u otro dependiendo de como sea
          * el tipo de producto
          */
-        public Map<Product, Double> discountPerProduct(Ticket<? extends IProduct> ticket) {
-            List<? extends IProduct> itemList = ticket.getItemsList();
+        public Map<Product, Double> discountPerProduct(Ticket<? extends Item> ticket) {
+            List<? extends Item> itemList = ticket.getItemsList();
             Map<Category, Integer> categoryCounter = countProductsByCategory(itemList);
             Map<Product, Double> discountMap = new HashMap<>();
-            for (IProduct iProduct : itemList) {
-                if (iProduct instanceof Product) {
-                    Product product = (Product) iProduct;
+            for (Item item : itemList) {
+                if (item instanceof Product) {
+                    Product product = (Product) item;
                     double factor = 1.0; // Valor por defecto
                     if (product instanceof BasicProduct) {
                         BasicProduct bp = (BasicProduct) product;
@@ -65,12 +65,12 @@
             return discountMap;
         }
 
-        private Map<Category, Integer> countProductsByCategory(List<? extends IProduct> products) {
+        private Map<Category, Integer> countProductsByCategory(List<? extends Item> products) {
             Map<Category, Integer> counter = new EnumMap<>(Category.class);
             for (Category category : Category.values()) {
                 counter.put(category, 0);
             }
-            for (IProduct product : products) {
+            for (Item product : products) {
                 if (product instanceof BasicProduct) {
                     Category category = ((BasicProduct) product).getCategory();
                     counter.put(category, counter.get(category) + 1);

@@ -1,6 +1,6 @@
 package upm.Products;
 
-public interface IProduct {
+public interface Item {
     String getId();
 
 }

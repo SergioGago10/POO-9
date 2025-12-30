@@ -1,7 +1,7 @@
 package upm.tickets;
 
 import upm.CLI;
-import upm.Products.IProduct;
+import upm.Products.Item;
 import upm.Products.ProductService;
 
 import java.time.LocalDateTime;
@@ -10,7 +10,7 @@ import java.util.List;
 public class AddServiceProduct extends ItemAdditionHandler<ProductService>{
 
     @Override
-    public boolean canHandle(IProduct product){
+    public boolean canHandle(Item product){
         return product instanceof ProductService;
     }
 

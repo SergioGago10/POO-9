@@ -1,7 +1,7 @@
 package upm.Products;
 
 import upm.CLI;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class ProductManager {
         return added;
     }
 
-    public IProduct getIProduct(String id) {
+    public Item getIProduct(String id) {
         for (Product p : catalogProducts) {
             if (p.getId().equals(id)) {
                 return p;
@@ -72,11 +72,6 @@ public class ProductManager {
     public List<ProductService> getCatalogServices() {
         return catalogServices;
     }
-
-    public int getAmountIProducts() {
-        return catalogProducts.size() + catalogServices.size();
-    }
-
 
     public boolean remove(String id) {
         int index = -1;
@@ -123,10 +118,12 @@ public class ProductManager {
         return -1;
     }
 
+    @JsonIgnore
     public boolean idExists(String id) {
         return this.indexOfIProduct(id) != -1;
     }
 
+    @JsonIgnore
     public boolean isEmpty() {
         return catalogProducts.isEmpty();
     }
@@ -142,5 +139,6 @@ public class ProductManager {
             serviceId++;
         return serviceId+"S";
     }
+
 }
 

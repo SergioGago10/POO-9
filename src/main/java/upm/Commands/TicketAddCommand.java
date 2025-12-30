@@ -36,7 +36,7 @@ public class TicketAddCommand extends Command {
             }
 
             // Buscar ticket
-            Ticket<? extends IProduct> ticketAModificar = ticketManager.getTicketById(ticketId);
+            Ticket<? extends Item> ticketAModificar = ticketManager.getTicketById(ticketId);
 
             if (ticketAModificar == null) {
                 System.err.println("Error: Ticket " + ticketId + " does not exist.");
@@ -55,7 +55,7 @@ public class TicketAddCommand extends Command {
             }
 
             //Identificamos si el comando es de servicios o de productos y metemos el item al ticket
-            IProduct itemToAdd = productManager.getIProduct(itemId);
+            Item itemToAdd = productManager.getIProduct(itemId);
             if(itemToAdd instanceof BasicProduct || itemToAdd instanceof Event){
                 amount = Integer.parseInt(args[5]);
 
@@ -63,7 +63,7 @@ public class TicketAddCommand extends Command {
                 ArrayList<String> customTexts = parseCustomizations(args);
 
                 ItemAdditionManager additionManager = new ItemAdditionManager();
-                boolean handled = additionManager.process((Ticket<IProduct>) ticketAModificar,productManager.getIProduct(itemId), amount, customTexts);
+                boolean handled = additionManager.process((Ticket<Item>) ticketAModificar,productManager.getIProduct(itemId), amount, customTexts);
 
                 if(!handled){
                     System.err.println("Error: Product " + itemId + " has an unkown or invalid type, it can't be added.");
@@ -78,7 +78,7 @@ public class TicketAddCommand extends Command {
             } else {
                 ItemAdditionManager additionManager = new ItemAdditionManager();
                 amount = 1; // solo vamos a poner un producto de servicio, no se pueden poner más
-                boolean handled = additionManager.process((Ticket<IProduct>) ticketAModificar,productManager.getIProduct(itemId), amount, null);
+                boolean handled = additionManager.process((Ticket<Item>) ticketAModificar,productManager.getIProduct(itemId), amount, null);
                 if(!handled){
                     System.err.println("Error: Product " + itemId + " has an unkown or invalid type, it can't be added.");
                     return true;

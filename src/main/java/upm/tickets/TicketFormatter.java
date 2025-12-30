@@ -2,10 +2,9 @@ package upm.tickets;
 
 import upm.CLI;
 import upm.Products.Event;
-import upm.Products.IProduct;
+import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
-import upm.Utilities;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -41,7 +40,7 @@ public class TicketFormatter {
         }
     }
 
-    public<T extends IProduct> void printCurrentTicket(Ticket<T> ticket){
+    public<T extends Item> void printCurrentTicket(Ticket<T> ticket){
         ServiceProdDiscountCalc serProdCalc = new ServiceProdDiscountCalc();
         CategoryDiscountCalc catCalc = new CategoryDiscountCalc();
         char ticketType = whatTypeIsTheticket(ticket);
@@ -84,7 +83,7 @@ public class TicketFormatter {
 
     }
 
-    private char whatTypeIsTheticket(Ticket<? extends IProduct> ticket){
+    private char whatTypeIsTheticket(Ticket<? extends Item> ticket){
         char type;
         if(ticket.getTicketType()==TicketType.SERVICE){
             type = 's';
@@ -146,11 +145,11 @@ public class TicketFormatter {
         }
     }
 
-    public void printFinalTicket(Ticket<? extends IProduct> ticket){
+    public void printFinalTicket(Ticket<? extends Item> ticket){
         printCurrentTicket(ticket);
     }
 
-    public static String ticketIDFinalFormat(Ticket<? extends IProduct> ticket, LocalDateTime closingTime){
+    public static String ticketIDFinalFormat(Ticket<? extends Item> ticket, LocalDateTime closingTime){
          return ticket.getTicketMetadata().getTicketID() + "-"
                + closingTime.format(TICKET_ID_FORMAT);
     }

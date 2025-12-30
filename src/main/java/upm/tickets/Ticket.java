@@ -1,14 +1,12 @@
 package upm.tickets;
 
-import upm.CLI;
 import upm.Products.*;
-import upm.Utilities;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Ticket<T extends IProduct>{
+public class Ticket<T extends Item>{
     private final static int MAX_PRODUCTOS = 100;
     private List<T> itemsList;
     private TicketMetadata ticketMetadata;
@@ -58,9 +56,9 @@ public class Ticket<T extends IProduct>{
 
     public void removeProductFromTicket(String productID) {
         if(estado != TicketState.CLOSE){
-            Iterator<IProduct> it = (Iterator<IProduct>) itemsList.iterator();
+            Iterator<Item> it = (Iterator<Item>) itemsList.iterator();
             while (it.hasNext()) {
-                IProduct p = it.next();
+                Item p = it.next();
                 if (p.getId().equals(productID)) {
                     it.remove();
                 }

@@ -2,7 +2,7 @@ package upm.tickets;
 
 import upm.CLI;
 import upm.Products.CustomizableProduct;
-import upm.Products.IProduct;
+import upm.Products.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ public class AddCustomProduct extends ItemAdditionHandler<CustomizableProduct> {
     private CustomizableProduct prodCustAux;
 
     @Override
-    public boolean canHandle(IProduct product){
+    public boolean canHandle(Item product){
         return product instanceof CustomizableProduct;
     }
 

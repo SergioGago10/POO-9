@@ -9,7 +9,7 @@ public class AddEventProduct extends ItemAdditionHandler<Event> {
     private Event eventAux;
 
     @Override
-    public boolean canHandle(IProduct product){
+    public boolean canHandle(Item product){
         return product instanceof Event;
     }
 
@@ -25,7 +25,7 @@ public class AddEventProduct extends ItemAdditionHandler<Event> {
         return true;
     }
 
-    private boolean doesThisProdExistinTicket(Ticket<?>ticket,IProduct product){
+    private boolean doesThisProdExistinTicket(Ticket<?>ticket, Item product){
         return ticket.getItemsList().contains(product);
     }
 

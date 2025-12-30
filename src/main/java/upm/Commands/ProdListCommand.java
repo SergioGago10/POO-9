@@ -1,7 +1,7 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Products.IProduct;
+import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductManager;
 import upm.Products.ProductService;
@@ -27,7 +27,7 @@ public class ProdListCommand extends Command {
             CLI.print("Catalog is empty");
         }else {
             CLI.print("Catalog:");
-            for (IProduct product : catalog) {
+            for (Item product : catalog) {
                 CLI.print(product.toString());
             }
             for (ProductService service : services) {

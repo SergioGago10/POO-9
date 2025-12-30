@@ -1,13 +1,13 @@
 package upm.tickets;
 import upm.Products.BasicProduct;
-import upm.Products.IProduct;
+import upm.Products.Item;
 
 import java.util.List;
 
 public class AddBasicProduct extends ItemAdditionHandler<BasicProduct> {
 
     @Override
-    public boolean canHandle(IProduct product){
+    public boolean canHandle(Item product){
         return product instanceof BasicProduct;
     }
 

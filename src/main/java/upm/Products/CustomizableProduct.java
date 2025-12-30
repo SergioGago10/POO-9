@@ -59,4 +59,8 @@ public class CustomizableProduct extends BasicProduct {
         return sb.toString();
     }
 
+    public void setMaxCustomTexts(int maxCustomTexts) {
+        this.maxCustomTexts = maxCustomTexts;
+    }
+
 }

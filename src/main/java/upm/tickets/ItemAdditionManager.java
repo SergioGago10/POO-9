@@ -1,6 +1,6 @@
 package upm.tickets;
 
-import upm.Products.IProduct;
+import upm.Products.Item;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +14,11 @@ public class ItemAdditionManager {
         handlers.add(new AddServiceProduct());
     }
 
-    public boolean process(Ticket<IProduct> ticket, IProduct product, int quantity, List<String> texts) {
+    public boolean process(Ticket<Item> ticket, Item product, int quantity, List<String> texts) {
         for (ItemAdditionHandler<?> handler : handlers) {
             if (handler.canHandle(product)) {
                 //Hacemos cast para que el handler sea del producto específico que ha sido seleccionado
-                ItemAdditionHandler<IProduct> castedHandler = (ItemAdditionHandler<IProduct>) handler;
+                ItemAdditionHandler<Item> castedHandler = (ItemAdditionHandler<Item>) handler;
 
                 // Intentamos añadirlo las veces que quantity pida
                 // y gestionará sus propios errores lógicos (poner más prods de los que se puedan meter, ...)

@@ -15,7 +15,7 @@ public class ProdUpdateCommand extends Command {
             try {
                 String id = args[2];
                 ProductManager productManager = ProductManager.getInstance();
-                IProduct product = productManager.getIProduct(id);
+                Item product = productManager.getIProduct(id);
                 if (product != null) {
                     switch (args[3].toUpperCase()) {
                         case "NAME":

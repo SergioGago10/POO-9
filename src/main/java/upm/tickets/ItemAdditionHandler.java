@@ -1,15 +1,15 @@
 package upm.tickets;
 import upm.CLI;
-import upm.Products.IProduct;
+import upm.Products.Item;
 import java.util.List;
 
-public abstract class ItemAdditionHandler<T extends IProduct>{
+public abstract class ItemAdditionHandler<T extends Item>{
 
     /**
      * Se encargará de determinar si se puede gestionar el producto a poner en el
      * ticket con dicho metodo.
      */
-    public boolean canHandle(IProduct product) {
+    public boolean canHandle(Item product) {
         return product != null;
     }
 

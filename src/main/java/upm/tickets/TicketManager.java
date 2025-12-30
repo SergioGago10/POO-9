@@ -1,6 +1,6 @@
 package upm.tickets;
 
-import upm.Products.IProduct;
+import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
 
@@ -48,7 +48,7 @@ public class TicketManager {
     }
 
     public Ticket<?> newTicket(String ticketId, String cashId, String userId,String option, boolean isTicketIdAutoGen) {
-        Ticket<? extends IProduct> ticket;
+        Ticket<? extends Item> ticket;
         switch (option){
             case "-c":
                 ticket = new Ticket<>(ticketId, cashId,TicketType.COMPOSITE,isTicketIdAutoGen);

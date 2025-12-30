@@ -1,17 +1,17 @@
 package upm.tickets;
 
-import upm.Products.IProduct;
+import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
 
 public class ServiceProdDiscountCalc implements ITicketDiscountCalc {
 
     @Override
-    public DiscountResult calculateTotals(Ticket<? extends IProduct> ticket) {
+    public DiscountResult calculateTotals(Ticket<? extends Item> ticket) {
         int numberOfServices = 0;
         double totalWithout = 0.0;
         double totalWith;
-        for (IProduct product : ticket.getItemsList()) {
+        for (Item product : ticket.getItemsList()) {
             if (product instanceof ProductService) {
                 numberOfServices++;
             } else{

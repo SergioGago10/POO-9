@@ -1,15 +1,21 @@
 package upm.Products;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class ProductService implements IProduct{
+@JsonIgnoreProperties({"type"})
+public class ProductService implements Item {
     private String id;
     private ServiceCategory category;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime maxDate;
 
+    public ProductService(){}
     public ProductService(String id, ServiceCategory category, LocalDateTime maxDate){
         this.id=id;
         this.category=category;
@@ -39,4 +45,9 @@ public class ProductService implements IProduct{
         sb.append("}");
         return sb.toString();
     }
+
+    public ServiceCategory getCategory() {
+        return category;
+    }
+
 }
