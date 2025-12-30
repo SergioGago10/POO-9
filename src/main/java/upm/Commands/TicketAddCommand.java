@@ -1,11 +1,8 @@
 package upm.Commands;
 
 import upm.CLI;
-import upm.Products.ProductManager;
-import upm.tickets.ProdAdditionManager;
-import upm.tickets.Ticket;
-import upm.tickets.TicketManager;
-import upm.tickets.TicketState;
+import upm.Products.*;
+import upm.tickets.*;
 
 import java.util.ArrayList;
 
@@ -17,26 +14,29 @@ public class TicketAddCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        if (args.length < 6) {
-            System.err.println("ticket add <ticketId> <cashId> <prodId> <amount> [--p<txt> --p<txt>]");
+        if (args.length < 5) {
+            System.err.println("Usage: ");
+            System.err.println("ticket add <ticketId> <cashId> <prodId> <amount> [--p<txt> --p<txt>] ");
+            System.err.println("ticket add <ticketId> <cashId> <eventId> <peopleInEvent> ");
+            System.err.println("ticket add <ticketId> <cashId> <serviceId>S ");
             return true;
         }
 
         try {
             String ticketId = args[2];
             String cashId = args[3];
-            String prodId = args[4];
-            int amount = Integer.parseInt(args[5]);
+            String itemId = args[4];
+            int amount;
             ProductManager productManager = ProductManager.getInstance();
             TicketManager ticketManager = TicketManager.getInstance();
-            // Validación del producto
-            if (!productManager.idExists(prodId)) {
-                System.err.println("prodId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
+            // Validación del item
+            if (!productManager.idExists(itemId)) {
+                System.err.println("itemId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
                 return true;
             }
 
             // Buscar ticket
-            Ticket ticketAModificar = ticketManager.getTicketById(ticketId);
+            Ticket<? extends IProduct> ticketAModificar = ticketManager.getTicketById(ticketId);
 
             if (ticketAModificar == null) {
                 System.err.println("Error: Ticket " + ticketId + " does not exist.");
@@ -54,27 +54,46 @@ public class TicketAddCommand extends Command {
                 return true;
             }
 
-            // Customizaciones
-            ArrayList<String> customTexts = parseCustomizations(args);
+            //Identificamos si el comando es de servicios o de productos y metemos el item al ticket
+            IProduct itemToAdd = productManager.getIProduct(itemId);
+            if(itemToAdd instanceof BasicProduct || itemToAdd instanceof Event){
+                amount = Integer.parseInt(args[5]);
 
+                // Customizaciones
+                ArrayList<String> customTexts = parseCustomizations(args);
 
-            boolean prodAdded;
+                ItemAdditionManager additionManager = new ItemAdditionManager();
+                boolean handled = additionManager.process((Ticket<IProduct>) ticketAModificar,productManager.getIProduct(itemId), amount, customTexts);
 
-            ProdAdditionManager additionManager = new ProdAdditionManager();
-            boolean handled = additionManager.process(ticketAModificar,productManager.getIProduct(prodId), amount, customTexts);
-
-            if(!handled){
-                System.err.println("Error: Product " + prodId + " has an unkown or invalid type, it can't be added.");
-                return true;
+                if(!handled){
+                    System.err.println("Error: Product " + itemId + " has an unkown or invalid type, it can't be added.");
+                    return true;
+                }
+                if (!ticketAModificar.getItemsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
+                    //Ticket vacio que ahora no lo es, debe ser open y no empty
+                    ticketAModificar.setEstado(TicketState.OPEN);
+                }
+                ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
+                CLI.print("ticket add: ok");
+            } else {
+                ItemAdditionManager additionManager = new ItemAdditionManager();
+                amount = 1; // solo vamos a poner un producto de servicio, no se pueden poner más
+                boolean handled = additionManager.process((Ticket<IProduct>) ticketAModificar,productManager.getIProduct(itemId), amount, null);
+                if(!handled){
+                    System.err.println("Error: Product " + itemId + " has an unkown or invalid type, it can't be added.");
+                    return true;
+                }
+                if (!ticketAModificar.getItemsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
+                    //Ticket vacio que ahora no lo es, debe ser open y no empty
+                    ticketAModificar.setEstado(TicketState.OPEN);
+                }
+                ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
+                CLI.print("ticket add: ok");
             }
-            if (!ticketAModificar.getProductsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
-                //Ticket vacio que ahora no lo es, debe ser open y no empty
-                ticketAModificar.setEstado(TicketState.OPEN);
-            }
-            ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
-            CLI.print("ticket add: ok");
         } catch (NumberFormatException e) {
             System.err.println("amount must be an integer.");
+        } catch (ClassCastException e) {
+            System.err.println("Error: Cannot add this type of product to the ticket." + e.getMessage());
         } catch (Exception e) {
             System.err.println("Error adding product to ticket: " + e.getMessage());
         }

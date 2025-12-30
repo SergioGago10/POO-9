@@ -5,16 +5,16 @@ import upm.Products.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class AddEventProduct extends ProdAdditionHandler<Event> {
+public class AddEventProduct extends ItemAdditionHandler<Event> {
+    private Event eventAux;
 
     @Override
     public boolean canHandle(IProduct product){
         return product instanceof Event;
     }
-    
+
     @Override
     public boolean canBeAdded(Ticket<? super Event> ticket, Event product, List<String> customTexts) {
-        boolean prodAdded = true, addedOnce = false;
         if(doesThisProdExistinTicket(ticket,product)){
             CLI.print("This product (Food/Meeting) is already in the ticket. It can not be added again.");
             return false;
@@ -26,7 +26,7 @@ public class AddEventProduct extends ProdAdditionHandler<Event> {
     }
 
     private boolean doesThisProdExistinTicket(Ticket<?>ticket,IProduct product){
-        return ticket.getProductsList().contains(product);
+        return ticket.getItemsList().contains(product);
     }
 
     private boolean isDateValid(Event product){
@@ -48,7 +48,24 @@ public class AddEventProduct extends ProdAdditionHandler<Event> {
 
     @Override
     protected boolean addMultipleTimes(Ticket<? super Event> ticket, Event product, int quantity) {
-        return super.addMultipleTimes(ticket, product, quantity);
+        if(!isTheAmountValid(quantity,product)){
+            CLI.print("The amount of people that will attend the event exceeds the limit.");
+            return  false;
+        }
+
+        double actualPrice = product.getPrice()*quantity;
+        this.eventAux = new Event(product.getId(), product.getName(), actualPrice,product.getCreationDate(),
+                                  product.getPlannedDate(), product.getMaxParticipants(),product.getTypeEvent(), quantity);
+
+        boolean wasTheEventAdded = ticket.addProductToTicket(this.eventAux);
+        if (!wasTheEventAdded) {
+            CLI.print("The event could not be added, the max number of products has been reached.");
+        }
+        return wasTheEventAdded;
     }
-    
+
+    private boolean isTheAmountValid(int amount, Event product){
+        return amount <= product.getMaxParticipants();
+    }
+
 }

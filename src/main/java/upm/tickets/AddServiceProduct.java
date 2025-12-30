@@ -1,0 +1,38 @@
+package upm.tickets;
+
+import upm.CLI;
+import upm.Products.IProduct;
+import upm.Products.ProductService;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public class AddServiceProduct extends ItemAdditionHandler<ProductService>{
+
+    @Override
+    public boolean canHandle(IProduct product){
+        return product instanceof ProductService;
+    }
+
+    @Override
+    public boolean canBeAdded(Ticket<? super ProductService> ticket, ProductService service, List<String> customTexts) {
+        //Los servicios solo tienen la restriccion de sí su fecha ya ha expirado.
+        boolean isDateValid = service.getMaxDate().isAfter(LocalDateTime.now());
+        boolean isServiceInTicket = ticket.getItemsList().contains(service);
+        if(isServiceInTicket){
+            CLI.print("The service is already in the ticket.");
+            return false;
+        }
+        if(!isDateValid){
+            CLI.print("The service date has expired.");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected boolean addMultipleTimes(Ticket<? super ProductService> ticket, ProductService service, int quantity) {
+        return  ticket.addProductToTicket(service);
+    }
+
+}

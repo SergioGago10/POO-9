@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 //hay que poner minutos
 public class Event extends Product {
     private int maxParticipants;
+    private int actualParticipants;
     private LocalDateTime creationDate;
     private LocalDateTime plannedDate;
     private TypeEvent typeEvent;
@@ -25,6 +26,12 @@ public class Event extends Product {
         this(id, name, pricePerson, LocalDateTime.now(), plannedDate, maxParticipants,typeEvent);
     }
 
+    public Event(String id, String name, double pricePerson, LocalDateTime creationDate, LocalDateTime plannedDate,
+                 int maxParticipants, TypeEvent typeEvent, int actualParticipants){
+        this(id,name,pricePerson,creationDate,plannedDate,maxParticipants,typeEvent);
+        this.actualParticipants = actualParticipants;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -32,20 +39,33 @@ public class Event extends Product {
         sb.append(", id: ").append(id);
         sb.append(", name:").append(name);
         sb.append(", price:").append(String.format("%.2f", price));
-        sb.append(", date of Event: ").append(plannedDate);
+        sb.append(", date of Event: ").append(plannedDate.toLocalDate());
         sb.append(", max people allowed:").append(maxParticipants).append("}");
+        return sb.toString();
+    }
+
+    public String toTicketString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("  {class:").append(typeEvent);
+        sb.append(", id: ").append(id);
+        sb.append(", name:").append(name);
+        sb.append(", price:").append(String.format("%.2f", price));
+        sb.append(", date of Event: ").append(plannedDate.toLocalDate());
+        sb.append(", max people allowed:").append(maxParticipants);
+        sb.append(", actual people in event:").append(actualParticipants).append("}");
         return sb.toString();
     }
 
     public int getMaxParticipants() {
         return maxParticipants;
     }
-
     public LocalDateTime getPlannedDate() {
         return plannedDate;
     }
-
     public TypeEvent getTypeEvent() {
         return typeEvent;
     }
+    public LocalDateTime getCreationDate() {return creationDate;}
+    public int getActualParticipants() {return actualParticipants;}
+
 }

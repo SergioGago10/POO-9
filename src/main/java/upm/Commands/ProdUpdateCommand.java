@@ -22,7 +22,7 @@ public class ProdUpdateCommand extends Command {
                             if (args[4].length() > ProductManager.MAX_CHAR_NAME)
                                 CLI.print("Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
                             Product productToChange = (Product) (product);
-                            productToChange.setName(args[4]);
+                            productToChange.setName("'" + args[4].trim().replaceAll("^([\"'])|([\"'])$", "") + "'");
                             applied = true;
                             break;
                         case "PRICE":

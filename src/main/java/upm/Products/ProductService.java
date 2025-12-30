@@ -20,6 +20,8 @@ public class ProductService implements IProduct{
         this.category=category;
     }
 
+    public LocalDateTime getMaxDate() {return maxDate;}
+
     public String getId(){
         return id;
     }
@@ -34,6 +36,7 @@ public class ProductService implements IProduct{
         sb.append(", id: ").append(id);
         sb.append(", category:").append(category);
         sb.append(", expiration:").append(formattedDate);
+        sb.append("}");
         return sb.toString();
     }
 }

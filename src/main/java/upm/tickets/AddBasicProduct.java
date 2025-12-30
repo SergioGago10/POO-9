@@ -4,7 +4,7 @@ import upm.Products.IProduct;
 
 import java.util.List;
 
-public class AddBasicProduct extends ProdAdditionHandler<BasicProduct> {
+public class AddBasicProduct extends ItemAdditionHandler<BasicProduct> {
 
     @Override
     public boolean canHandle(IProduct product){

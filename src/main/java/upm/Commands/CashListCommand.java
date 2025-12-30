@@ -31,6 +31,7 @@ public class CashListCommand extends Command {
             CLI.print("  " + cash.toString());
         }
 
+        CLI.print("cash list: ok");
         return true;
     }
 }
