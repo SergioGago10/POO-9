@@ -1,9 +1,8 @@
 package upm;
 
-import upm.Products.BasicProduct;
-import upm.Products.ProductManager;
+import upm.Products.*;
 
-import java.util.Random;
+import java.util.*;
 
 public class Utilities {
 
@@ -25,7 +24,7 @@ public class Utilities {
     }
     public static boolean isValidProd(int id, String name, double price) {
         boolean resul = true;
-        if (id <= 0 ) {
+        if (id < 0 ) {
             CLI.print("Id must be positive.");
             return false;
         }

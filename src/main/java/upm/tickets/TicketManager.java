@@ -51,13 +51,13 @@ public class TicketManager {
         Ticket<? extends IProduct> ticket;
         switch (option){
             case "-c":
-                ticket = new Ticket<>(ticketId, cashId, userId,TicketType.COMPOSITE,isTicketIdAutoGen);
+                ticket = new Ticket<>(ticketId, cashId,TicketType.COMPOSITE,isTicketIdAutoGen);
                 break;
             case "-p":
-                ticket = new Ticket<Product>(ticketId, cashId, userId, TicketType.PRODUCT, isTicketIdAutoGen);
+                ticket = new Ticket<Product>(ticketId, cashId, TicketType.PRODUCT, isTicketIdAutoGen);
                 break;
             case "-s":
-                ticket = new Ticket<ProductService>(ticketId, cashId, userId, TicketType.SERVICE, isTicketIdAutoGen);
+                ticket = new Ticket<ProductService>(ticketId, cashId, TicketType.SERVICE, isTicketIdAutoGen);
                 break;
             default:
                 //AQUI NUNCA VA A LLEGAR PERO ES OBLIGATORIO PARA QUE JAVA PIENSE QUE TICKET SE HA INICIALIZADO CORRECTAMENTE
@@ -72,7 +72,6 @@ public class TicketManager {
         }
         list.add(ticket);
         System.out.println("Ticket: " + ticket.getTicketMetadata().getTicketID());
-        this.getFormatter().printCurrentTicket(ticket);
         return ticket;
     }
 

@@ -33,7 +33,7 @@ public class ProdAddFoodCommand extends Command {
                     id = args[i];
                     i++;
                 }
-                String name = args[i].replace("\"", "");
+                String name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
                 i++;
                 double price = Double.parseDouble(args[i]);
                 i++;

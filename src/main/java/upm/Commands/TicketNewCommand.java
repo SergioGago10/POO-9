@@ -17,7 +17,7 @@ public class TicketNewCommand extends Command {
     public boolean apply(String[] args) {
 
         if (args.length < 4 || args.length > 6) {
-            System.out.println("Usage: ticket new [<id>] <cashId> < userId> -[c|p|s] (default -p option) ");
+            System.out.println("Usage: ticket new [<id>] <cashId> <userId> -[c|p|s] (default -p option) ");
             return false;
         }
 
@@ -66,6 +66,18 @@ public class TicketNewCommand extends Command {
             return false;
         }
 
+        //Determinamos si el user es empresa o usuario normal, poniendo las restricciones convenientes.
+        //Si es user, usa DNI, los DNI acaban siempre con una letra, las empresas no, ya que usan un NIF
+        //el NIF empieza por una letra, pero no termina en una
+        User user = userManager.getUserByID(userId);
+        if(user.getId().matches(".*[A-Za-z]$") && !option.contentEquals("-p")){
+            CLI.print("An user can not create a ticket of type '-c' or '-s' only company users are able to.");
+            return false;
+        } else if(!user.getId().matches(".*[A-Za-z]$") && option.contentEquals("-p")){
+            CLI.print("A company user can not create a ticket of type '-p' only users are able to.");
+            return false;
+        }
+
         try {
 
             Cash cashier = (Cash) userManager.getUserByID(cashId);
@@ -79,6 +91,7 @@ public class TicketNewCommand extends Command {
 
             cashier.addTicket(ticket);
             client.addTicket(ticket);
+            ticketManager.getFormatter().printCurrentTicket(ticket);
             CLI.print("ticket new: ok");
             return true;
         }catch (ClassCastException ex){

@@ -10,7 +10,7 @@ public class ServiceProdDiscountCalc implements ITicketDiscountCalc {
     public DiscountResult calculateTotals(Ticket<? extends IProduct> ticket) {
         int numberOfServices = 0;
         double totalWithout = 0.0;
-        double totalWith = 0.0;
+        double totalWith;
         for (IProduct product : ticket.getItemsList()) {
             if (product instanceof ProductService) {
                 numberOfServices++;
@@ -22,8 +22,10 @@ public class ServiceProdDiscountCalc implements ITicketDiscountCalc {
             }
         }
         double percentagetToApply = 0.15 * numberOfServices;
-        totalWith = percentagetToApply * totalWithout;
-        double totalDiscount = totalWithout - totalWith;
+        if(percentagetToApply >= 1) percentagetToApply = 1;
+        //si es 1 o mayor a 1, lo dejamos en 1 y resultara en que todo sera gratis.
+        double totalDiscount = percentagetToApply * totalWithout;
+        totalWith = totalWithout - totalDiscount;
         return new DiscountResult(totalWithout,totalWith,totalDiscount);
     }
 }

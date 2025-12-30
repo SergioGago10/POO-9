@@ -3,7 +3,7 @@ import upm.CLI;
 import upm.Products.IProduct;
 import java.util.List;
 
-public abstract class ProdAdditionHandler<T extends IProduct>{
+public abstract class ItemAdditionHandler<T extends IProduct>{
 
     /**
      * Se encargará de determinar si se puede gestionar el producto a poner en el

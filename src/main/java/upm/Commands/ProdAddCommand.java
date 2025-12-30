@@ -6,6 +6,7 @@ import upm.Utilities;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 public class ProdAddCommand extends Command {
 
@@ -15,7 +16,7 @@ public class ProdAddCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        if (args.length < 5) {
+        if (args.length < 4) {
             CLI.print("Format must be: prod add ([<id>] \"<name>\" <category> <price> [<maxPers>]) || " +
                     "(\"<expiration:yyyy-MM-dd>\" <category> )");
         } else {
@@ -35,7 +36,11 @@ public class ProdAddCommand extends Command {
                     if (LocalDateTime.now().isBefore(date)) {
                         service = new ProductService(id, serviceCategory, date);
                         productManager.addService(service);
+                        CLI.print(service.toString());
+                        CLI.print("prod add:ok");
                         return true;
+                    } else{
+                        CLI.print("The service must have a date that has not passed.");
                     }
                 } else {
                     int i = 2;
@@ -49,7 +54,7 @@ public class ProdAddCommand extends Command {
                         id = args[i];
                         i++;
                     }
-                    name = args[i].replace("\"", "");
+                    name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
                     if (name.length() > ProductManager.MAX_CHAR_NAME) {
                         CLI.print("name length must be lower than" + ProductManager.MAX_CHAR_NAME);
                         return true;
@@ -70,6 +75,7 @@ public class ProdAddCommand extends Command {
                         } else
                             product = new BasicProduct(id, name, category, price);
                         if (productManager.addProduct(product)) {
+                            productManager.getCatalogProducts().sort(Comparator.comparingInt(p -> Integer.parseInt(p.getId())));
                             CLI.print(product.toString());
                             CLI.print("prod add:ok");
                         }

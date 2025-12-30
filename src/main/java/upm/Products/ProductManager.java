@@ -10,8 +10,8 @@ public class ProductManager {
     public final static int MAX_CHAR_NAME = 100;
     private List<Product> catalogProducts;
     private List<ProductService> catalogServices;
-    private int newId = 1;
-    private int serviceId=1;
+    private int newId = 0;
+    private int serviceId = 1;
     private static ProductManager instance;
 
     private ProductManager() {
@@ -80,7 +80,7 @@ public class ProductManager {
 
     public boolean remove(String id) {
         int index = -1;
-        if (id.endsWith("s")) {
+        if (id.endsWith("S")) {
             for (int i = 0; i < catalogServices.size(); i++) {
                 if (catalogServices.get(i).getId().equals(id)) {
                     index = i;
@@ -107,7 +107,7 @@ public class ProductManager {
     }
 
     public int indexOfIProduct(String id) {
-        if (id.endsWith("s")) {
+        if (id.endsWith("S")) {
             for (int i = 0; i < catalogServices.size(); i++) {
                 if (catalogServices.get(i).getId().equals(id)) {
                     return i;
@@ -138,7 +138,7 @@ public class ProductManager {
     }
 
     public String generateNewServiceId() {
-        while (idExists(Integer.toString(serviceId)))
+        while (idExists(serviceId +"S"))
             serviceId++;
         return serviceId+"S";
     }
