@@ -1,6 +1,8 @@
 package upm.Commands;
 
 import upm.Products.ProductManager;
+import upm.Users.Cash;
+import upm.Users.UserManager;
 import upm.tickets.Ticket;
 import upm.tickets.TicketManager;
 
@@ -26,7 +28,8 @@ public class TicketRemoveCommand  extends Command{
                     if(ticketAModificar == null){
                         System.err.println("Error: Ticket " + ticketId + " does not exist.");
                     } else {
-                        if(!ticketAModificar.getTicketMetadata().getCashID().equals(cashId)){
+                        Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
+                        if(!cashUser.getTickets().contains(ticketAModificar)){
                             System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
                         }else {
                             ticketAModificar.removeProductFromTicket(prodId);

@@ -84,9 +84,9 @@ public class TicketNewCommand extends Command {
             Client client = (Client) userManager.getUserByID(userId);
             TicketManager ticketManager=TicketManager.getInstance();
             if (ticketId == null) {
-                ticket = ticketManager.newTicket(cashId, userId, option);
+                ticket = ticketManager.newTicket(option);
             } else {
-                ticket = ticketManager.newTicket(ticketId, cashId, userId, option,false);
+                ticket = ticketManager.newTicket(ticketId,option,false);
             }
 
             cashier.addTicket(ticket);

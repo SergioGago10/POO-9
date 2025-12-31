@@ -2,6 +2,8 @@ package upm.Commands;
 
 import upm.CLI;
 import upm.Products.*;
+import upm.Users.Cash;
+import upm.Users.UserManager;
 import upm.tickets.*;
 
 import java.util.ArrayList;
@@ -44,7 +46,8 @@ public class TicketAddCommand extends Command {
             }
 
             // Comprobar que pertenece al mismo cashId
-            if (!ticketAModificar.getTicketMetadata().getCashID().equals(cashId)) {
+            Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
+            if (!cashUser.getTickets().contains(ticketAModificar)) {
                 System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
                 return true;
             }

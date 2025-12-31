@@ -7,21 +7,23 @@ import upm.Products.ProductService;
 import java.util.*;
 
 public class TicketManager {
-    private Map<String, Ticket<?>> ticketsByTicketId;
-    private Map<String, List<Ticket<?>>> ticketsByCashId;
+    private List<Ticket<?>> ticketsList;
     private static TicketManager instance;
     private final TicketFormatter ticketFormatter;
 
     private TicketManager() {
-        ticketsByTicketId = new HashMap<>();
-        ticketsByCashId = new HashMap<>();
+        ticketsList = new ArrayList<>();
         this.ticketFormatter = new TicketFormatter();
     }
 
     public TicketFormatter getFormatter() {return ticketFormatter;}
-    public Ticket<?> getTicketById(String ticketId) {return ticketsByTicketId.get(ticketId);}
-    public Map<String, Ticket<?>> getTicketsById() {return ticketsByTicketId;}
-    public List<Ticket<?>> getTicketByCashId(String cashID){return ticketsByCashId.get(cashID);}
+    public List<Ticket<?>> getTicketsList(){return new ArrayList<>(ticketsList);}
+    public Ticket<?> getTicketById(String ticketId) {
+        return ticketsList.stream()
+                .filter(t -> t.getTicketMetadata().getTicketID().equals(ticketId))
+                .findFirst()
+                .orElse(null);
+    }
 
     public static TicketManager getInstance() {
         if (instance == null)
@@ -30,7 +32,7 @@ public class TicketManager {
     }
 
     public boolean exists(String ticketId) {
-        return ticketsByTicketId.containsKey(ticketId);
+        return ticketsList.stream().anyMatch(t -> t.getTicketMetadata().getTicketID().equals(ticketId));
     }
 
     private String generateTicketId() {
@@ -39,38 +41,32 @@ public class TicketManager {
         return String.format("%05d", num);
     }
 
-    public Ticket<?> newTicket(String cashId, String userId, String option) {
+    public Ticket<?> newTicket(String option) {
         String ticketId = generateTicketId();
         while (exists(ticketId)) {
             ticketId = generateTicketId();
         }
-        return newTicket(ticketId, cashId, userId,option, true);
+        return newTicket(ticketId,option, true);
     }
 
-    public Ticket<?> newTicket(String ticketId, String cashId, String userId,String option, boolean isTicketIdAutoGen) {
+    public Ticket<?> newTicket(String ticketId,String option, boolean isTicketIdAutoGen) {
         Ticket<? extends Item> ticket;
         switch (option){
             case "-c":
-                ticket = new Ticket<>(ticketId, cashId,TicketType.COMPOSITE,isTicketIdAutoGen);
+                ticket = new Ticket<>(ticketId,TicketType.COMPOSITE,isTicketIdAutoGen);
                 break;
             case "-p":
-                ticket = new Ticket<Product>(ticketId, cashId, TicketType.PRODUCT, isTicketIdAutoGen);
+                ticket = new Ticket<Product>(ticketId, TicketType.PRODUCT, isTicketIdAutoGen);
                 break;
             case "-s":
-                ticket = new Ticket<ProductService>(ticketId, cashId, TicketType.SERVICE, isTicketIdAutoGen);
+                ticket = new Ticket<ProductService>(ticketId, TicketType.SERVICE, isTicketIdAutoGen);
                 break;
             default:
                 //AQUI NUNCA VA A LLEGAR PERO ES OBLIGATORIO PARA QUE JAVA PIENSE QUE TICKET SE HA INICIALIZADO CORRECTAMENTE
                 throw new IllegalArgumentException("Opción inválida: " + option);
         }
         //definimos el tipo de ticket al crearlo.
-        ticketsByTicketId.put(ticketId, ticket);
-        List<Ticket<?>> list = ticketsByCashId.get(cashId);
-        if (list == null) {
-            list = new ArrayList<>();
-            ticketsByCashId.put(cashId, list);
-        }
-        list.add(ticket);
+        ticketsList.add(ticket);
         System.out.println("Ticket: " + ticket.getTicketMetadata().getTicketID());
         return ticket;
     }

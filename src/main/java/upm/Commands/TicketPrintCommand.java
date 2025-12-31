@@ -1,5 +1,7 @@
 package upm.Commands;
 
+import upm.Users.Cash;
+import upm.Users.UserManager;
 import upm.tickets.Ticket;
 import upm.tickets.TicketManager;
 import upm.tickets.TicketState;
@@ -21,7 +23,8 @@ public class TicketPrintCommand extends Command{
                 TicketManager ticketManager=TicketManager.getInstance();
                 Ticket<?> ticketAMostrar = ticketManager.getTicketById(ticketId);
                 if(ticketAMostrar != null){
-                    if(!ticketAMostrar.getTicketMetadata().getCashID().equals(cashId)){
+                    Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
+                    if(!cashUser.getTickets().contains(ticketAMostrar)){
                         System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
                     } else{
                         //todo revisar el hecho de cerrar aqui o en otro lado

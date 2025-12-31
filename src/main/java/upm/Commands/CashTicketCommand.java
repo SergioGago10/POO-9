@@ -27,12 +27,12 @@ public class CashTicketCommand extends Command {
                 return false;
             }
             TicketManager ticketManager=TicketManager.getInstance();
-            ticketManager.getFormatter().printTicketsByCash(ticketManager,cashIdentifier);
+            ticketManager.getFormatter().printTicketsByCash(cashIdentifier);
             CLI.print("cash tickets: ok");
             return true;
 
         } catch (ClassCastException ex) {
-            CLI.print("Id doesnt belong to a cahier, it belongs to a Client.");
+            CLI.print("Id doesnt belong to a cashier, it belongs to a Client.");
             return false;
         }
     }
