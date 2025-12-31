@@ -33,7 +33,7 @@ public class ClientAddCommand extends Command {
             }
 
             String name = args[2];
-            String dni = args[3];
+            String identificator = args[3];
             String email = args[4];
             String cashierId = args[5];
             TypeClient type;
@@ -45,11 +45,11 @@ public class ClientAddCommand extends Command {
             if (!userManager.idExists(cashierId)) {
                 CLI.print("Cashier ID does not exist.");
             }
-            if (Character.isDigit(dni.charAt(dni.length() - 1)))
+            if (Character.isDigit(identificator.charAt(identificator.length() - 1)))
                 type = TypeClient.COMPANY;
             else
                 type = TypeClient.CLIENT;
-            Client client = new Client(name, dni, email, cashierId,type);
+            Client client = new Client(name, identificator, email, cashierId,type);
 
             if (userManager.addClient(client)) {
                 System.out.println(client.toString());
