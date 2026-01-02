@@ -69,7 +69,8 @@ public class TicketAddCommand extends Command {
                 boolean handled = additionManager.process((Ticket<Item>) ticketAModificar,productManager.getIProduct(itemId), amount, customTexts);
 
                 if(!handled){
-                    System.err.println("Error: Product " + itemId + " has an unkown or invalid type, it can't be added.");
+                    System.err.println("Error: Product with id " + itemId + " has an invalid type, it can't be added " +
+                            "(remember that you can not add services to an only product ticket and viceversa).");
                     return true;
                 }
                 if (!ticketAModificar.getItemsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {

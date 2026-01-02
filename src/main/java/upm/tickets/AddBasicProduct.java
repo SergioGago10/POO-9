@@ -13,7 +13,9 @@ public class AddBasicProduct extends ItemAdditionHandler<BasicProduct> {
 
     @Override
     public boolean canBeAdded(Ticket<? super BasicProduct> ticket, BasicProduct product, List<String> customTexts) {
-        //Un producto basico no tiene ningun tipo de restriccion, solo si pasa el límite de productos en la lista
+        if(ticket.getTicketType()==TicketType.SERVICE){
+            return false;
+        }
         return super.canBeAdded(ticket, product, customTexts);
     }
     

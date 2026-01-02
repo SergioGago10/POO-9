@@ -16,7 +16,9 @@ public class AddServiceProduct extends ItemAdditionHandler<ProductService>{
 
     @Override
     public boolean canBeAdded(Ticket<? super ProductService> ticket, ProductService service, List<String> customTexts) {
-        //Los servicios solo tienen la restriccion de sí su fecha ya ha expirado.
+        if(ticket.getTicketType()==TicketType.PRODUCT){
+            return false;
+        }
         boolean isDateValid = service.getMaxDate().isAfter(LocalDateTime.now());
         boolean isServiceInTicket = ticket.getItemsList().contains(service);
         if(isServiceInTicket){

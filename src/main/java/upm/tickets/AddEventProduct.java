@@ -15,6 +15,9 @@ public class AddEventProduct extends ItemAdditionHandler<Event> {
 
     @Override
     public boolean canBeAdded(Ticket<? super Event> ticket, Event product, List<String> customTexts) {
+        if(ticket.getTicketType()==TicketType.SERVICE){
+            return false;
+        }
         if(doesThisProdExistinTicket(ticket,product)){
             CLI.print("This product (Food/Meeting) is already in the ticket. It can not be added again.");
             return false;
