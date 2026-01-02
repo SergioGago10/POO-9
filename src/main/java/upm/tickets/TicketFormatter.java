@@ -5,6 +5,8 @@ import upm.Products.Event;
 import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
+import upm.Users.Cash;
+import upm.Users.UserManager;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -19,12 +21,13 @@ public class TicketFormatter {
         return isTicketIDAutoGen ? fechaApertura.format(TICKET_ID_FORMAT) + "-" + ticketID : ticketID;
     }
 
-    public void printTicketsByCash(TicketManager ticketManager, String cashID){
-        List<Ticket<?>> list = ticketManager.getTicketByCashId(cashID);
-        if (list != null && !list.isEmpty()) {
-            list.sort(Comparator.comparing(t -> t.getTicketMetadata().getTicketID()));
+    public void printTicketsByCash(String cashID){
+        Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashID);
+        List<Ticket<?>> ticketsByCashId = cashUser.getTickets();
+        if (!ticketsByCashId.isEmpty()) {
+            ticketsByCashId.sort(Comparator.comparing(t -> t.getTicketMetadata().getTicketID()));
             System.out.println("Tickets:");
-            for (Ticket<?> t : list) {
+            for (Ticket<?> t : ticketsByCashId) {
                 System.out.println(t.getTicketMetadata().getTicketID() + "->" + t.getEstado());
             }
         }
@@ -32,10 +35,9 @@ public class TicketFormatter {
 
     public void printListTickets(TicketManager ticketManager){
         System.out.println("Ticket list : ");
-        Map<String,Ticket<?>> ticketsByID = ticketManager.getTicketsById();
-        List<Ticket<?>> ticketList = new ArrayList<>(ticketsByID.values());
-        ticketList.sort(Comparator.comparing((Ticket<?> t) -> t.getTicketMetadata().getTicketID()).reversed());
-        for (Ticket<?> t : ticketList) {
+        List<Ticket<?>> ticketsList = ticketManager.getTicketsList();
+        ticketsList.sort(Comparator.comparing((Ticket<?> t) -> t.getTicketMetadata().getTicketID()).reversed());
+        for (Ticket<?> t : ticketsList) {
             System.out.println("  " + t.getTicketMetadata().getTicketID() + " - " + t.getEstado());
         }
     }
