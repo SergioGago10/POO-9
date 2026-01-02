@@ -1,5 +1,7 @@
 package upm.tickets;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import upm.Products.*;
 
 import java.time.LocalDateTime;
@@ -11,6 +13,8 @@ public class Ticket<T extends Item>{
     private List<T> itemsList;
     private TicketMetadata ticketMetadata;
     private TicketState estado;
+
+    @JsonProperty("ticketType")
     private TicketType type;
 
     public Ticket(String ticketID, TicketType type) {
@@ -19,6 +23,8 @@ public class Ticket<T extends Item>{
         itemsList = new ArrayList<>();
         this.type = type;
     }
+
+    public Ticket(){}
 
     public TicketType getTicketType(){return this.type;}
     public TicketMetadata getTicketMetadata() {return ticketMetadata;}
@@ -70,7 +76,7 @@ public class Ticket<T extends Item>{
             System.out.println("This ticket has been closed. You can't add or remove products from it.");
         }
     }
-
+    @JsonIgnore
     public List<Product> getProductsSortedByName() {
         return itemsList.stream()
                 .filter(p -> p instanceof Product)
@@ -79,6 +85,7 @@ public class Ticket<T extends Item>{
                 .collect(Collectors.toList());
     }
 
+    @JsonIgnore
     public List<ProductService> getServicesSortedById() {
         return itemsList.stream()
                 .filter(p -> p instanceof ProductService)
@@ -87,4 +94,15 @@ public class Ticket<T extends Item>{
                 .collect(Collectors.toList());
     }
 
+    public void setType(TicketType type) {
+        this.type = type;
+    }
+
+    public void setItemsList(List<T> itemsList) {
+        this.itemsList = itemsList;
+    }
+
+    public void setTicketMetadata(TicketMetadata ticketMetadata) {
+        this.ticketMetadata = ticketMetadata;
+    }
 }

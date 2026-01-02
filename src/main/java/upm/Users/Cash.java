@@ -8,6 +8,8 @@ public class Cash extends User {
         super(name, email,identifier);
     }
 
+    public Cash(){}
+
     @Override
     public String toString() {
         return " Cash{identifier='" + id + "', name='" + name + "', email='" + email + "'}";

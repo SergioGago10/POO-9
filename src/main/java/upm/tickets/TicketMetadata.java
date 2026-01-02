@@ -9,6 +9,8 @@ public class TicketMetadata{
         this.numProducts = 0; //siempre tenemos un ticket vacio al inicializarlo, por lo que sera 0 al inicializarlo.
     }
 
+    public TicketMetadata(){}
+
     public String getTicketID() {return ticketID;}
     public void setTicketID(String ticketID) {this.ticketID = ticketID;}
     public int getNumProducts(){return numProducts;}

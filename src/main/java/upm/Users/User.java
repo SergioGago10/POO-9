@@ -1,51 +1,81 @@
 package upm.Users;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import upm.CLI;
+import upm.Products.Item;
 import upm.tickets.Ticket;
-import upm.tickets.TicketManager;
 
 import java.util.ArrayList;
 import java.util.List;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Client.class, name = "client"),
+        @JsonSubTypes.Type(value = Cash.class, name = "cashier")
+})
 
 public abstract class User {
     protected String id;
     protected String name;
     protected String email;
-    protected List<String> ticketIds;
+    protected List<Ticket<? extends Item>> tickets;
 
-    public User(String name, String email, String id){
+    public User(String name, String email, String id) {
         this.name = name;
         this.email = email;
-        this.id=id;
-        this.ticketIds = new ArrayList<>();
+        this.id = id;
+        tickets = new ArrayList<>();
+
     }
 
-    public String getName(){return name;}
-    public String getEmail(){return email;}
-    public String getId(){return id;}
+    public User(){}
 
-    public List<Ticket<?>> getTickets() {
-        TicketManager ticketManager = TicketManager.getInstance();
-        List<Ticket<?>> tickets = new ArrayList<>();
+    public String getName() {
+        return name;
+    }
 
-        for (String id : ticketIds) {
-            Ticket<?> ticket = ticketManager.getTicketById(id);
-            if (ticket != null) {
-                tickets.add(ticket);
-            }
+    public String getEmail() {
+        return email;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public boolean addTicket(Ticket<? extends Item> ticket) {
+        boolean resul;
+        if (!tickets.contains(ticket)) {
+            tickets.add(ticket);
+            resul = true;
+        } else {
+            CLI.print("That ticket already exists.");
+            resul = false;
         }
+        return resul;
+    }
+
+    public List<Ticket<? extends Item>> getTickets() {
         return tickets;
     }
 
-
-    public boolean addTicket(Ticket<?> ticket) {
-        if (!ticketIds.contains(ticket.getTicketMetadata().getTicketID())) {
-            ticketIds.add(ticket.getTicketMetadata().getTicketID());
-            return true;
-        } else {
-            CLI.print("That ticket already exists.");
-            return false;
-        }
+    public void setTickets(List<Ticket<? extends Item>> tickets) {
+        this.tickets = tickets;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
