@@ -1,14 +1,18 @@
 package upm.Products;
 
-import upm.CLI;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import upm.CLI;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductManager {
     private final static int MAX_DIF_PRODUCTS = 200;
     public final static int MAX_CHAR_NAME = 100;
+    @JsonProperty("products")
     private List<Product> catalogProducts;
+    @JsonProperty("services")
     private List<ProductService> catalogServices;
     private int newId = 0;
     private int serviceId = 1;
@@ -65,12 +69,26 @@ public class ProductManager {
         return null;
     }
 
+    @JsonIgnore
     public List<Product> getCatalogProducts() {
-        return catalogProducts;
+        return new ArrayList<>(catalogProducts);
     }
 
+    @JsonIgnore
     public List<ProductService> getCatalogServices() {
-        return catalogServices;
+        return new ArrayList<>(catalogServices);
+    }
+
+    public void setCatalogProducts(List<Product> catalogProducts) {
+        this.catalogProducts.clear();
+        if (catalogProducts != null)
+            this.catalogProducts.addAll(catalogProducts);
+    }
+
+    public void setCatalogServices(List<ProductService> catalogServices) {
+        this.catalogServices.clear();
+        if (catalogServices != null)
+            this.catalogServices.addAll(catalogServices);
     }
 
     public boolean remove(String id) {
@@ -135,9 +153,9 @@ public class ProductManager {
     }
 
     public String generateNewServiceId() {
-        while (idExists(serviceId +"S"))
+        while (idExists(serviceId + "S"))
             serviceId++;
-        return serviceId+"S";
+        return serviceId + "S";
     }
 
 }
