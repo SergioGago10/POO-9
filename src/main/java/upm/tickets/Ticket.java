@@ -13,8 +13,8 @@ public class Ticket<T extends Item>{
     private TicketState estado;
     private TicketType type;
 
-    public Ticket(String ticketID, TicketType type ,boolean isTicketIdAutoGen) {
-        this.ticketMetadata = new TicketMetadata(ticketID, isTicketIdAutoGen);
+    public Ticket(String ticketID, TicketType type) {
+        this.ticketMetadata = new TicketMetadata(ticketID);
         this.estado = TicketState.EMPTY;
         itemsList = new ArrayList<>();
         this.type = type;

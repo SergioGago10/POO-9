@@ -1,15 +1,11 @@
 package upm.tickets;
 
-import java.time.LocalDateTime;
-
 public class TicketMetadata{
     private String ticketID;
-    private LocalDateTime fechaApertura;
     private int numProducts;
 
-    public TicketMetadata(String ticketID, boolean isTicketIDAutoGen) {
-        this.fechaApertura = LocalDateTime.now();
-        this.ticketID = TicketFormatter.ticketIDFormatter(isTicketIDAutoGen,ticketID,this.fechaApertura);
+    public TicketMetadata(String ticketID) {
+        this.ticketID = ticketID;
         this.numProducts = 0; //siempre tenemos un ticket vacio al inicializarlo, por lo que sera 0 al inicializarlo.
     }
 

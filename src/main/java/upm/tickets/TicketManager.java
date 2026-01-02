@@ -3,7 +3,10 @@ package upm.tickets;
 import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
+import upm.Utilities;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TicketManager {
@@ -35,31 +38,26 @@ public class TicketManager {
         return ticketsList.stream().anyMatch(t -> t.getTicketMetadata().getTicketID().equals(ticketId));
     }
 
-    private String generateTicketId() {
-        Random rand = new Random();
-        int num = rand.nextInt(100000); // [0 - 99999]
-        return String.format("%05d", num);
-    }
-
     public Ticket<?> newTicket(String option) {
-        String ticketId = generateTicketId();
+        String ticketId = String.valueOf(Utilities.randomNumGen(5));
         while (exists(ticketId)) {
-            ticketId = generateTicketId();
+            ticketId = String.valueOf(Utilities.randomNumGen(5));
         }
-        return newTicket(ticketId,option, true);
+        ticketId = ticketId + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm"));
+        return newTicket(ticketId,option);
     }
 
-    public Ticket<?> newTicket(String ticketId,String option, boolean isTicketIdAutoGen) {
+    public Ticket<?> newTicket(String ticketId,String option) {
         Ticket<? extends Item> ticket;
         switch (option){
             case "-c":
-                ticket = new Ticket<>(ticketId,TicketType.COMPOSITE,isTicketIdAutoGen);
+                ticket = new Ticket<>(ticketId,TicketType.COMPOSITE);
                 break;
             case "-p":
-                ticket = new Ticket<Product>(ticketId, TicketType.PRODUCT, isTicketIdAutoGen);
+                ticket = new Ticket<Product>(ticketId, TicketType.PRODUCT);
                 break;
             case "-s":
-                ticket = new Ticket<ProductService>(ticketId, TicketType.SERVICE, isTicketIdAutoGen);
+                ticket = new Ticket<ProductService>(ticketId, TicketType.SERVICE);
                 break;
             default:
                 //AQUI NUNCA VA A LLEGAR PERO ES OBLIGATORIO PARA QUE JAVA PIENSE QUE TICKET SE HA INICIALIZADO CORRECTAMENTE

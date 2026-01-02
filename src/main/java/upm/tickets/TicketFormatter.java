@@ -17,10 +17,6 @@ public class TicketFormatter {
     private static final DateTimeFormatter TICKET_ID_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
     private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("0.0######");
 
-    public static String ticketIDFormatter(boolean isTicketIDAutoGen, String ticketID, LocalDateTime fechaApertura){
-        return isTicketIDAutoGen ? fechaApertura.format(TICKET_ID_FORMAT) + "-" + ticketID : ticketID;
-    }
-
     public void printTicketsByCash(String cashID){
         Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashID);
         List<Ticket<?>> ticketsByCashId = cashUser.getTickets();
