@@ -55,13 +55,13 @@ public class TicketManager {
         Ticket<? extends Item> ticket;
         switch (option){
             case "-c":
-                ticket = new Ticket<>(ticketId,TicketType.COMPOSITE);
+                ticket = new Ticket<>(ticketId);
                 break;
             case "-p":
-                ticket = new Ticket<Product>(ticketId, TicketType.PRODUCT);
+                ticket = new Ticket<Product>(ticketId);
                 break;
             case "-s":
-                ticket = new Ticket<ProductService>(ticketId, TicketType.SERVICE);
+                ticket = new Ticket<ProductService>(ticketId);
                 break;
             default:
                 //AQUI NUNCA VA A LLEGAR PERO ES OBLIGATORIO PARA QUE JAVA PIENSE QUE TICKET SE HA INICIALIZADO CORRECTAMENTE
