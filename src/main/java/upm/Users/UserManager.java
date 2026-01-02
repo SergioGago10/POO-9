@@ -1,5 +1,7 @@
 package upm.Users;
 
+import upm.tickets.TicketManager;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -75,6 +77,9 @@ public class UserManager {
             while (it.hasNext()) {
                 Cash current = it.next();
                 if (current.getId().equals(dni)) {
+                    //borramos los tickets del cashier una vez lo hemos borrado.
+                    TicketManager tm = TicketManager.getInstance();
+                    tm.ticketCashRemover(current);
                     it.remove();
                     return true;
                 }

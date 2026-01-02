@@ -3,6 +3,10 @@ package upm.tickets;
 import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
+import upm.Users.Cash;
+import upm.Users.Client;
+import upm.Users.User;
+import upm.Users.UserManager;
 import upm.Utilities;
 
 import java.time.LocalDateTime;
@@ -67,6 +71,20 @@ public class TicketManager {
         ticketsList.add(ticket);
         System.out.println("Ticket: " + ticket.getTicketMetadata().getTicketID());
         return ticket;
+    }
+
+    public void ticketCashRemover(Cash cashier){
+        UserManager clientSearch = UserManager.getInstance();
+        List <Ticket<?>> cashTickets = cashier.getTickets();
+        for (Ticket<?> currentTicket : cashTickets) {
+            this.ticketsList.remove(currentTicket); //borramos el ticket de la lista global
+            Iterator<Client> clientIt = clientSearch.getClients().iterator();
+            boolean found = false;
+            while (!found && clientIt.hasNext()) { //borramos el ticket del cliente que lo creo
+                User user = clientIt.next();
+                found = user.getTickets().remove(currentTicket);
+            }
+        }
     }
 
 }

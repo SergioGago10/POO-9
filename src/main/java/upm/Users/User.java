@@ -11,13 +11,13 @@ public abstract class User {
     protected String id;
     protected String name;
     protected String email;
-    protected List<String> ticketIds;
+    protected List<Ticket<?>> ticketList;
 
     public User(String name, String email, String id){
         this.name = name;
         this.email = email;
         this.id=id;
-        this.ticketIds = new ArrayList<>();
+        this.ticketList = new ArrayList<>();
     }
 
     public String getName(){return name;}
@@ -25,26 +25,14 @@ public abstract class User {
     public String getId(){return id;}
 
     public List<Ticket<?>> getTickets() {
-        TicketManager ticketManager = TicketManager.getInstance();
-        List<Ticket<?>> tickets = new ArrayList<>();
-
-        for (String id : ticketIds) {
-            Ticket<?> ticket = ticketManager.getTicketById(id);
-            if (ticket != null) {
-                tickets.add(ticket);
-            }
-        }
-        return tickets;
+        return new ArrayList<>(ticketList);
     }
 
-
-    public boolean addTicket(Ticket<?> ticket) {
-        if (!ticketIds.contains(ticket.getTicketMetadata().getTicketID())) {
-            ticketIds.add(ticket.getTicketMetadata().getTicketID());
-            return true;
+    public void addTicket(Ticket<?> ticket) {
+        if (!ticketList.contains(ticket)) {
+            ticketList.add(ticket);
         } else {
             CLI.print("That ticket already exists.");
-            return false;
         }
     }
 
