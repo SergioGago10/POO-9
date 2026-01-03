@@ -3,6 +3,8 @@ package upm.Commands;
 import upm.CLI;
 import upm.Users.Cash;
 import upm.Users.UserManager;
+import upm.tickets.Ticket;
+import upm.tickets.TicketManager;
 
 public class CashRemoveCommand extends Command {
     public CashRemoveCommand() {
@@ -11,8 +13,9 @@ public class CashRemoveCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied=false;
-        UserManager userManager=UserManager.getInstance();
+        boolean applied = false;
+        UserManager userManager = UserManager.getInstance();
+        TicketManager ticketManager = TicketManager.getInstance();
         if (args.length < 3) {
             System.out.println("Format must be: cash remove <cashierId>");
         } else {
@@ -21,14 +24,16 @@ public class CashRemoveCommand extends Command {
                 Cash cash = (Cash) userManager.getUserByID(identifier);
                 if (cash == null) {
                     CLI.print("Cashier not found.");
-                } else if (userManager.removeUserByDni(identifier)) {
-                    CLI.print(cash.toString());
-                    CLI.print("cash remove: ok");
-                    applied = true;
                 } else {
-                    CLI.print("Cashier couldn't be removed.");
+                    if (userManager.removeUserByDni(identifier)) {
+                        CLI.print(cash.toString());
+                        CLI.print("cash remove: ok");
+                        applied = true;
+                    } else {
+                        CLI.print("Cashier couldn't be removed.");
+                    }
                 }
-            }catch (ClassCastException ex){
+            } catch (ClassCastException ex) {
                 CLI.print("Id doesnt belong to a cahier, it belongs to a Client.");
             }
         }

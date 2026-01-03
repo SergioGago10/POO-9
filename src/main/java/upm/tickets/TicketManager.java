@@ -1,5 +1,7 @@
 package upm.tickets;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
@@ -24,6 +26,7 @@ public class TicketManager {
     }
 
     public TicketFormatter getFormatter() {return ticketFormatter;}
+    @JsonIgnore
     public List<Ticket<?>> getTicketsList(){return new ArrayList<>(ticketsList);}
     public Ticket<?> getTicketById(String ticketId) {
         return ticketsList.stream()

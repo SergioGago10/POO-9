@@ -1,9 +1,12 @@
 package upm.Users;
 
-import upm.tickets.TicketManager;
+ import upm.tickets.TicketManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 public class UserManager {
@@ -23,13 +26,16 @@ public class UserManager {
         return instance;
     }
 
+    @JsonIgnore
     public ArrayList<Client> getClients() {
         return new ArrayList<>(clientsList); // devolvemos copia para no exponer la interna
     }
 
+    @JsonIgnore
     public ArrayList<Cash> getCash() {
         return new ArrayList<>(cashList); // devolvemos copia para no exponer la interna
     }
+
 
     public boolean addClient(Client client) {
         if (client == null) return false;
@@ -111,5 +117,17 @@ public class UserManager {
             number = 1_000_000 + random.nextInt(9_000_000);
         } while (idExists("UW" + number));
         return "UW" + number;
+    }
+
+    public void setClientsList(List<Client> clientsList){
+        this.clientsList.clear();
+        if (clientsList != null)
+            this.clientsList.addAll(clientsList);
+    }
+
+    public void setCashList(List<Cash> cashList){
+        this.cashList.clear();
+        if (cashList != null)
+            this.cashList.addAll(cashList);
     }
 }
