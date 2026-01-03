@@ -14,19 +14,12 @@ public class Ticket<T extends Item>{
     private TicketMetadata ticketMetadata;
     private TicketState estado;
 
-    @JsonProperty("ticketType")
-    private TicketType type;
-
-    public Ticket(String ticketID, TicketType type) {
+    public Ticket(String ticketID) {
         this.ticketMetadata = new TicketMetadata(ticketID);
         this.estado = TicketState.EMPTY;
         itemsList = new ArrayList<>();
-        this.type = type;
     }
 
-    public Ticket(){}
-
-    public TicketType getTicketType(){return this.type;}
     public TicketMetadata getTicketMetadata() {return ticketMetadata;}
     public TicketState getEstado(){return estado;}
     public List<T> getItemsList() {

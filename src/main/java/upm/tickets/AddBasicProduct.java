@@ -13,9 +13,6 @@ public class AddBasicProduct extends ItemAdditionHandler<BasicProduct> {
 
     @Override
     public boolean canBeAdded(Ticket<? super BasicProduct> ticket, BasicProduct product, List<String> customTexts) {
-        if(ticket.getTicketType()==TicketType.SERVICE){
-            return false;
-        }
         return super.canBeAdded(ticket, product, customTexts);
     }
     

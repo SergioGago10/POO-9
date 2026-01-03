@@ -17,9 +17,6 @@ public class AddCustomProduct extends ItemAdditionHandler<CustomizableProduct> {
 
     @Override
     public boolean canBeAdded(Ticket<? super CustomizableProduct> ticket, CustomizableProduct product, List<String> customTexts) {
-        if(ticket.getTicketType()==TicketType.SERVICE){
-            return false;
-        }
         List<String> textsToAdd = (customTexts == null) ? new ArrayList<>() : new ArrayList<>(customTexts);
         if(textsToAdd.size() > product.getMaxCustomTexts()){
             CLI.print("Too many custom texts for this product. Max allowed: " + product.getMaxCustomTexts());

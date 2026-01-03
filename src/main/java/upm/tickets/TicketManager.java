@@ -5,6 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
+import upm.Users.Cash;
+import upm.Users.Client;
+import upm.Users.User;
+import upm.Users.UserManager;
 import upm.Utilities;
 
 import java.time.LocalDateTime;
@@ -54,13 +58,13 @@ public class TicketManager {
         Ticket<? extends Item> ticket;
         switch (option){
             case "-c":
-                ticket = new Ticket<>(ticketId,TicketType.COMPOSITE);
+                ticket = new Ticket<>(ticketId);
                 break;
             case "-p":
-                ticket = new Ticket<Product>(ticketId, TicketType.PRODUCT);
+                ticket = new Ticket<Product>(ticketId);
                 break;
             case "-s":
-                ticket = new Ticket<ProductService>(ticketId, TicketType.SERVICE);
+                ticket = new Ticket<ProductService>(ticketId);
                 break;
             default:
                 //AQUI NUNCA VA A LLEGAR PERO ES OBLIGATORIO PARA QUE JAVA PIENSE QUE TICKET SE HA INICIALIZADO CORRECTAMENTE
@@ -72,15 +76,18 @@ public class TicketManager {
         return ticket;
     }
 
-    public void addTicket(Ticket<?> t) {
-        if (!ticketsList.contains(t)) {
-            ticketsList.add(t);
+    public void ticketCashRemover(Cash cashier){
+        UserManager clientSearch = UserManager.getInstance();
+        List <Ticket<?>> cashTickets = cashier.getTickets();
+        for (Ticket<?> currentTicket : cashTickets) {
+            this.ticketsList.remove(currentTicket); //borramos el ticket de la lista global
+            Iterator<Client> clientIt = clientSearch.getClients().iterator();
+            boolean found = false;
+            while (!found && clientIt.hasNext()) { //borramos el ticket del cliente que lo creo
+                User user = clientIt.next();
+                found = user.getTickets().remove(currentTicket);
+            }
         }
     }
 
-    public void setTicketsList(List<Ticket<?>> ticketsList) {
-        this.ticketsList.clear();
-        if (ticketsList != null)
-            this.ticketsList.addAll(ticketsList);
-    }
 }

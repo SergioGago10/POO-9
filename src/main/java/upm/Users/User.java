@@ -28,33 +28,21 @@ public abstract class User {
     public User(String name, String email, String id) {
         this.name = name;
         this.email = email;
-        this.id = id;
-        tickets = new ArrayList<>();
-
+        this.id=id;
+        this.ticketList = new ArrayList<>();
     }
 
     public User(){}
 
-    public String getName() {
-        return name;
+    public List<Ticket<?>> getTickets() {
+        return new ArrayList<>(ticketList);
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public boolean addTicket(Ticket<? extends Item> ticket) {
-        boolean resul;
-        if (!tickets.contains(ticket)) {
-            tickets.add(ticket);
-            resul = true;
+    public void addTicket(Ticket<?> ticket) {
+        if (!ticketList.contains(ticket)) {
+            ticketList.add(ticket);
         } else {
             CLI.print("That ticket already exists.");
-            resul = false;
         }
         return resul;
     }
