@@ -13,16 +13,17 @@ public class AddEventProduct extends ItemAdditionHandler<Event> {
         return product instanceof Event;
     }
 
+    /**
+     * @param args [ticketId, itemId, amount, texts(if they had)]
+     */
     @Override
-    public boolean canBeAdded(Ticket<? super Event> ticket, Event product, List<String> customTexts) {
-        if(doesThisProdExistinTicket(ticket,product)){
+    public boolean canBeAdded(String[] args) {
+        Event eventProd = (Event) this.productManager.getIProduct(args[1]);
+        if(doesThisProdExistinTicket(this.ticketManager.getTicketById(args[0]),eventProd)){
             CLI.print("This product (Food/Meeting) is already in the ticket. It can not be added again.");
             return false;
         }
-        if(!isDateValid(product)){
-            return false;
-        }
-        return true;
+        return isDateValid(eventProd);
     }
 
     private boolean doesThisProdExistinTicket(Ticket<?>ticket, Item product){
@@ -46,8 +47,14 @@ public class AddEventProduct extends ItemAdditionHandler<Event> {
         return true;
     }
 
+    /**
+     * @param args [ticketId, itemId, amount, texts(if they had)]
+     */
     @Override
-    protected boolean addMultipleTimes(Ticket<? super Event> ticket, Event product, int quantity) {
+    protected boolean addMultipleTimes(String[] args) {
+        Ticket<Product> ticket = (Ticket<Product>) this.ticketManager.getTicketById(args[0]);
+        Event product = (Event) this.productManager.getIProduct(args[1]);
+        int quantity = Integer.parseInt(args[2]);
         if(!isTheAmountValid(quantity,product)){
             CLI.print("The amount of people that will attend the event exceeds the limit.");
             return  false;

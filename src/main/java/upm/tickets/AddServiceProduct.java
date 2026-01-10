@@ -1,6 +1,7 @@
 package upm.tickets;
 
 import upm.CLI;
+import upm.Products.CustomizableProduct;
 import upm.Products.Item;
 import upm.Products.ProductService;
 
@@ -14,8 +15,13 @@ public class AddServiceProduct extends ItemAdditionHandler<ProductService>{
         return product instanceof ProductService;
     }
 
+    /**
+     * @param args [ticketId, itemId, amount, texts(if they had)]
+     */
     @Override
-    public boolean canBeAdded(Ticket<? super ProductService> ticket, ProductService service, List<String> customTexts) {
+    public boolean canBeAdded(String[] args) {
+        Ticket<ProductService> ticket = (Ticket<ProductService>) this.ticketManager.getTicketById(args[0]);
+        ProductService service = (ProductService) this.productManager.getIProduct(args[1]);
         boolean isDateValid = service.getMaxDate().isAfter(LocalDateTime.now());
         boolean isServiceInTicket = ticket.getItemsList().contains(service);
         if(isServiceInTicket){
@@ -30,7 +36,9 @@ public class AddServiceProduct extends ItemAdditionHandler<ProductService>{
     }
 
     @Override
-    protected boolean addMultipleTimes(Ticket<? super ProductService> ticket, ProductService service, int quantity) {
+    protected boolean addMultipleTimes(String[] args) {
+        Ticket<ProductService> ticket =  (Ticket<ProductService>) this.ticketManager.getTicketById(args[0]);
+        ProductService service = (ProductService) this.productManager.getIProduct(args[1]);
         return  ticket.addProductToTicket(service);
     }
 

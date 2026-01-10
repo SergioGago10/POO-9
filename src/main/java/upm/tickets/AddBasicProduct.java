@@ -12,13 +12,15 @@ public class AddBasicProduct extends ItemAdditionHandler<BasicProduct> {
     }
 
     @Override
-    public boolean canBeAdded(Ticket<? super BasicProduct> ticket, BasicProduct product, List<String> customTexts) {
-        return super.canBeAdded(ticket, product, customTexts);
+    public boolean canBeAdded(String[] args) {
+        return true;
+        //No hay restricciones de si se puede meter un basicProduct
+        //Las únicas que hay se manejan en otros lugares ya
     }
     
     @Override
-    protected boolean addMultipleTimes(Ticket<? super BasicProduct> ticket, BasicProduct product, int quantity) {
-        return super.addMultipleTimes(ticket, product, quantity);
+    protected boolean addMultipleTimes(String[] args) {
+        return super.addMultipleTimes(args);
     }
     
 }
