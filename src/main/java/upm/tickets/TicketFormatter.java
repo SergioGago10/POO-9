@@ -1,10 +1,7 @@
 package upm.tickets;
 
 import upm.CLI;
-import upm.Products.Event;
-import upm.Products.Item;
-import upm.Products.Product;
-import upm.Products.ProductService;
+import upm.Products.*;
 import upm.Users.Cash;
 import upm.Users.UserManager;
 
@@ -16,10 +13,6 @@ import java.util.*;
 public class TicketFormatter {
     private static final DateTimeFormatter TICKET_ID_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
     private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("0.0######");
-
-    public static String ticketIDFormatter(boolean isTicketIDAutoGen, String ticketID, LocalDateTime fechaApertura){
-        return isTicketIDAutoGen ? fechaApertura.format(TICKET_ID_FORMAT) + "-" + ticketID : ticketID;
-    }
 
     public void printTicketsByCash(String cashID){
         Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashID);
@@ -45,7 +38,7 @@ public class TicketFormatter {
     public<T extends Item> void printCurrentTicket(Ticket<T> ticket){
         ServiceProdDiscountCalc serProdCalc = new ServiceProdDiscountCalc();
         CategoryDiscountCalc catCalc = new CategoryDiscountCalc();
-        char ticketType = whatTypeIsTheticket(ticket);
+        boolean areProductsInTicket = false, areServicesInTicket = false;
         List<T> itemsList = ticket.getItemsList();
 
         if (itemsList.isEmpty()) {
@@ -56,7 +49,12 @@ public class TicketFormatter {
             return;
         }
 
-        if(ticketType == 'c'){
+        for(T item : itemsList){
+            if(item instanceof BasicProduct) areProductsInTicket = true;
+            if(item instanceof ProductService) areServicesInTicket = true;
+        }
+
+        if(areProductsInTicket && areServicesInTicket){
             DiscountResult discountResultCat = catCalc.calculateTotals(ticket);
             DiscountResult discountResultSerProd = serProdCalc.calculateTotals(ticket);
             Map<Product, Double> hasDiscount = catCalc.discountPerProduct(ticket);
@@ -70,11 +68,11 @@ public class TicketFormatter {
                 printProducts(prodList, hasDiscount);
             }
             printPriceValues(discountResultCat,discountResultSerProd);
-        } else if (ticketType == 's') {
+        } else if (areServicesInTicket){
             List<ProductService> serviceList = ticket.getServicesSortedById();
             CLI.print("Ticket: " + ticket.getTicketMetadata().getTicketID());
             printServices(serviceList);
-        } else{
+        } else {
             DiscountResult discountResultCat = catCalc.calculateTotals(ticket);
             Map<Product, Double> hasDiscount = catCalc.discountPerProduct(ticket);
             List<Product> productList = ticket.getProductsSortedByName();
@@ -82,19 +80,6 @@ public class TicketFormatter {
             printProducts(productList,hasDiscount);
             printPriceValues(discountResultCat);
         }
-
-    }
-
-    private char whatTypeIsTheticket(Ticket<? extends Item> ticket){
-        char type;
-        if(ticket.getTicketType()==TicketType.SERVICE){
-            type = 's';
-        } else if (ticket.getTicketType()==TicketType.PRODUCT) {
-            type = 'p';
-        } else{
-            type = 'c';
-        }
-        return type;
     }
 
     private void printServices(List<ProductService> serviceList){

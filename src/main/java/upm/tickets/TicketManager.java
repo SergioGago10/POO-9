@@ -5,7 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
+import upm.Users.Cash;
+import upm.Users.Client;
+import upm.Users.User;
+import upm.Users.UserManager;
+import upm.Utilities;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TicketManager {
@@ -38,31 +45,26 @@ public class TicketManager {
         return ticketsList.stream().anyMatch(t -> t.getTicketMetadata().getTicketID().equals(ticketId));
     }
 
-    private String generateTicketId() {
-        Random rand = new Random();
-        int num = rand.nextInt(100000); // [0 - 99999]
-        return String.format("%05d", num);
-    }
-
     public Ticket<?> newTicket(String option) {
-        String ticketId = generateTicketId();
+        String ticketId = String.valueOf(Utilities.randomNumGen(5));
         while (exists(ticketId)) {
-            ticketId = generateTicketId();
+            ticketId = String.valueOf(Utilities.randomNumGen(5));
         }
-        return newTicket(ticketId,option, true);
+        ticketId = ticketId + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm"));
+        return newTicket(ticketId,option);
     }
 
-    public Ticket<?> newTicket(String ticketId,String option, boolean isTicketIdAutoGen) {
+    public Ticket<?> newTicket(String ticketId,String option) {
         Ticket<? extends Item> ticket;
         switch (option){
             case "-c":
-                ticket = new Ticket<>(ticketId,TicketType.COMPOSITE,isTicketIdAutoGen);
+                ticket = new Ticket<>(ticketId);
                 break;
             case "-p":
-                ticket = new Ticket<Product>(ticketId, TicketType.PRODUCT, isTicketIdAutoGen);
+                ticket = new Ticket<Product>(ticketId);
                 break;
             case "-s":
-                ticket = new Ticket<ProductService>(ticketId, TicketType.SERVICE, isTicketIdAutoGen);
+                ticket = new Ticket<ProductService>(ticketId);
                 break;
             default:
                 //AQUI NUNCA VA A LLEGAR PERO ES OBLIGATORIO PARA QUE JAVA PIENSE QUE TICKET SE HA INICIALIZADO CORRECTAMENTE
@@ -74,15 +76,18 @@ public class TicketManager {
         return ticket;
     }
 
-    public void addTicket(Ticket<?> t) {
-        if (!ticketsList.contains(t)) {
-            ticketsList.add(t);
+    public void ticketCashRemover(Cash cashier){
+        UserManager clientSearch = UserManager.getInstance();
+        List <Ticket<?>> cashTickets = cashier.getTickets();
+        for (Ticket<?> currentTicket : cashTickets) {
+            this.ticketsList.remove(currentTicket); //borramos el ticket de la lista global
+            Iterator<Client> clientIt = clientSearch.getClients().iterator();
+            boolean found = false;
+            while (!found && clientIt.hasNext()) { //borramos el ticket del cliente que lo creo
+                User user = clientIt.next();
+                found = user.getTickets().remove(currentTicket);
+            }
         }
     }
 
-    public void setTicketsList(List<Ticket<?>> ticketsList) {
-        this.ticketsList.clear();
-        if (ticketsList != null)
-            this.ticketsList.addAll(ticketsList);
-    }
 }

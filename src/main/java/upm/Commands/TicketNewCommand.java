@@ -86,7 +86,7 @@ public class TicketNewCommand extends Command {
             if (ticketId == null) {
                 ticket = ticketManager.newTicket(option);
             } else {
-                ticket = ticketManager.newTicket(ticketId,option,false);
+                ticket = ticketManager.newTicket(ticketId,option);
             }
 
             cashier.addTicket(ticket);
