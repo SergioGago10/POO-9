@@ -8,10 +8,9 @@ public class ClientMapper {
     public static ClientDTO toDTO(Client client) {  //Convertir de cliente en clienteDTO
         ClientDTO dto = new ClientDTO();
         dto.name = client.getName();
-        dto.dni = client.getDni();
+        dto.dni = client.getId();
         dto.email = client.getEmail();
         dto.cashId = client.getCashId();
-        dto.type = client.getType().name();
         return dto;
     }
 
