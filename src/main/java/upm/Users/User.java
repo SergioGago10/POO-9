@@ -29,27 +29,23 @@ public abstract class User {
         this.name = name;
         this.email = email;
         this.id=id;
-        this.ticketList = new ArrayList<>();
+        this.tickets = new ArrayList<>();
     }
 
     public User(){}
 
     public List<Ticket<?>> getTickets() {
-        return new ArrayList<>(ticketList);
+        return new ArrayList<>(tickets);
     }
 
     public void addTicket(Ticket<?> ticket) {
-        if (!ticketList.contains(ticket)) {
-            ticketList.add(ticket);
+        if (!tickets.contains(ticket)) {
+            tickets.add(ticket);
         } else {
             CLI.print("That ticket already exists.");
         }
-        return resul;
     }
 
-    public List<Ticket<? extends Item>> getTickets() {
-        return tickets;
-    }
 
     public void setTickets(List<Ticket<? extends Item>> tickets) {
         this.tickets = tickets;

@@ -87,9 +87,6 @@ public class Ticket<T extends Item>{
                 .collect(Collectors.toList());
     }
 
-    public void setType(TicketType type) {
-        this.type = type;
-    }
 
     public void setItemsList(List<T> itemsList) {
         this.itemsList = itemsList;
