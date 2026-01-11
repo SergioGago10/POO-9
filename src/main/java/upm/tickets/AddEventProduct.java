@@ -18,6 +18,10 @@ public class AddEventProduct extends ItemAdditionHandler<Event> {
      */
     @Override
     public boolean canBeAdded(String[] args) {
+        Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
+        if(ticket.getTicketMetadata().getClassType().equals(ProductService.class)){
+            return false;
+        }
         Event eventProd = (Event) this.productManager.getIProduct(args[1]);
         if(doesThisProdExistinTicket(this.ticketManager.getTicketById(args[0]),eventProd)){
             CLI.print("This product (Food/Meeting) is already in the ticket. It can not be added again.");
@@ -52,7 +56,7 @@ public class AddEventProduct extends ItemAdditionHandler<Event> {
      */
     @Override
     protected boolean addMultipleTimes(String[] args) {
-        Ticket<Product> ticket = (Ticket<Product>) this.ticketManager.getTicketById(args[0]);
+        Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
         Event product = (Event) this.productManager.getIProduct(args[1]);
         int quantity = Integer.parseInt(args[2]);
         if(!isTheAmountValid(quantity,product)){

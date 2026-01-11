@@ -1,7 +1,6 @@
 package upm.tickets;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import upm.Products.*;
 
 import java.time.LocalDateTime;
@@ -14,10 +13,10 @@ public class Ticket<T extends Item>{
     private TicketMetadata ticketMetadata;
     private TicketState estado;
 
-    public Ticket(String ticketID) {
-        this.ticketMetadata = new TicketMetadata(ticketID);
+    public Ticket(String ticketID, Class<T> classType) {
+        this.ticketMetadata = new TicketMetadata(ticketID, classType);
         this.estado = TicketState.EMPTY;
-        itemsList = new ArrayList<>();
+        itemsList = Collections.checkedList(new ArrayList<>(),classType);
     }
 
     public TicketMetadata getTicketMetadata() {return ticketMetadata;}
@@ -33,14 +32,11 @@ public class Ticket<T extends Item>{
      * son gestionados por la funcion que gestiona el comando, este metodo solamente agrega el producto al ticket
      * @param product producto a poner
      */
-    public boolean addProductToTicket(T product) {
-        if (this.ticketMetadata.getNumProducts() >= MAX_PRODUCTOS && !(product instanceof ProductService)) {
+    public boolean addProductToTicket(Item product) {
+        if (this.itemsList.size() >= MAX_PRODUCTOS) {
             return false;
         }
-        itemsList.add(product);
-        if(!(product instanceof ProductService)){
-            this.ticketMetadata.setNumProducts(this.ticketMetadata.getNumProducts()+1);
-        }
+        itemsList.add((T) product);
         return true;
     }
 
@@ -55,7 +51,7 @@ public class Ticket<T extends Item>{
 
     public void removeProductFromTicket(String productID) {
         if(estado != TicketState.CLOSE){
-            Iterator<Item> it = (Iterator<Item>) itemsList.iterator();
+            Iterator<T> it = itemsList.iterator();
             while (it.hasNext()) {
                 Item p = it.next();
                 if (p.getId().equals(productID)) {

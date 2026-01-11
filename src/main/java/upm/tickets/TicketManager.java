@@ -55,22 +55,7 @@ public class TicketManager {
     }
 
     public Ticket<?> newTicket(String ticketId,String option) {
-        Ticket<? extends Item> ticket;
-        switch (option){
-            case "-c":
-                ticket = new Ticket<>(ticketId);
-                break;
-            case "-p":
-                ticket = new Ticket<Product>(ticketId);
-                break;
-            case "-s":
-                ticket = new Ticket<ProductService>(ticketId);
-                break;
-            default:
-                //AQUI NUNCA VA A LLEGAR PERO ES OBLIGATORIO PARA QUE JAVA PIENSE QUE TICKET SE HA INICIALIZADO CORRECTAMENTE
-                throw new IllegalArgumentException("Opción inválida: " + option);
-        }
-        //definimos el tipo de ticket al crearlo.
+        Ticket<?> ticket = TicketFactory.create(ticketId,option);
         ticketsList.add(ticket);
         System.out.println("Ticket: " + ticket.getTicketMetadata().getTicketID());
         return ticket;

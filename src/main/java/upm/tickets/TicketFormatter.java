@@ -50,7 +50,7 @@ public class TicketFormatter {
         }
 
         for(T item : itemsList){
-            if(item instanceof BasicProduct) areProductsInTicket = true;
+            if(item instanceof Product) areProductsInTicket = true;
             if(item instanceof ProductService) areServicesInTicket = true;
         }
 

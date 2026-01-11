@@ -2,17 +2,16 @@ package upm.tickets;
 
 public class TicketMetadata{
     private String ticketID;
-    private int numProducts;
+    private Class<?> classType;
 
-    public TicketMetadata(String ticketID) {
+    public TicketMetadata(String ticketID, Class<?> classType) {
         this.ticketID = ticketID;
-        this.numProducts = 0; //siempre tenemos un ticket vacio al inicializarlo, por lo que sera 0 al inicializarlo.
+        this.classType = classType;
     }
 
     public TicketMetadata(){}
 
     public String getTicketID() {return ticketID;}
+    public Class<?> getClassType(){return classType;}
     public void setTicketID(String ticketID) {this.ticketID = ticketID;}
-    public int getNumProducts(){return numProducts;}
-    public void setNumProducts(int numProducts){this.numProducts=numProducts;}
 }

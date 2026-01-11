@@ -4,6 +4,7 @@ import upm.CLI;
 import upm.Products.CustomizableProduct;
 import upm.Products.Item;
 import upm.Products.Product;
+import upm.Products.ProductService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +23,10 @@ public class AddCustomProduct extends ItemAdditionHandler<CustomizableProduct> {
      */
     @Override
     public boolean canBeAdded(String[] args) {
+        Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
+        if(ticket.getTicketMetadata().getClassType().equals(ProductService.class)){
+            return false;
+        }
         CustomizableProduct product = (CustomizableProduct) this.productManager.getIProduct(args[1]);
         List<String> textsToAdd = null;
         if(args.length > 3){
@@ -50,7 +55,7 @@ public class AddCustomProduct extends ItemAdditionHandler<CustomizableProduct> {
      */
     @Override
     protected boolean addMultipleTimes(String[] args) {
-        Ticket<Product> ticket = (Ticket<Product>) this.ticketManager.getTicketById(args[0]);
+        Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
         int quantity = Integer.parseInt(args[2]);
         boolean prodAdded = true;
         boolean addedOnce = false;
