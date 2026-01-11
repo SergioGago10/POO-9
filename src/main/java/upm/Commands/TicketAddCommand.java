@@ -63,8 +63,8 @@ public class TicketAddCommand extends Command {
             //comando está mal
             String[] texts = null;
             if(args.length > 6){
-                // Arrays.toString(Arrays.copyOfRange(args,7,args.length)) nos da desde --p hasta donde se hayan terminado las customizaciones
-                texts = parseCustomizations(Arrays.copyOfRange(args,7,args.length));
+                // Arrays.toString(Arrays.copyOfRange(args,6,args.length)) nos da desde --p hasta donde se hayan terminado las customizaciones
+                texts = parseCustomizations(Arrays.copyOfRange(args,6,args.length));
                 if(texts == null) return true;
             }
 

@@ -93,7 +93,7 @@ public class TicketFormatter {
         CLI.print("Product included:");
         for (Product currentItem : productList) {
             if(currentItem instanceof Event){
-                CLI.print(((Event) currentItem).toTicketString());
+                CLI.printText(((Event) currentItem).toTicketString());
             } else{
                 CLI.printText(currentItem.toString());
             }
@@ -104,6 +104,9 @@ public class TicketFormatter {
                 double priceAfterDiscount = currentItem.getPrice() * hasDiscount.get(currentItem);
                 double discountAmount = currentItem.getPrice() - priceAfterDiscount;
                 System.out.printf(" **Discount -%s%n", PRICE_FORMAT.format(discountAmount));
+            } else {
+                //Aplicamos un salto de linea para el foramto ya que si no tiene descuento, no lo hace
+                System.out.println();
             }
         }
     }
