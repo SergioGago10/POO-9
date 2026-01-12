@@ -1,16 +1,15 @@
-package upm.tickets;
+package upm.tickets.items.addition;
 
 import upm.CLI;
 import upm.Products.CustomizableProduct;
 import upm.Products.Item;
-import upm.Products.Product;
-import upm.Products.ProductService;
+import upm.tickets.core.Ticket;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddCustomProduct extends ItemAdditionHandler<CustomizableProduct> {
+public class AddCustomProduct extends ItemAdditionStrategy<CustomizableProduct> {
     private CustomizableProduct prodCustAux;
 
     @Override
@@ -23,10 +22,6 @@ public class AddCustomProduct extends ItemAdditionHandler<CustomizableProduct> {
      */
     @Override
     public boolean canBeAdded(String[] args) {
-        Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
-        if(ticket.getTicketMetadata().getClassType().equals(ProductService.class)){
-            return false;
-        }
         CustomizableProduct product = (CustomizableProduct) this.productManager.getIProduct(args[1]);
         List<String> textsToAdd = null;
         if(args.length > 3){
@@ -57,18 +52,21 @@ public class AddCustomProduct extends ItemAdditionHandler<CustomizableProduct> {
     protected boolean addMultipleTimes(String[] args) {
         Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
         int quantity = Integer.parseInt(args[2]);
-        boolean prodAdded = true;
-        boolean addedOnce = false;
+        boolean canAddMore = true;
+        boolean addedAtLeastOne = false;
 
-        for (int i = 0; i < quantity && prodAdded; i++) {
-            prodAdded = ticket.addProductToTicket(this.prodCustAux);
-            addedOnce = addedOnce || prodAdded;
+        for (int i = 0; i < quantity && canAddMore; i++) {
+            canAddMore = ticket.tryToAdd(this.prodCustAux);
+
+            if (canAddMore) {
+                addedAtLeastOne = true;
+            }
         }
 
-        if (!prodAdded) {
+        if (ticket.getItemsList().size() >= ticket.getTicketMetadata().getMAX_PRODS_IN_TICKET()) {
             CLI.print("You can't add more products to the ticket. Try to make a new one if needed.");
         }
-        return addedOnce;
+        return addedAtLeastOne;
     }
     
 }

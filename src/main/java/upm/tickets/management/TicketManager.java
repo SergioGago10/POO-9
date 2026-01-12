@@ -1,15 +1,14 @@
-package upm.tickets;
+package upm.tickets.management;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import upm.Products.Item;
-import upm.Products.Product;
-import upm.Products.ProductService;
 import upm.Users.Cash;
 import upm.Users.Client;
 import upm.Users.User;
 import upm.Users.UserManager;
 import upm.Utilities;
+import upm.tickets.core.TicketFactory;
+import upm.tickets.core.Ticket;
+import upm.tickets.format.TicketFormatter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -57,7 +56,6 @@ public class TicketManager {
     public Ticket<?> newTicket(String ticketId,String option) {
         Ticket<?> ticket = TicketFactory.create(ticketId,option);
         ticketsList.add(ticket);
-        System.out.println("Ticket: " + ticket.getTicketMetadata().getTicketID());
         return ticket;
     }
 

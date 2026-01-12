@@ -1,16 +1,21 @@
-package upm.tickets;
+package upm.tickets.format;
 
 import upm.CLI;
 import upm.Products.*;
 import upm.Users.Cash;
 import upm.Users.UserManager;
+import upm.tickets.core.*;
+import upm.tickets.discount.CategoryDiscountCalc;
+import upm.tickets.discount.DiscountResult;
+import upm.tickets.discount.ServiceProdDiscountCalc;
+import upm.tickets.management.TicketManager;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class TicketFormatter {
+public class TicketFormatter implements TicketRenderer {
     private static final DateTimeFormatter TICKET_ID_FORMAT = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
     private static final DecimalFormat PRICE_FORMAT = new DecimalFormat("0.0######");
 
@@ -35,51 +40,47 @@ public class TicketFormatter {
         }
     }
 
-    public<T extends Item> void printCurrentTicket(Ticket<T> ticket){
-        ServiceProdDiscountCalc serProdCalc = new ServiceProdDiscountCalc();
+    public void printCurrentTicket(Ticket<?> ticket){
         CategoryDiscountCalc catCalc = new CategoryDiscountCalc();
-        boolean areProductsInTicket = false, areServicesInTicket = false;
-        List<T> itemsList = ticket.getItemsList();
 
-        if (itemsList.isEmpty()) {
-            //la lista está vacía, imprimimos solo el precio siendo este 0.0 y ya
-            //da igual el descuento que apliquemos, sera siempre 0 ya que no hay nada
-            DiscountResult discountInEmptyList = catCalc.calculateTotals(ticket);
-            printPriceValues(discountInEmptyList);
-            return;
+        //Obtenemos el contenido del ticket ya filtrado y sorted
+        TicketContent content = ticket.getSortedContent();
+
+        Map<Product, Double> hasDiscount = catCalc.discountPerProduct(ticket);
+
+
+        CLI.print("Ticket: " + ticket.getTicketMetadata().getTicketID());
+
+        if (!content.getServices().isEmpty()) {
+            printServices(content.getServices());
         }
 
-        for(T item : itemsList){
-            if(item instanceof Product) areProductsInTicket = true;
-            if(item instanceof ProductService) areServicesInTicket = true;
+        if (!content.getProducts().isEmpty()) {
+            printProducts(content.getProducts(), hasDiscount);
         }
 
-        if(areProductsInTicket && areServicesInTicket){
-            DiscountResult discountResultCat = catCalc.calculateTotals(ticket);
-            DiscountResult discountResultSerProd = serProdCalc.calculateTotals(ticket);
-            Map<Product, Double> hasDiscount = catCalc.discountPerProduct(ticket);
-            List<ProductService> serviceList = ticket.getServicesSortedById();
-            List<Product> prodList = ticket.getProductsSortedByName();
-            CLI.print("Ticket: " + ticket.getTicketMetadata().getTicketID());
-            if(!serviceList.isEmpty()){
-                printServices(serviceList);
-            }
-            if(!prodList.isEmpty()){
-                printProducts(prodList, hasDiscount);
-            }
-            printPriceValues(discountResultCat,discountResultSerProd);
-        } else if (areServicesInTicket){
-            List<ProductService> serviceList = ticket.getServicesSortedById();
-            CLI.print("Ticket: " + ticket.getTicketMetadata().getTicketID());
-            printServices(serviceList);
-        } else {
-            DiscountResult discountResultCat = catCalc.calculateTotals(ticket);
-            Map<Product, Double> hasDiscount = catCalc.discountPerProduct(ticket);
-            List<Product> productList = ticket.getProductsSortedByName();
-            CLI.print("Ticket : " + ticket.getTicketMetadata().getTicketID());
-            printProducts(productList,hasDiscount);
-            printPriceValues(discountResultCat);
-        }
+
+        //Aplicamos el double-dispatcher
+        ticket.accept(this);
+    }
+
+    //Esta tecnica se llama double dispatcher, es un patron de dise;o
+    @Override
+    public void renderPrices(ProductTicket ticket) {
+        DiscountResult res = new CategoryDiscountCalc().calculateTotals(ticket);
+        printPriceValues(res); // El formato simple
+    }
+
+    @Override
+    public void renderPrices(CommonTicket ticket) {
+        DiscountResult resCat = new CategoryDiscountCalc().calculateTotals(ticket);
+        DiscountResult resSer = new ServiceProdDiscountCalc().calculateTotals(ticket);
+        printPriceValues(resCat, resSer); // El formato mixto
+    }
+
+    @Override
+    public void renderPrices(ServiceTicket ticket) {
+        // Si el ticket es de servicios no se imprime nada
     }
 
     private void printServices(List<ProductService> serviceList){

@@ -3,7 +3,7 @@ package upm.Commands;
 import upm.CLI;
 import upm.Users.Cash;
 import upm.Users.UserManager;
-import upm.tickets.TicketManager;
+import upm.tickets.management.TicketManager;
 
 public class CashTicketCommand extends Command {
 

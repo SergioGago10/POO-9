@@ -1,7 +1,6 @@
 package upm;
 
 import upm.Commands.*;
-import upm.tickets.TicketManager;
 
 import java.util.ArrayList;
 import java.util.List;

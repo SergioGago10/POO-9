@@ -2,9 +2,9 @@ package upm.Commands;
 
 import upm.Users.Cash;
 import upm.Users.UserManager;
-import upm.tickets.Ticket;
-import upm.tickets.TicketManager;
-import upm.tickets.TicketState;
+import upm.tickets.core.Ticket;
+import upm.tickets.management.TicketManager;
+import upm.tickets.core.TicketState;
 
 public class TicketPrintCommand extends Command{
 

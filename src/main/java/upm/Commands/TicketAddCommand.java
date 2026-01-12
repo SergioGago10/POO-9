@@ -4,7 +4,10 @@ import upm.CLI;
 import upm.Products.*;
 import upm.Users.Cash;
 import upm.Users.UserManager;
-import upm.tickets.*;
+import upm.tickets.core.Ticket;
+import upm.tickets.core.TicketState;
+import upm.tickets.items.addition.ItemAdditionManager;
+import upm.tickets.management.TicketManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +57,7 @@ public class TicketAddCommand extends Command {
                 return true;
             }
 
-            if(ticketAModificar.getEstado()==TicketState.CLOSE){
+            if(ticketAModificar.getEstado()== TicketState.CLOSE){
                 System.err.println("Error: Ticket " + ticketId + " is closed, and no products can be added to it.");
                 return true;
             }
@@ -82,6 +85,7 @@ public class TicketAddCommand extends Command {
                 //Lo convertimos a String[]
                 String[] argsNeeded = argsNeededHelper.toArray(new String[0]);
                 ItemAdditionManager additionManager = new ItemAdditionManager();
+
                 boolean handled = additionManager.process(argsNeeded);
 
                 if(!handled){

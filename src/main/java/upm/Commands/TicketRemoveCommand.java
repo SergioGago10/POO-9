@@ -3,8 +3,8 @@ package upm.Commands;
 import upm.Products.ProductManager;
 import upm.Users.Cash;
 import upm.Users.UserManager;
-import upm.tickets.Ticket;
-import upm.tickets.TicketManager;
+import upm.tickets.core.Ticket;
+import upm.tickets.management.TicketManager;
 
 public class TicketRemoveCommand  extends Command{
 
@@ -24,7 +24,7 @@ public class TicketRemoveCommand  extends Command{
                 TicketManager ticketManager=TicketManager.getInstance();
                 String prodId = args[4];
                 if (productManager.idExists(prodId)) {
-                    Ticket ticketAModificar = ticketManager.getTicketById(ticketId); //Si es null es que no existe dicho ticketId!
+                    Ticket<?> ticketAModificar = ticketManager.getTicketById(ticketId); //Si es null es que no existe dicho ticketId!
                     if(ticketAModificar == null){
                         System.err.println("Error: Ticket " + ticketId + " does not exist.");
                     } else {

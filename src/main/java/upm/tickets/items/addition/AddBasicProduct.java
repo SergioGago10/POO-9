@@ -1,11 +1,7 @@
-package upm.tickets;
+package upm.tickets.items.addition;
 import upm.Products.BasicProduct;
 import upm.Products.Item;
-import upm.Products.ProductService;
-
-import java.util.List;
-
-public class AddBasicProduct extends ItemAdditionHandler<BasicProduct> {
+public class AddBasicProduct extends ItemAdditionStrategy<BasicProduct> {
 
     @Override
     public boolean canHandle(Item product){
@@ -14,8 +10,7 @@ public class AddBasicProduct extends ItemAdditionHandler<BasicProduct> {
 
     @Override
     public boolean canBeAdded(String[] args) {
-        Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
-        return !ticket.getTicketMetadata().getClassType().equals(ProductService.class);
+        return true;
     }
     
     @Override

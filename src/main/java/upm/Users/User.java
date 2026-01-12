@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import upm.CLI;
 import upm.Products.Item;
-import upm.tickets.Ticket;
+import upm.tickets.core.Ticket;
 
 import java.util.ArrayList;
 import java.util.List;

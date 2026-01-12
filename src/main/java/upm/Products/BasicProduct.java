@@ -1,5 +1,7 @@
 package upm.Products;
 
+import upm.tickets.core.Ticket;
+
 public class BasicProduct extends Product {
     protected Category category;
     public BasicProduct(){}
@@ -29,6 +31,11 @@ public class BasicProduct extends Product {
         sb.append(",Category:").append(category);
         sb.append(",price:").append(String.format("%.2f", price)).append("}");
         return sb.toString();
+    }
+    @Override
+    public boolean addTo(Ticket<?> ticket) {
+        // Al pasar 'this', el ticket recibe un objeto de tipo BasicProduct
+        return ticket.addSpecificProduct(this);
     }
 }
 

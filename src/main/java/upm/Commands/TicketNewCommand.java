@@ -2,8 +2,8 @@ package upm.Commands;
 
 import upm.CLI;
 import upm.Users.*;
-import upm.tickets.Ticket;
-import upm.tickets.TicketManager;
+import upm.tickets.core.Ticket;
+import upm.tickets.management.TicketManager;
 
 import java.util.Objects;
 

@@ -1,4 +1,4 @@
-package upm.tickets;
+package upm.tickets.discount;
 
 public class DiscountResult {
     private final double totalWithout;

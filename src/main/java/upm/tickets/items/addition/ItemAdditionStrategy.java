@@ -1,13 +1,12 @@
-package upm.tickets;
+package upm.tickets.items.addition;
 import upm.CLI;
 import upm.Products.Item;
 import upm.Products.ProductManager;
+import upm.tickets.core.Ticket;
+import upm.tickets.management.TicketManager;
 
-import java.util.Arrays;
-import java.util.List;
-
-public abstract class ItemAdditionHandler<T extends Item>{
-    protected  TicketManager ticketManager = TicketManager.getInstance();
+public abstract class ItemAdditionStrategy<T extends Item>{
+    protected TicketManager ticketManager = TicketManager.getInstance();
     protected ProductManager productManager = ProductManager.getInstance();
 
     /**
@@ -32,18 +31,20 @@ public abstract class ItemAdditionHandler<T extends Item>{
      * @param args [ticketId, itemId, amount, texts(if they had)]
      */
     protected boolean addMultipleTimes(String[] args) {
-        Ticket<T> ticket = (Ticket<T>) ticketManager.getTicketById(args[0]);
-        T item = (T) productManager.getIProduct(args[1]);
+        Ticket<?> ticket = ticketManager.getTicketById(args[0]);
+        Item item =  productManager.getIProduct(args[1]);
         int quantity = Integer.parseInt(args[2]);
-        boolean prodAdded = true;
+        boolean canContinueAdding = true;
         boolean addedOnce = false;
 
-        for (int i = 0; i < quantity && prodAdded; i++) {
-            prodAdded = ticket.addProductToTicket(item);
-            addedOnce = addedOnce || prodAdded;
+        for (int i = 0; i < quantity && canContinueAdding; i++) {
+            canContinueAdding = ticket.tryToAdd(item);
+            if (canContinueAdding) {
+                addedOnce = true;
+            }
         }
 
-        if (!prodAdded) {
+        if (ticket.getItemsList().size() >= ticket.getTicketMetadata().getMAX_PRODS_IN_TICKET()) {
             CLI.print("You can't add more products to the ticket. Try to make a new one if needed.");
         }
         return addedOnce;

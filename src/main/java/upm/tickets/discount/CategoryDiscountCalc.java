@@ -1,9 +1,10 @@
-    package upm.tickets;
+    package upm.tickets.discount;
 
     import upm.Products.BasicProduct;
     import upm.Products.Item;
     import upm.Products.Product;
     import upm.Products.Category;
+    import upm.tickets.core.Ticket;
 
     import java.util.EnumMap;
     import java.util.HashMap;
@@ -27,8 +28,7 @@
             double totalWithout = 0.0;
             double totalWith = 0.0;
             for (Item product : ticket.getItemsList()) {
-                if (product instanceof Product) {
-                    Product productAdder = (Product) product;
+                if (product instanceof Product productAdder) {
                     double price = productAdder.getPrice();
                     totalWithout += price;
                     totalWith += price * discounts.get(productAdder);
@@ -48,11 +48,9 @@
             Map<Category, Integer> categoryCounter = countProductsByCategory(itemList);
             Map<Product, Double> discountMap = new HashMap<>();
             for (Item item : itemList) {
-                if (item instanceof Product) {
-                    Product product = (Product) item;
+                if (item instanceof Product product) {
                     double factor = 1.0; // Valor por defecto
-                    if (product instanceof BasicProduct) {
-                        BasicProduct bp = (BasicProduct) product;
+                    if (product instanceof BasicProduct bp) {
                         Category category = bp.getCategory();
                         if (categoryCounter.get(category) >= 2) {
                             factor = whatDiscountToApply(category);

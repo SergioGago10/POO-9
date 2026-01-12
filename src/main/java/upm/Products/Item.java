@@ -2,6 +2,7 @@ package upm.Products;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import upm.tickets.core.Ticket;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -19,5 +20,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 })
 public interface Item {
     String getId();
+    boolean addTo(Ticket<?> ticket);
 
 }

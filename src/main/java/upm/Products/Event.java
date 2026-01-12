@@ -1,5 +1,7 @@
 package upm.Products;
 
+import upm.tickets.core.Ticket;
+
 import java.time.LocalDateTime;
 
 //hay que poner minutos
@@ -68,4 +70,8 @@ public class Event extends Product {
     public LocalDateTime getCreationDate() {return creationDate;}
     public int getActualParticipants() {return actualParticipants;}
 
+    @Override
+    public boolean addTo(Ticket<?> ticket) {
+        return ticket.addSpecificProduct(this);
+    }
 }

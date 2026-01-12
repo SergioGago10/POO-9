@@ -1,10 +1,9 @@
 package upm.Users;
 
- import upm.tickets.TicketManager;
+ import upm.tickets.management.TicketManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
+ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;

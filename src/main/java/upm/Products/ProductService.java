@@ -2,6 +2,7 @@ package upm.Products;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import upm.tickets.core.Ticket;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -44,6 +45,12 @@ public class ProductService implements Item {
         sb.append(", expiration:").append(formattedDate);
         sb.append("}");
         return sb.toString();
+    }
+
+    @Override
+    public boolean addTo(Ticket<?> ticket) {
+        // Al pasar 'this', el ticket recibe un objeto de tipo ProductService
+        return ticket.addSpecificService(this);
     }
 
     public ServiceCategory getCategory() {

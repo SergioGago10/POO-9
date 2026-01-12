@@ -1,12 +1,11 @@
-package upm.tickets;
+package upm.tickets.items.addition;
 import upm.CLI;
 import upm.Products.*;
+import upm.tickets.core.Ticket;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class AddEventProduct extends ItemAdditionHandler<Event> {
-    private Event eventAux;
+public class AddEventProduct extends ItemAdditionStrategy<Event> {
 
     @Override
     public boolean canHandle(Item product){
@@ -18,10 +17,6 @@ public class AddEventProduct extends ItemAdditionHandler<Event> {
      */
     @Override
     public boolean canBeAdded(String[] args) {
-        Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
-        if(ticket.getTicketMetadata().getClassType().equals(ProductService.class)){
-            return false;
-        }
         Event eventProd = (Event) this.productManager.getIProduct(args[1]);
         if(doesThisProdExistinTicket(this.ticketManager.getTicketById(args[0]),eventProd)){
             CLI.print("This product (Food/Meeting) is already in the ticket. It can not be added again.");
@@ -65,10 +60,10 @@ public class AddEventProduct extends ItemAdditionHandler<Event> {
         }
 
         double actualPrice = product.getPrice()*quantity;
-        this.eventAux = new Event(product.getId(), product.getName(), actualPrice,product.getCreationDate(),
-                                  product.getPlannedDate(), product.getMaxParticipants(),product.getTypeEvent(), quantity);
+        Event eventAux = new Event(product.getId(), product.getName(), actualPrice, product.getCreationDate(),
+                product.getPlannedDate(), product.getMaxParticipants(), product.getTypeEvent(), quantity);
 
-        boolean wasTheEventAdded = ticket.addProductToTicket(this.eventAux);
+        boolean wasTheEventAdded = ticket.tryToAdd(eventAux);
         if (!wasTheEventAdded) {
             CLI.print("The event could not be added, the max number of products has been reached.");
         }

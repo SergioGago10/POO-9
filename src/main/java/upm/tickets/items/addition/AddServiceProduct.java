@@ -1,15 +1,13 @@
-package upm.tickets;
+package upm.tickets.items.addition;
 
 import upm.CLI;
-import upm.Products.CustomizableProduct;
 import upm.Products.Item;
-import upm.Products.Product;
 import upm.Products.ProductService;
+import upm.tickets.core.Ticket;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-public class AddServiceProduct extends ItemAdditionHandler<ProductService>{
+public class AddServiceProduct extends ItemAdditionStrategy<ProductService> {
 
     @Override
     public boolean canHandle(Item product){
@@ -22,9 +20,6 @@ public class AddServiceProduct extends ItemAdditionHandler<ProductService>{
     @Override
     public boolean canBeAdded(String[] args) {
         Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
-        if(ticket.getTicketMetadata().getClassType().equals(Product.class)){
-            return false;
-        }
         ProductService service = (ProductService) this.productManager.getIProduct(args[1]);
         boolean isDateValid = service.getMaxDate().isAfter(LocalDateTime.now());
         boolean isServiceInTicket = ticket.getItemsList().contains(service);
@@ -43,7 +38,7 @@ public class AddServiceProduct extends ItemAdditionHandler<ProductService>{
     protected boolean addMultipleTimes(String[] args) {
         Ticket<? extends Item> ticket =  this.ticketManager.getTicketById(args[0]);
         ProductService service = (ProductService) this.productManager.getIProduct(args[1]);
-        return  ticket.addProductToTicket(service);
+        return  ticket.tryToAdd(service);
     }
 
 }

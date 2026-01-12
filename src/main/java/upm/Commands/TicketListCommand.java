@@ -1,6 +1,6 @@
 package upm.Commands;
 
-import upm.tickets.TicketManager;
+import upm.tickets.management.TicketManager;
 
 public class TicketListCommand extends Command{
 

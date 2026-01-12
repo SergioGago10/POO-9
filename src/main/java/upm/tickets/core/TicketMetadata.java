@@ -1,17 +1,17 @@
-package upm.tickets;
+package upm.tickets.core;
 
 public class TicketMetadata{
     private String ticketID;
-    private Class<?> classType;
+    private  int MAX_PRODS_IN_TICKET;
 
-    public TicketMetadata(String ticketID, Class<?> classType) {
+    public TicketMetadata(String ticketID, int MAX_PROD) {
         this.ticketID = ticketID;
-        this.classType = classType;
+        this.MAX_PRODS_IN_TICKET = MAX_PROD;
     }
 
     public TicketMetadata(){}
 
     public String getTicketID() {return ticketID;}
-    public Class<?> getClassType(){return classType;}
+    public int getMAX_PRODS_IN_TICKET(){return this.MAX_PRODS_IN_TICKET;}
     public void setTicketID(String ticketID) {this.ticketID = ticketID;}
 }

@@ -1,13 +1,12 @@
-package upm.tickets;
+package upm.tickets.items.addition;
 
-import upm.Products.Item;
 import upm.Products.ProductManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemAdditionManager {
-    private final List<ItemAdditionHandler<?>> handlers = new ArrayList<>();
+    private final List<ItemAdditionStrategy<?>> handlers = new ArrayList<>();
 
     public ItemAdditionManager() {
         handlers.add(new AddEventProduct());
@@ -20,10 +19,10 @@ public class ItemAdditionManager {
      *
      * @param args [ticketId, itemId, amount, texts(if they had)]
      */
-    public<T extends Item> boolean process(String[] args) {
+    public boolean process(String[] args) {
       try{
           ProductManager productManager = ProductManager.getInstance();
-          for (ItemAdditionHandler<?> handler : handlers) {
+          for (ItemAdditionStrategy<?> handler : handlers) {
               if (handler.canHandle(productManager.getIProduct(args[1]))) {
                   // Intentamos añadirlo las veces que quantity pida
                   // y gestionará sus propios errores lógicos (poner más prods de los que se puedan meter, ...)

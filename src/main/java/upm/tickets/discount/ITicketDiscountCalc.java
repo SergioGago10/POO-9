@@ -1,6 +1,7 @@
-package upm.tickets;
+package upm.tickets.discount;
 
 import upm.Products.Item;
+import upm.tickets.core.Ticket;
 
 public interface ITicketDiscountCalc{
     //Interfaz que usaremos para aplicar cualquier "estrategia" de descuentos, ya que en un futuro pueden cambiar

@@ -1,8 +1,9 @@
-package upm.tickets;
+package upm.tickets.discount;
 
 import upm.Products.Item;
 import upm.Products.Product;
 import upm.Products.ProductService;
+import upm.tickets.core.Ticket;
 
 public class ServiceProdDiscountCalc implements ITicketDiscountCalc {
 
@@ -23,7 +24,7 @@ public class ServiceProdDiscountCalc implements ITicketDiscountCalc {
         }
         double percentagetToApply = 0.15 * numberOfServices;
         if(percentagetToApply >= 1) percentagetToApply = 1;
-        //si es 1 o mayor a 1, lo dejamos en 1 y resultara en que todo sera gratis.
+        //si es 1 o mayor a 1, lo dejamos en 1 y resultara en que t.odo sera gratis.
         double totalDiscount = percentagetToApply * totalWithout;
         totalWith = totalWithout - totalDiscount;
         return new DiscountResult(totalWithout,totalWith,totalDiscount);
