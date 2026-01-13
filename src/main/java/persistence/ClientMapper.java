@@ -1,7 +1,7 @@
 package persistence;
 
-import upm.Users.Client;
-import upm.Users.TypeClient;
+import upm.users.Client;
+import upm.users.TypeClient;
 
 public class ClientMapper {
 

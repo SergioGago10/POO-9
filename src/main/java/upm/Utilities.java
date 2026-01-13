@@ -1,6 +1,6 @@
 package upm;
 
-import upm.Products.*;
+import upm.products.*;
 
 import java.util.*;
 
