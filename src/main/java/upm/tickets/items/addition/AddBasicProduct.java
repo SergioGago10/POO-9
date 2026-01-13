@@ -1,6 +1,6 @@
 package upm.tickets.items.addition;
-import upm.Products.BasicProduct;
-import upm.Products.Item;
+import upm.products.BasicProduct;
+import upm.products.Item;
 public class AddBasicProduct extends ItemAdditionStrategy<BasicProduct> {
 
     @Override

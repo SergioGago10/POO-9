@@ -1,10 +1,10 @@
 package upm.tickets.management;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import upm.Users.Cash;
-import upm.Users.Client;
-import upm.Users.User;
-import upm.Users.UserManager;
+import upm.users.Cash;
+import upm.users.Client;
+import upm.users.User;
+import upm.users.UserManager;
 import upm.Utilities;
 import upm.tickets.core.TicketFactory;
 import upm.tickets.core.Ticket;

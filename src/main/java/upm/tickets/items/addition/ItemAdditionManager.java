@@ -1,6 +1,6 @@
 package upm.tickets.items.addition;
 
-import upm.Products.ProductManager;
+import upm.products.ProductManager;
 
 import java.util.ArrayList;
 import java.util.List;

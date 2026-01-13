@@ -1,6 +1,6 @@
 package upm.tickets.core;
 
-import upm.Products.Item;
+import upm.products.Item;
 
 public class TicketFactory {
     public static Ticket<? extends Item> create(String ticketId, String option) {

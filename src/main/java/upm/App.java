@@ -1,6 +1,12 @@
 package upm;
 
-import upm.Commands.*;
+import upm.commands.cash.CashCommands;
+import upm.commands.client.ClientCommands;
+import upm.commands.common.CommandEcho;
+import upm.commands.common.CommandHelp;
+import upm.commands.core.Command;
+import upm.commands.product.ProdCommands;
+import upm.commands.ticket.TicketCommands;
 
 import java.util.ArrayList;
 import java.util.List;

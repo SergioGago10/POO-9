@@ -1,6 +1,6 @@
 package upm.tickets.discount;
 
-import upm.Products.Item;
+import upm.products.Item;
 import upm.tickets.core.Ticket;
 
 public interface ITicketDiscountCalc{

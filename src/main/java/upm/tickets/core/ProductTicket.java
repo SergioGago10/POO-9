@@ -1,6 +1,6 @@
 package upm.tickets.core;
 
-import upm.Products.Product;
+import upm.products.Product;
 
 import java.util.Collections;
 import java.util.Comparator;

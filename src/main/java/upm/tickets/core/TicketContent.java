@@ -1,7 +1,7 @@
 package upm.tickets.core;
 
-import upm.Products.Product;
-import upm.Products.ProductService;
+import upm.products.Product;
+import upm.products.ProductService;
 import java.util.List;
 
 public class TicketContent {

@@ -1,9 +1,9 @@
 package upm.tickets.format;
 
 import upm.CLI;
-import upm.Products.*;
-import upm.Users.Cash;
-import upm.Users.UserManager;
+import upm.products.*;
+import upm.users.Cash;
+import upm.users.UserManager;
 import upm.tickets.core.*;
 import upm.tickets.discount.CategoryDiscountCalc;
 import upm.tickets.discount.DiscountResult;

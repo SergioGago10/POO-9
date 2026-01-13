@@ -1,6 +1,6 @@
 package upm.tickets.core;
 
-import upm.Products.*;
+import upm.products.*;
 import upm.tickets.format.TicketFormatter;
 
 import java.time.LocalDateTime;

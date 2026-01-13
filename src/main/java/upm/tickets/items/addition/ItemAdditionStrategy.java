@@ -1,7 +1,7 @@
 package upm.tickets.items.addition;
 import upm.CLI;
-import upm.Products.Item;
-import upm.Products.ProductManager;
+import upm.products.Item;
+import upm.products.ProductManager;
 import upm.tickets.core.Ticket;
 import upm.tickets.management.TicketManager;
 

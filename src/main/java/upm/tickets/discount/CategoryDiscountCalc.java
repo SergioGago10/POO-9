@@ -1,9 +1,9 @@
     package upm.tickets.discount;
 
-    import upm.Products.BasicProduct;
-    import upm.Products.Item;
-    import upm.Products.Product;
-    import upm.Products.Category;
+    import upm.products.BasicProduct;
+    import upm.products.Item;
+    import upm.products.Product;
+    import upm.products.Category;
     import upm.tickets.core.Ticket;
 
     import java.util.EnumMap;

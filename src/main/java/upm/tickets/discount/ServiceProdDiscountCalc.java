@@ -1,8 +1,8 @@
 package upm.tickets.discount;
 
-import upm.Products.Item;
-import upm.Products.Product;
-import upm.Products.ProductService;
+import upm.products.Item;
+import upm.products.Product;
+import upm.products.ProductService;
 import upm.tickets.core.Ticket;
 
 public class ServiceProdDiscountCalc implements ITicketDiscountCalc {

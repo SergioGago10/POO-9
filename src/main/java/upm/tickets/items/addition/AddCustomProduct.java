@@ -1,8 +1,8 @@
 package upm.tickets.items.addition;
 
 import upm.CLI;
-import upm.Products.CustomizableProduct;
-import upm.Products.Item;
+import upm.products.CustomizableProduct;
+import upm.products.Item;
 import upm.tickets.core.Ticket;
 
 import java.util.ArrayList;
