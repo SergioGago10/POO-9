@@ -26,6 +26,8 @@ public class ProdAddFoodCommand extends Command {
             try {
                 int i = 2;
                 String id;
+                String name;
+                double price;
                 Product product;
                 ProductManager productManager=ProductManager.getInstance();
                 if (args[i].contains("\"")) {
@@ -34,9 +36,19 @@ public class ProdAddFoodCommand extends Command {
                     id = args[i];
                     i++;
                 }
-                String name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
+                if(args[i].contains("\""))
+                    name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
+                else {
+                    CLI.print("Name must be between quotes (\" \")");
+                    return false;
+                }
                 i++;
-                double price = Double.parseDouble(args[i]);
+                try {
+                    price = Double.parseDouble(args[i]);
+                } catch (NumberFormatException ex) {
+                    CLI.print("Price must be double");
+                    return false;
+                }
                 i++;
                 String[] dateStr = args[i].split("-");
                 int expirationYear = Integer.parseInt(dateStr[0]);
@@ -50,7 +62,7 @@ public class ProdAddFoodCommand extends Command {
                     return true;
                 }
                 i++;
-                if (Utilities.isValidProd(Integer.parseInt(id), name, price)) {
+                if (Utilities.isValidProd(id, name, price)) {
                     if (i == args.length - 1) {
                         String[] creationDateStr = args[i].split("-");
                         int creationYear = Integer.parseInt(creationDateStr[0]);
@@ -80,8 +92,7 @@ public class ProdAddFoodCommand extends Command {
                 }
 
             } catch (NumberFormatException ex) {
-                CLI.print("Id and max personalization must be integer and price must be double," +
-                        "date format: yyyy-MM-dd");
+                CLI.print("Expiration date must have the next format: yyyy-mm-dd");
             }
         }
         return true;
