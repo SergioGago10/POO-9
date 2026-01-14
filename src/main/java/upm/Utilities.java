@@ -1,8 +1,9 @@
 package upm;
 
-import upm.products.*;
+import upm.products.BasicProduct;
+import upm.products.ProductManager;
 
-import java.util.*;
+import java.util.Random;
 
 public class Utilities {
 
@@ -21,7 +22,7 @@ public class Utilities {
         return "UW" + randomNumGen(7);
     }
 
-    public static int randomNumGen(int howManyDigits){
+    public static int randomNumGen(int howManyDigits) {
         return switch (howManyDigits) {
             case 1 -> new Random().nextInt(10); // 0 a 9
             // return 1 + new Random().nextInt(9); // 1 a 9
@@ -38,9 +39,17 @@ public class Utilities {
     }
 
 
-    public static boolean isValidProd(int id, String name, double price) {
+    public static boolean isValidProd(String id, String name, double price) {
         boolean resul = true;
-        if (id < 0 ) {
+        int idNum;
+        double priceNum;
+        try {
+            idNum = Integer.parseInt(id);
+        } catch (NumberFormatException ex) {
+            CLI.print("Id must be a number");
+            return false;
+        }
+        if (idNum < 0) {
             CLI.print("Id must be positive.");
             return false;
         }
