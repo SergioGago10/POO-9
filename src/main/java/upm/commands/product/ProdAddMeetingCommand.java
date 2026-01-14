@@ -49,7 +49,7 @@ public class ProdAddMeetingCommand extends Command {
                     return true;
                 }
                 i++;
-                if (Utilities.isValidProd(Integer.parseInt(id), name, price)) {
+                if (Utilities.isValidProd(id, name, price)) {
                     if (i == args.length - 1) {
                         String[] creationDateStr = args[i].split("-");
                         int creationYear = Integer.parseInt(creationDateStr[0]);

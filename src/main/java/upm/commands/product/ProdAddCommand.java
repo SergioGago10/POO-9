@@ -65,7 +65,7 @@ public class ProdAddCommand extends Command {
                     i++;
                     price = Double.parseDouble(args[i]);
                     i++;
-                    if (Utilities.isValidProd(Integer.parseInt(id), name, price)) {
+                    if (Utilities.isValidProd(id, name, price)) {
                         if (i == args.length - 1) {
                             int maxPers = Integer.parseInt(args[i]);
                             product = new CustomizableProduct(id, name, category, price, maxPers);

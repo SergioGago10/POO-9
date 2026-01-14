@@ -20,6 +20,10 @@ public abstract class Ticket<T extends Item>{
         this.estado = TicketState.EMPTY;
     }
 
+    //Para el json
+    public Ticket() {}
+
+
     public TicketMetadata getTicketMetadata() {return ticketMetadata;}
     public TicketState getEstado(){return estado;}
     public List<T> getItemsList() {
