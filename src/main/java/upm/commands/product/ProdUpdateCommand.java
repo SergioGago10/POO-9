@@ -21,7 +21,7 @@ public class ProdUpdateCommand extends Command {
                     switch (args[3].toUpperCase()) {
                         case "NAME":
                             if (args[4].length() > ProductManager.MAX_CHAR_NAME)
-                                CLI.print("Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
+                                CLI.printErrorNextLine("Error -> Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
                             Product productToChange = (Product) (product);
                             productToChange.setName("'" + args[4].trim().replaceAll("^([\"'])|([\"'])$", "") + "'");
                             applied = true;
@@ -29,7 +29,7 @@ public class ProdUpdateCommand extends Command {
                         case "PRICE":
                             Product productToChange2 = (Product) (product);
                             if (Double.parseDouble(args[4]) < 0)
-                                CLI.print("Price must be positive");
+                                CLI.printErrorNextLine("Error -> Price must be positive");
                             else
                                 productToChange2.setPrice(Double.parseDouble(args[4]));
                             applied = true;
@@ -43,17 +43,17 @@ public class ProdUpdateCommand extends Command {
                                     ((ProductService) product).setCategory(ServiceCategory.valueOf(args[4]));
                                     applied = true;
                                 }else{
-                                    CLI.print("That type of product doesnt have category.");
+                                    CLI.printErrorNextLine("Error -> That type of product doesn't have category.");
                                 }
                             }
                     }
                     if (applied) {
-                        CLI.print(product.toString());
-                        CLI.print("prod update: ok");
+                        CLI.printNextLine(product.toString());
+                        CLI.printNextLine("prod update: ok");
                     }
                 }
             } catch (IllegalArgumentException ignored) {
-                CLI.print("Category must be: MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC in Basic/Custom Products," +
+                CLI.print("Error -> Category must be: MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC in Basic/Custom Products," +
                         "or: INSURANCE, TRANSPORT or SHOW in Services");
             }
         }

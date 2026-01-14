@@ -1,5 +1,6 @@
 package upm.commands.ticket;
 
+import upm.CLI;
 import upm.commands.core.Command;
 import upm.users.Cash;
 import upm.users.UserManager;
@@ -17,7 +18,7 @@ public class TicketPrintCommand extends Command {
     public boolean apply(String[] args) {
         try {
             if(args.length!= 4){
-                System.err.println("Usage: ticket print <ticketId> <cashId>");
+                CLI.printErrorNextLine("Error -> format must be: ticket print <ticketId> <cashId>");
             } else{
                 String ticketId = args[2];
                 String cashId = args[3];
@@ -26,21 +27,20 @@ public class TicketPrintCommand extends Command {
                 if(ticketAMostrar != null){
                     Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
                     if(!cashUser.getTickets().contains(ticketAMostrar)){
-                        System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
+                        CLI.printErrorNextLine("Error -> Ticket " + ticketId + " does not belong to cashier " + cashId);
                     } else{
-                        //todo revisar el hecho de cerrar aqui o en otro lado
                         if(ticketAMostrar.getEstado() != TicketState.EMPTY){
                             ticketAMostrar.closeTicket();
                         }
                         ticketManager.getFormatter().printFinalTicket(ticketAMostrar);
-                        System.out.println("ticket print: ok");
+                        CLI.printNextLine("ticket print: ok");
                     }
                 } else{
-                    System.err.println("Error: Ticket " + ticketId + " does not exist.");
+                    CLI.printErrorNextLine("Error -> Ticket with id: " + ticketId + " does not exist.");
                 }
             }
         } catch (Exception e) {
-            System.err.println("Error printing ticket: " + e.getMessage());
+            CLI.printErrorNextLine("Error -> Ticket could not be printed: " + e.getMessage());
         }
         return true;
     }

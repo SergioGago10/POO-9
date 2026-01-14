@@ -1,4 +1,4 @@
-package upm.tickets.items.addition;
+package upm.tickets.itemsaddition;
 
 import upm.CLI;
 import upm.products.Item;

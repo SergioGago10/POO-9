@@ -18,23 +18,23 @@ public class ProdListCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length < 2) {
-            CLI.print("Format must be: prod list");
+            CLI.printErrorNextLine("Error -> format must be: prod list");
             return true;
         }
         ProductManager productManager=ProductManager.getInstance();
         List<Product> catalog = productManager.getCatalogProducts();
         List<ProductService> services=productManager.getCatalogServices();
         if (catalog.isEmpty()&& services.isEmpty()){
-            CLI.print("Catalog is empty");
+            CLI.printErrorNextLine("Error -> Catalog is empty");
         }else {
             CLI.print("Catalog:");
             for (Item product : catalog) {
-                CLI.print(product.toString());
+                CLI.printNextLine(product.toString());
             }
             for (ProductService service : services) {
-                CLI.print(service.toString());
+                CLI.printNextLine(service.toString());
             }
-            CLI.print("prod list: ok");
+            CLI.printNextLine("prod list: ok");
         }
         return true;
     }
