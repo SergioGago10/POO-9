@@ -20,7 +20,7 @@ public class ProdAddFoodCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length < 6) {
-            CLI.print("Format must be: " +
+            CLI.printErrorNextLine("Error -> Format must be: " +
                     "prod addFood [<id>] \"< name>\" <price> <expiration: yyyy-MM-dd> <max_people>");
         } else {
             try {
@@ -46,7 +46,7 @@ public class ProdAddFoodCommand extends Command {
                 i++;
                 int maxPeople = Integer.parseInt(args[i]);
                 if (maxPeople > 100) {
-                    CLI.print("Error processing ->prod addFood ->Error adding product");
+                    CLI.printErrorNextLine("Error processing ->prod addFood ->Error adding product");
                     return true;
                 }
                 i++;
@@ -61,26 +61,26 @@ public class ProdAddFoodCommand extends Command {
                         LocalDateTime creationDate = LocalDateTime.of(creationYear, creationMonth, creationDay,
                                 creationHour, creationMinute);
                         if (creationDate.plusDays(3).isAfter(date)) {
-                            CLI.print("The meeting should be planned at least 3 days before");
+                            CLI.printErrorNextLine("Error -> The meeting should be planned at least 3 days before");
                             return true;
                         }
 
                         product = new Event(id, name, price, creationDate, date, maxPeople, TypeEvent.FOOD);
                     } else {
                         if (LocalDateTime.now().plusDays(3).isAfter(date)) {
-                            CLI.print("The meeting should be planned at least 3 days before");
+                            CLI.printErrorNextLine("Error -> The meeting should be planned at least 3 days before");
                             return true;
                         } else
                             product = new Event(id, name, price, date, maxPeople, TypeEvent.FOOD);
                     }
                     if (productManager.addProduct(product)) {
-                        CLI.print(product.toString());
-                        CLI.print("prod addFood: ok");
+                        CLI.printNextLine(product.toString());
+                        CLI.printNextLine("prod addFood: ok");
                     }
                 }
 
             } catch (NumberFormatException ex) {
-                CLI.print("Id and max personalization must be integer and price must be double," +
+                CLI.printErrorNextLine("Error -> Id and max personalization must be integer and price must be double," +
                         "date format: yyyy-MM-dd");
             }
         }

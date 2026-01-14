@@ -1,6 +1,7 @@
 package upm.commands.common;
 
 
+import upm.CLI;
 import upm.commands.core.Command;
 
 public class CommandEcho extends Command {
@@ -28,7 +29,7 @@ public class CommandEcho extends Command {
         // Quitamos las comillas: "texto" → texto
         if (rawText.length() >= 2 && rawText.startsWith("\"") && rawText.endsWith("\"")) {
             String text = rawText.substring(1, rawText.length() - 1);
-            System.out.println(text);
+            CLI.printNextLine(text);
             return true;
         }
 

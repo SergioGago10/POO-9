@@ -16,12 +16,12 @@ public class ClientAddCommand extends Command {
         boolean applied = false;
         UserManager userManager = UserManager.getInstance();
         if (args.length < 6) {
-            System.out.println("Format must be: client add \"<name>\" <DNI> <email> <cashId>");
+            CLI.printErrorNextLine("Error -> Format must be: client add \"<name>\" <DNI> <email> <cashId>");
         }
 
         String rawName = args[2];
         if (!(rawName.startsWith("\"") && rawName.endsWith("\""))) {
-            CLI.print("The name must be enclosed in quotes.");
+            CLI.printNextLine("Error -> The name must be enclosed in quotes.");
         }
 
         try {
@@ -40,11 +40,11 @@ public class ClientAddCommand extends Command {
             TypeClient type;
 
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-                CLI.print("Invalid email format.");
+                CLI.printErrorNextLine("Error -> Invalid email format.");
             }
 
             if (!userManager.idExists(cashierId)) {
-                CLI.print("Cashier ID does not exist.");
+                CLI.printErrorNextLine("Error -> Cashier ID does not exist.");
             }
             if (Character.isDigit(identificator.charAt(identificator.length() - 1)))
                 type = TypeClient.COMPANY;
@@ -53,15 +53,15 @@ public class ClientAddCommand extends Command {
             Client client = new Client(name, identificator, email, cashierId,type);
 
             if (userManager.addClient(client)) {
-                System.out.println(client.toString());
-                System.out.println("client add: ok");
+                CLI.printNextLine(client.toString());
+                CLI.printNextLine("client add: ok");
                 applied = true;
             } else {
-                CLI.print("Client could not be added.");
+                CLI.printErrorNextLine("Error -> Client could not be added.");
             }
 
         } catch (Exception ex) {
-            CLI.print("Error adding client.");
+            CLI.printErrorNextLine("Error -> client could not be added: " + ex.getMessage());
         }
 
         return applied;

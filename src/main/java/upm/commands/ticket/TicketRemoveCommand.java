@@ -1,5 +1,6 @@
 package upm.commands.ticket;
 
+import upm.CLI;
 import upm.commands.core.Command;
 import upm.products.ProductManager;
 import upm.users.Cash;
@@ -16,7 +17,7 @@ public class TicketRemoveCommand  extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length != 5) {
-            System.err.println("Usage: ticket remove <ticketId> <cashId> <prodId>");
+            CLI.printErrorNextLine("Error -> format must be: ticket remove <ticketId> <cashId> <prodId>");
         } else {
             try {
                 String ticketId = args[2];
@@ -27,23 +28,23 @@ public class TicketRemoveCommand  extends Command {
                 if (productManager.idExists(prodId)) {
                     Ticket<?> ticketAModificar = ticketManager.getTicketById(ticketId); //Si es null es que no existe dicho ticketId!
                     if(ticketAModificar == null){
-                        System.err.println("Error: Ticket " + ticketId + " does not exist.");
+                        CLI.printErrorNextLine("Error -> Ticket with id: " + ticketId + " does not exist.");
                     } else {
                         Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
                         if(!cashUser.getTickets().contains(ticketAModificar)){
-                            System.err.println("Error: Ticket " + ticketId + " does not belong to cashier " + cashId);
+                            CLI.printErrorNextLine("Error -> Ticket: " + ticketId + " does not belong to cashier " + cashId);
                         }else {
                             ticketAModificar.removeProductFromTicket(prodId);
                             ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
-                            System.out.println("ticket remove: ok");
+                            CLI.printNextLine("ticket remove: ok");
                         }
                     }
                 } else
-                    System.out.println("Product with the id " + prodId + " was not found.");
+                    CLI.printErrorNextLine("Error -> Product with the id: " + prodId + " was not found.");
             } catch (NumberFormatException e) {
-                System.err.println("prodId must be an integer.");
+                CLI.printErrorNextLine("Error -> prodId must be an integer.");
             } catch (Exception e) {
-                System.err.println("Error removing product from ticket: " + e.getMessage());
+                CLI.printErrorNextLine("Error -> product could not be removed from the ticket: " + e.getMessage());
             }
         }
         return true;

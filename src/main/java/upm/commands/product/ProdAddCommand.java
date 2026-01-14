@@ -18,7 +18,7 @@ public class ProdAddCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length < 4) {
-            CLI.print("Format must be: prod add ([<id>] \"<name>\" <category> <price> [<maxPers>]) || " +
+            CLI.printErrorNextLine("Error -> Format must be: prod add ([<id>] \"<name>\" <category> <price> [<maxPers>]) || " +
                     "(\"<expiration:yyyy-MM-dd>\" <category> )");
         } else {
             try {
@@ -37,11 +37,11 @@ public class ProdAddCommand extends Command {
                     if (LocalDateTime.now().isBefore(date)) {
                         service = new ProductService(id, serviceCategory, date);
                         productManager.addService(service);
-                        CLI.print(service.toString());
-                        CLI.print("prod add:ok");
+                        CLI.printNextLine(service.toString());
+                        CLI.printNextLine("prod add:ok");
                         return true;
                     } else{
-                        CLI.print("The service must have a date that has not passed.");
+                        CLI.printErrorNextLine("Error -> The service must have a date that has not passed.");
                     }
                 } else {
                     int i = 2;
@@ -57,7 +57,7 @@ public class ProdAddCommand extends Command {
                     }
                     name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
                     if (name.length() > ProductManager.MAX_CHAR_NAME) {
-                        CLI.print("name length must be lower than" + ProductManager.MAX_CHAR_NAME);
+                        CLI.printErrorNextLine("Error -> name length must be lower than" + ProductManager.MAX_CHAR_NAME);
                         return true;
                     }
                     i++;
@@ -73,15 +73,15 @@ public class ProdAddCommand extends Command {
                             product = new BasicProduct(id, name, category, price);
                         if (productManager.addProduct(product)) {
                             productManager.getCatalogProducts().sort(Comparator.comparingInt(p -> Integer.parseInt(p.getId())));
-                            CLI.print(product.toString());
-                            CLI.print("prod add:ok");
+                            CLI.printNextLine(product.toString());
+                            CLI.printNextLine("prod add:ok");
                         }
                     }
                 }
             } catch (NumberFormatException ex) {
-                CLI.print("Max personalization must be integer and price must be double");
+                CLI.printErrorNextLine("Error -> Max personalization must be integer and price must be double");
             } catch (IllegalArgumentException exc) {
-                CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
+                CLI.printErrorNextLine("Error -> Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
             }
         }
         return true;

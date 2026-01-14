@@ -3,6 +3,7 @@ package persistence;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import persistence.StoreDTO;
+import upm.CLI;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -21,7 +22,7 @@ public class PersistenceManager {
             gson.toJson(store, writer);
             writer.close();
         } catch (Exception e) {
-            System.out.println("Error guardando datos");
+            CLI.printErrorNextLine("Error guardando datos");
         }
     }
 

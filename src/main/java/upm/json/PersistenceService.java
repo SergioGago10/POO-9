@@ -3,6 +3,7 @@ package upm.json;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import upm.CLI;
 import upm.products.*;
 import upm.tickets.management.TicketManager;
 import upm.users.*;
@@ -57,15 +58,15 @@ public final class PersistenceService {
         TicketManager tm=TicketManager.getInstance();
         load();
         for(Client client : userManager.getClients()){
-            System.out.println(client.toString());
-            System.out.println(client.getTickets());
+            CLI.printNextLine(client.toString());
+            CLI.printNextLine(client.getTickets().toString());
         }
         for(Cash cash : userManager.getCash()){
-            System.out.println(cash.toString());
-            System.out.println(cash.getTickets());
+            CLI.printNextLine(cash.toString());
+            CLI.printNextLine(cash.getTickets().toString());
         }
         for(Product product : productManager.getCatalogProducts()){
-            System.out.println(product.toString());
+            CLI.printNextLine(product.toString());
         }
     }
 

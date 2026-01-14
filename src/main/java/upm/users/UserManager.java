@@ -1,5 +1,6 @@
 package upm.users;
 
+ import upm.CLI;
  import upm.tickets.management.TicketManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -48,12 +49,12 @@ public class UserManager {
 
     public boolean addCash(Cash cash) {
         if (cash == null) {
-            System.out.println("Cashier couldn't be created");
+            CLI.printNextLine("Cashier couldn't be created");
             return false;
         }
         for (Cash c : cashList) {
             if (c.getId().equals(cash.getId())) {
-                System.out.println("Cashier already exist");
+                CLI.printNextLine("Cashier already exist");
                 return false;
             }
         }

@@ -1,5 +1,6 @@
 package upm.tickets.core;
 
+import upm.CLI;
 import upm.products.*;
 import upm.tickets.format.TicketFormatter;
 
@@ -63,7 +64,7 @@ public abstract class Ticket<T extends Item>{
                 estado = TicketState.EMPTY;
             }
         } else {
-            System.out.println("This ticket has been closed. You can't add or remove products from it.");
+            CLI.printNextLine("This ticket has been closed. You can't add or remove products from it.");
         }
     }
 }

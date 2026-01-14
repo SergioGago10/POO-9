@@ -15,7 +15,7 @@ public class CashTicketCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length < 3) {
-            CLI.print("Format of instruction: cash list");
+            CLI.printErrorNextLine("Error -> Format must be: cash list");
             return false;
         }
 
@@ -24,16 +24,16 @@ public class CashTicketCommand extends Command {
             UserManager userManager=UserManager.getInstance();
             Cash cash = (Cash) userManager.getUserByID(cashIdentifier);
             if (cash == null) {
-                CLI.print("Cash not found.");
+                CLI.printErrorNextLine("Error -> Cash not found.");
                 return false;
             }
             TicketManager ticketManager=TicketManager.getInstance();
             ticketManager.getFormatter().printTicketsByCash(cashIdentifier);
-            CLI.print("cash tickets: ok");
+            CLI.printNextLine("cash tickets: ok");
             return true;
 
         } catch (ClassCastException ex) {
-            CLI.print("Id doesnt belong to a cashier, it belongs to a Client.");
+            CLI.printErrorNextLine("Error -> Id doesnt belong to a cashier, it belongs to a Client.");
             return false;
         }
     }

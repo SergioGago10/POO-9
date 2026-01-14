@@ -19,16 +19,16 @@ public class ProdRemoveCommand extends Command {
                 ProductManager productManager=ProductManager.getInstance();
                 Item productRemoved = productManager.getIProduct(id);
                 if (productRemoved != null && productManager.remove(id)) { //Esto ya directamente comprueba si se puede eliminar o no por lo que no importa no comprobarlo antes
-                    CLI.print(productRemoved.toString());
-                    CLI.print("prod remove:ok");
+                    CLI.printNextLine(productRemoved.toString());
+                    CLI.printNextLine("prod remove: ok");
                 } else {
-                    CLI.print("The product with the id:" + id + " couldn't be removed. Product not found.");
+                    CLI.printErrorNextLine("Error -> The product with the id:" + id + " couldn't be removed. Product not found.");
                 }
             } catch (NumberFormatException exception) {
-                CLI.print("Id must be an integer number.");
+                CLI.printErrorNextLine("Error -> Id must be an integer number.");
             }
         } else {
-            CLI.print("Format must be: prod remove <id>");
+            CLI.printErrorNextLine("Error -> Format must be: prod remove <id>");
         }
         return applied;
     }
