@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @JsonIgnoreProperties({"type"})
+
 public class ProductService implements Item {
     private String id;
     private ServiceCategory category;

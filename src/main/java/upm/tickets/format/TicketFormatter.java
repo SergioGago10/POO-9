@@ -94,9 +94,9 @@ public class TicketFormatter implements TicketRenderer {
         CLI.print("Product included:");
         for (Product currentItem : productList) {
             if(currentItem instanceof Event){
-                CLI.printText(((Event) currentItem).toTicketString());
+                CLI.print(((Event) currentItem).toTicketString());
             } else{
-                CLI.printText(currentItem.toString());
+                CLI.print(currentItem.toString());
             }
             // Si el descuento no es igual a 1.0, el producto tiene descuento
             boolean hasAnyDiscount = (hasDiscount.get(currentItem)!=1.0);

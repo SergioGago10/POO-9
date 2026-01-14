@@ -1,11 +1,13 @@
 package upm.users;
 
-public class Client extends User {
+public class Client extends upm.users.User {
     private String cashId;
     private TypeClient typeClient;
+    private String dni;
 
     public Client(String name, String dni, String email, String cashId, TypeClient typeClient) {
-        super(name, email, dni);
+        super(name, email, dni); // id del User == dni
+        this.dni = dni;
         this.cashId = cashId;
         this.typeClient = typeClient;
     }
@@ -31,4 +33,13 @@ public class Client extends User {
     public void setCashId(String cashId) {
         this.cashId = cashId;
     }
+
+    public String getName() {
+        return name;
+    }
+    public String getEmail() {
+        return email;
+    }
+    @Override
+    public String getId() {return dni;}
 }

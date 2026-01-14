@@ -20,11 +20,11 @@ public class CLI {
         return resul;
     }
 
-    public static void print(String message) {
+    public static void printNextLine(String message) {
         System.out.println(message);
     }
 
-    public static void printText(String message) {
+    public static void print(String message) {
         System.out.print(message);
     }
 
