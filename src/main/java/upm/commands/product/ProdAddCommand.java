@@ -26,7 +26,7 @@ public class ProdAddCommand extends Command {
                 ServiceCategory serviceCategory;
                 ProductService service;
                 ProductManager productManager = ProductManager.getInstance();
-                if (args[2].contains("-")) {
+                if (args.length==4) {
                     id = productManager.generateNewServiceId();
                     String[] dateStr = args[2].split("-");
                     int expirationYear = Integer.parseInt(dateStr[0]);
@@ -64,10 +64,6 @@ public class ProdAddCommand extends Command {
                     category = Category.valueOf(args[i]);
                     i++;
                     price = Double.parseDouble(args[i]);
-                    if (price < 0) {
-                        CLI.print("Price must be positive");
-                        return true;
-                    }
                     i++;
                     if (Utilities.isValidProd(Integer.parseInt(id), name, price)) {
                         if (i == args.length - 1) {

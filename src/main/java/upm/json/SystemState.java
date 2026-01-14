@@ -1,4 +1,4 @@
-package upm.JSON;
+package upm.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import upm.products.Product;
@@ -6,7 +6,6 @@ import upm.products.ProductService;
 import upm.tickets.core.Ticket;
 import upm.users.Client;
 import upm.users.Cash;
-import upm.tickets.*;
 
 import java.util.ArrayList;
 import java.util.List;

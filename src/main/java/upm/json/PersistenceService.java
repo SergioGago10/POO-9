@@ -1,11 +1,9 @@
-package upm.JSON;
+package upm.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import upm.products.*;
-import upm.tickets.*;
-import upm.tickets.core.Ticket;
 import upm.tickets.management.TicketManager;
 import upm.users.*;
 
