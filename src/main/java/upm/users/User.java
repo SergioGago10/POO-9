@@ -34,6 +34,10 @@ public abstract class User {
 
     public User(){}
 
+    public boolean removeTicket(Ticket<? extends Item> ticket) {
+        return tickets.remove(ticket);
+    }
+
     public void addTicket(Ticket<?> ticket) {
         if (!tickets.contains(ticket)) {
             tickets.add(ticket);

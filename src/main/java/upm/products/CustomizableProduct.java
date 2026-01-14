@@ -8,7 +8,10 @@ public class CustomizableProduct extends BasicProduct {
     private int maxCustomTexts;
     private List<String> customTexts;
 
-
+    public CustomizableProduct() {
+        super();
+        this.customTexts = new ArrayList<>();
+    }
     public CustomizableProduct(String id, String name, Category category, double price, int maxCustomTexts) {
         super(id, name, category, price);
         this.maxCustomTexts = maxCustomTexts;

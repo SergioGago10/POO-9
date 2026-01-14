@@ -1,0 +1,50 @@
+{
+  "products" : [ {
+    "type" : "BasicProduct",
+    "id" : "1",
+    "name" : "Troteras y danceras",
+    "price" : 12.0,
+    "category" : "BOOK"
+  }, {
+    "type" : "BasicProduct",
+    "id" : "2",
+    "name" : "Chaqueta",
+    "price" : 20.0,
+    "category" : "CLOTHES"
+  } ],
+  "services" : [ {
+    "type" : "service",
+    "id" : "1",
+    "category" : "TRANSPORT",
+    "maxDate" : "2026-01-14T17:31:02"
+  }, {
+    "type" : "service",
+    "id" : "2",
+    "category" : "INSURANCE",
+    "maxDate" : "2026-01-14T17:31:02"
+  } ],
+  "clients" : [ {
+    "type" : "client",
+    "id" : "00000000N",
+    "name" : "Saul",
+    "email" : "saul@gmail.com",
+    "tickets" : [ ],
+    "cashId" : "00000W",
+    "typeClient" : "CLIENT"
+  }, {
+    "type" : "client",
+    "id" : "00000011H",
+    "name" : "Jesus",
+    "email" : "jesus@gmail.com",
+    "tickets" : [ ],
+    "cashId" : "00000W",
+    "typeClient" : "COMPANY"
+  } ],
+  "cash" : [ {
+    "type" : "cashier",
+    "id" : "00000W",
+    "name" : "Saul",
+    "tickets" : [ ]
+  } ],
+  "tickets" : [ ]
+}

@@ -12,6 +12,9 @@ public class ServiceTicket extends Ticket<ProductService>{
     public ServiceTicket(String ticketID) {
         super(ticketID);
     }
+    public ServiceTicket() {
+        super();
+    }
 
     @Override
     public void accept(TicketRenderer renderer) {

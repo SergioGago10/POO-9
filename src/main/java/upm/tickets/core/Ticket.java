@@ -1,10 +1,23 @@
 package upm.tickets.core;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import upm.products.*;
 import upm.tickets.format.TicketFormatter;
 
 import java.time.LocalDateTime;
 import java.util.*;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "ticketType"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = CommonTicket.class, name = "common"),
+        @JsonSubTypes.Type(value = ProductTicket.class, name = "product"),
+        @JsonSubTypes.Type(value = ServiceTicket.class, name = "service")
+})
 
 public abstract class Ticket<T extends Item>{
     private final static int MAX_PRODUCTOS = 100;
@@ -17,6 +30,9 @@ public abstract class Ticket<T extends Item>{
     public Ticket(String ticketID) {
         this.ticketMetadata = new TicketMetadata(ticketID, MAX_PRODUCTOS);
         this.estado = TicketState.EMPTY;
+    }
+    protected Ticket() {
+        this.itemsList = new ArrayList<>();
     }
 
     public TicketMetadata getTicketMetadata() {return ticketMetadata;}

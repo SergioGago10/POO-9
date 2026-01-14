@@ -11,7 +11,9 @@ public class ProductTicket extends Ticket<Product> {
     public ProductTicket(String ticketID) {
         super(ticketID);
     }
-
+    public ProductTicket() {
+        super(); // Jackson
+    }
     @Override
     public TicketContent getSortedContent() {
         List<Product> sorted = itemsList.stream()
