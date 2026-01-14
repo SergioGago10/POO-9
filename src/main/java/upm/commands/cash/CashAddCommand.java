@@ -14,7 +14,7 @@ public class CashAddCommand extends Command {
     public boolean apply(String[] args) {
         boolean applied = false;
         if (args.length < 4) {
-            System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
+            CLI.printErrorNextLine("Error -> Format must be: cash add [<identifier>] \"<name>\" <email>");
             return false;
         }
 
@@ -35,14 +35,14 @@ public class CashAddCommand extends Command {
             rawName = args[i];
             i++;
             if (i >= args.length) {
-                System.out.println("Format must be: cash add [<identifier>] \"<name>\" <email>");
+                CLI.printErrorNextLine("Error -> Format must be: cash add [<identifier>] \"<name>\" <email>");
                 return true;
             }
             email = args[i];
         }
 
         if (!(rawName.startsWith("\"") && rawName.endsWith("\""))) {
-            CLI.print("The name must be enclosed in quotes.");
+            CLI.printErrorNextLine("Error -> The name must be enclosed in quotes.");
             return true;
         }
 
@@ -63,21 +63,21 @@ public class CashAddCommand extends Command {
                     .trim();
 
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
-                CLI.print("Invalid email format.");
+                CLI.printErrorNextLine("Error -> Invalid email format.");
                 return false;
             }
 
             Cash cash = new Cash(identifier, name, email);
 
             if (userManager.addCash(cash)) {
-                System.out.println(cash.toString());
-                System.out.println("cash add: ok");
+                CLI.printNextLine(cash.toString());
+                CLI.printNextLine("cash add: ok");
                 applied = true;
             } else {
-                System.err.println("Cashier couldn't be added.");
+                CLI.printErrorNextLine("Error -> Cashier couldn't be added.");
             }
         } catch (Exception ex) {
-            System.out.println("Error: Invalid parameters.");
+            CLI.printErrorNextLine("Error -> Invalid parameters.");
         }
 
         return applied;

@@ -1,6 +1,7 @@
 package upm.commands.common;
 
 
+import upm.CLI;
 import upm.commands.core.Command;
 
 public class CommandHelp extends Command {
@@ -26,31 +27,33 @@ public class CommandHelp extends Command {
     }
 
     private void printHelp() {
-        System.out.println("Commands:\n" +
-                "  client add \"<nombre>\" <DNI> <email> <cashId>\n" +
-                "  client remove <DNI>\n" +
-                "  client list\n" +
-                "  cash add [<id>] \"<nombre>\"<email>\n" +
-                "  cash remove <id>\n" +
-                "  cash list\n" +
-                "  cash tickets <id>\n" +
-                "  ticket new [<id>] <cashId> <userId>\n" +
-                "  ticket add <ticketId><cashId> <prodId> <amount> [--p<txt> --p<txt>] \n" +
-                "  ticket remove <ticketId><cashId> <prodId> \n" +
-                "  ticket print <ticketId> <cashId> \n" +
-                "  ticket list\n" +
-                "  prod add <id> \"<name>\" <category> <price>\n" +
-                "  prod update <id> NAME|CATEGORY|PRICE <value>\n" +
-                "  prod addFood [<id>] \"<name>\" <price> <expiration:yyyy-MM-dd> <max_people>\n" +
-                "  prod addMeeting [<id>] \"<name>\" <price> <expiration:yyyy-MM-dd> <max_people>\n" +
-                "  prod list\n" +
-                "  prod remove <id>\n" +
-                "  help\n" +
-                "  echo “<text>” \n" +
-                "  exit\n" +
-                "\n" +
-                "Categories: MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS\n" +
-                "Discounts if there are ≥2 units in the category: MERCH 0%, STATIONERY 5%, CLOTHES 7%, BOOK 10%, ELECTRONICS 3%.\n");
+        CLI.printNextLine("""
+                Commands:
+                  client add "<nombre>" <DNI> <email> <cashId>
+                  client remove <DNI>
+                  client list
+                  cash add [<id>] "<nombre>"<email>
+                  cash remove <id>
+                  cash list
+                  cash tickets <id>
+                  ticket new [<id>] <cashId> <userId>
+                  ticket add <ticketId><cashId> <prodId> <amount> [--p<txt> --p<txt>]\s
+                  ticket remove <ticketId><cashId> <prodId>\s
+                  ticket print <ticketId> <cashId>\s
+                  ticket list
+                  prod add <id> "<name>" <category> <price>
+                  prod update <id> NAME|CATEGORY|PRICE <value>
+                  prod addFood [<id>] "<name>" <price> <expiration:yyyy-MM-dd> <max_people>
+                  prod addMeeting [<id>] "<name>" <price> <expiration:yyyy-MM-dd> <max_people>
+                  prod list
+                  prod remove <id>
+                  help
+                  echo “<text>”\s
+                  exit
+                
+                Categories: MERCH, STATIONERY, CLOTHES, BOOK, ELECTRONICS
+                Discounts if there are ≥2 units in the category: MERCH 0%, STATIONERY 5%, CLOTHES 7%, BOOK 10%, ELECTRONICS 3%.
+                """);
     }
 }
 

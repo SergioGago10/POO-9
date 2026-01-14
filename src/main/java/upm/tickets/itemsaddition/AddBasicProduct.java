@@ -1,4 +1,4 @@
-package upm.tickets.items.addition;
+package upm.tickets.itemsaddition;
 import upm.products.BasicProduct;
 import upm.products.Item;
 public class AddBasicProduct extends ItemAdditionStrategy<BasicProduct> {
