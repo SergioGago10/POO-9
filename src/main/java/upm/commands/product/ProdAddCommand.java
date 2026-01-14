@@ -1,9 +1,9 @@
 package upm.commands.product;
 
 import upm.CLI;
+import upm.Utilities;
 import upm.commands.core.Command;
 import upm.products.*;
-import upm.Utilities;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,7 +26,7 @@ public class ProdAddCommand extends Command {
                 ServiceCategory serviceCategory;
                 ProductService service;
                 ProductManager productManager = ProductManager.getInstance();
-                if (args.length==4) {
+                if (args.length == 4) {
                     id = productManager.generateNewServiceId();
                     String[] dateStr = args[2].split("-");
                     int expirationYear = Integer.parseInt(dateStr[0]);
@@ -40,7 +40,7 @@ public class ProdAddCommand extends Command {
                         CLI.print(service.toString());
                         CLI.print("prod add:ok");
                         return true;
-                    } else{
+                    } else {
                         CLI.print("The service must have a date that has not passed.");
                     }
                 } else {
@@ -55,17 +55,28 @@ public class ProdAddCommand extends Command {
                         id = args[i];
                         i++;
                     }
-                    name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
-                    if (name.length() > ProductManager.MAX_CHAR_NAME) {
-                        CLI.print("name length must be lower than" + ProductManager.MAX_CHAR_NAME);
-                        return true;
+                    if(args[i].contains("\""))
+                        name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
+                    else {
+                        CLI.print("Name must be between quotes (\" \")");
+                        return false;
                     }
                     i++;
-                    category = Category.valueOf(args[i]);
+                    try {
+                        category = Category.valueOf(args[i]);
+                    } catch (IllegalArgumentException exc) {
+                        CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
+                        return false;
+                    }
                     i++;
-                    price = Double.parseDouble(args[i]);
+                    try {
+                        price = Double.parseDouble(args[i]);
+                    } catch (NumberFormatException ex) {
+                        CLI.print("Price must be double");
+                        return false;
+                    }
                     i++;
-                    if (Utilities.isValidProd(Integer.parseInt(id), name, price)) {
+                    if (Utilities.isValidProd(id, name, price)) {
                         if (i == args.length - 1) {
                             int maxPers = Integer.parseInt(args[i]);
                             product = new CustomizableProduct(id, name, category, price, maxPers);
@@ -79,9 +90,7 @@ public class ProdAddCommand extends Command {
                     }
                 }
             } catch (NumberFormatException ex) {
-                CLI.print("Max personalization must be integer and price must be double");
-            } catch (IllegalArgumentException exc) {
-                CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
+                CLI.print("Max personalization must be integer");
             }
         }
         return true;
