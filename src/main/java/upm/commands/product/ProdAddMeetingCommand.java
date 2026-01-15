@@ -8,6 +8,7 @@ import upm.products.Product;
 import upm.products.ProductManager;
 import upm.products.TypeEvent;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -28,6 +29,7 @@ public class ProdAddMeetingCommand extends Command {
                 String name;
                 double price;
                 Product product;
+                int maxPeople;
                 ProductManager productManager = ProductManager.getInstance();
                 if (args[i].contains("\"")) {
                     id = productManager.generateNewProductId();
@@ -55,7 +57,12 @@ public class ProdAddMeetingCommand extends Command {
                 int expirationDay = Integer.parseInt(dateStr[2]);
                 LocalDateTime date = LocalDate.of(expirationYear, expirationMonth, expirationDay).atStartOfDay();
                 i++;
-                int maxPeople = Integer.parseInt(args[i]);
+                try {
+                    maxPeople = Integer.parseInt(args[i]);
+                } catch (NumberFormatException exc) {
+                    CLI.print("Max people must be an integer number.");
+                    return false;
+                }
                 if (maxPeople > 100) {
                     CLI.print("Error processing ->prod addMeeting ->Error adding product");
                     return true;
@@ -89,7 +96,7 @@ public class ProdAddMeetingCommand extends Command {
                     }
                 }
 
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException | DateTimeException | ArrayIndexOutOfBoundsException ex) {
                 CLI.print("Expiration date must have the next format: yyyy-mm-dd");
                 return true;
             }

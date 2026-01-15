@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import upm.commands.product.ProdAddCommand;
 import upm.commands.product.ProdAddFoodCommand;
+import upm.commands.product.ProdAddMeetingCommand;
+import upm.commands.product.ProdCommands;
 import upm.products.*;
 
 import java.io.ByteArrayOutputStream;
@@ -29,7 +31,7 @@ public class ItemTests {
 
     @Test
     public void createBasicProduct() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 1 \"Libro POO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -45,7 +47,7 @@ public class ItemTests {
 
     @Test
     public void createBasicProductBadId() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add -1 \"Libro POO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -54,7 +56,7 @@ public class ItemTests {
 
     @Test
     public void createBasicProductNegativePrice() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 1 \"Libro POO\" BOOK -25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -63,7 +65,7 @@ public class ItemTests {
 
     @Test
     public void createBasicProductToMuchChars() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 1 \"Libro POOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
                 "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
                 "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO" +
@@ -78,7 +80,7 @@ public class ItemTests {
 
     @Test
     public void createBasicProductBadCategory() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 1 \"Libro POO\" LIBRO 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -88,7 +90,7 @@ public class ItemTests {
 
     @Test
     public void createBasicProductCharId() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add A \"Libro POO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -98,7 +100,7 @@ public class ItemTests {
 
     @Test
     public void createBasicProductCharPrice() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 1 \"Libro POO\" BOOK Ñ";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -108,7 +110,7 @@ public class ItemTests {
 
     @Test
     public void createCustomProductCharMaxPers() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 1 \"Libro POO\" BOOK 25 A";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -118,7 +120,7 @@ public class ItemTests {
 
     @Test
     public void lackOfParametersAddCommand() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -129,7 +131,7 @@ public class ItemTests {
 
     @Test
     public void createBasicProductNoQuotesName() {
-        ProdAddCommand prodCommands = new ProdAddCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 1 Libro POO BOOK 25 A";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -139,7 +141,7 @@ public class ItemTests {
 
     @Test
     public void createFood() {
-        ProdAddFoodCommand prodCommands = new ProdAddFoodCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod addFood 23459 \"Restaurante Asador\" 50 2030-12-21 40";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
@@ -148,7 +150,7 @@ public class ItemTests {
                 40, TypeEvent.FOOD);
         ProductManager productManager = ProductManager.getInstance();
         List<Product> products = productManager.getCatalogProducts();
-        Event realFood = (Event) products.get(0);
+        Event realFood = (Event) products.get(products.size()-1);
         Assertions.assertEquals(expectedEvent.getName(), realFood.getName());
         Assertions.assertEquals(expectedEvent.getTypeEvent(), realFood.getTypeEvent());
         Assertions.assertEquals(expectedEvent.getId(), realFood.getId());
@@ -159,13 +161,100 @@ public class ItemTests {
 
     @Test
     public void createFoodTooLate() {
-        ProdAddFoodCommand prodCommands = new ProdAddFoodCommand();
+        ProdCommands prodCommands = new ProdCommands();
         String input = "prod addFood 23459 \"Restaurante Asador\" 50 2025-12-21 40";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("The meeting should be planned at least 3 days before",
+        Assertions.assertEquals("The food should be planned at least 3 days before",
                 outContent.toString().trim());
     }
+
+    @Test
+    public void createMeetingTooLate() {
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod addMeeting 23456 \"Reunion Rotonda\" 12 2025-12-21 100";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("The meeting should be planned at least 12 hours before",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void createMeetingWrongDate() {
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod addMeeting 23456 \"Reunion Rotonda\" 12 21-12-2025 100";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("Expiration date must have the next format: yyyy-mm-dd",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void createFoodWrongDate() {
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod addFood 23459 \"Restaurante Asador\" 50 21-12-2025 40";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("Expiration date must have the next format: yyyy-mm-dd",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void createMeetingMaxPeopleChar() {
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod addMeeting 23456 \"Reunion Rotonda\" 12 2025-12-21 A";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("Max people must be an integer number.",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void createFoodMaxPeopleChar() {
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod addFood 23459 \"Restaurante Asador\" 50 2025-12-21 A";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("Max people must be an integer number.",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void createService() {
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod add 2035-12-24 TRANSPORT";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        ProductService expectedService=new ProductService("1S",ServiceCategory.TRANSPORT,
+                LocalDate.of(2035, 12, 24).atStartOfDay());
+        List<ProductService> servicesList=ProductManager.getInstance().getCatalogServices();
+        ProductService realService=servicesList.get(servicesList.size()-1);
+        Assertions.assertEquals(expectedService.getId(), realService.getId());
+        Assertions.assertEquals(expectedService.getMaxDate(), realService.getMaxDate());
+        Assertions.assertEquals(expectedService.getCategory(), realService.getCategory());
+    }
+
+    @Test
+    public void createServiceTooLate() {
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod add 2025-12-24 TRANSPORT";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("The service must have a date that has not passed.",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void createServiceBadWrittenDate() {
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod add 24-12 TRANSPORT";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("Expiration date must have the next format: yyyy-mm-dd",
+                outContent.toString().trim());
+    }
+
+
 
 }
 

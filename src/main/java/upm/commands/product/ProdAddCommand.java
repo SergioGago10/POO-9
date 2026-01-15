@@ -5,6 +5,7 @@ import upm.Utilities;
 import upm.commands.core.Command;
 import upm.products.*;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -29,10 +30,16 @@ public class ProdAddCommand extends Command {
                 if (args.length == 4) {
                     id = productManager.generateNewServiceId();
                     String[] dateStr = args[2].split("-");
-                    int expirationYear = Integer.parseInt(dateStr[0]);
-                    int expirationMonth = Integer.parseInt(dateStr[1]);
-                    int expirationDay = Integer.parseInt(dateStr[2]);
-                    LocalDateTime date = LocalDate.of(expirationYear, expirationMonth, expirationDay).atStartOfDay();
+                    LocalDateTime date;
+                    try {
+                        int expirationYear = Integer.parseInt(dateStr[0]);
+                        int expirationMonth = Integer.parseInt(dateStr[1]);
+                        int expirationDay = Integer.parseInt(dateStr[2]);
+                        date = LocalDate.of(expirationYear, expirationMonth, expirationDay).atStartOfDay();
+                    } catch (NumberFormatException | DateTimeException | ArrayIndexOutOfBoundsException exc) {
+                        CLI.print("Expiration date must have the next format: yyyy-mm-dd");
+                        return false;
+                    }
                     serviceCategory = ServiceCategory.valueOf(args[3]);
                     if (LocalDateTime.now().isBefore(date)) {
                         service = new ProductService(id, serviceCategory, date);
@@ -55,7 +62,7 @@ public class ProdAddCommand extends Command {
                         id = args[i];
                         i++;
                     }
-                    if(args[i].contains("\""))
+                    if (args[i].contains("\""))
                         name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
                     else {
                         CLI.print("Name must be between quotes (\" \")");
