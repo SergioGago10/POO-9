@@ -10,7 +10,6 @@ import upm.commands.ticket.TicketCommands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class App {
 
@@ -55,6 +54,9 @@ public class App {
                 for (Command command : commands) {
                     try {
                         if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
+                            // el booleano handled SIEMPRE será true si se ejecuta un comando
+                            // da igual que sea error, lo importante es que el comando se ha encontrado y ejecutado
+                            // la unica forma de la cual dará false es que el comando no se encuentre
                             handled = true;
                             break; // ya hay un comando que ha ejecutado esta línea
                         }

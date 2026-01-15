@@ -1,5 +1,6 @@
 package upm.commands.core;
 
+
 public abstract class Command {
     protected String text;
 
