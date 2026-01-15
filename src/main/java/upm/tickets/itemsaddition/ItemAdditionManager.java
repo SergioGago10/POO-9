@@ -17,7 +17,7 @@ public class ItemAdditionManager {
 
     /**
      *
-     * @param args [ticketId, itemId, amount, texts(if they had)]
+     * @param args [ticketId, itemId, amount(if they had), texts(if they had)]
      */
     public boolean process(String[] args) {
       try{

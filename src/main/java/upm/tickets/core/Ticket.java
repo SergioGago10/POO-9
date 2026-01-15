@@ -36,7 +36,7 @@ public abstract class Ticket<T extends Item>{
 
 
     public boolean tryToAdd(Item item) {
-        return item.addTo(this);
+    return item.addTo(this);
     }
 
     public boolean addSpecificProduct(Product p) { return false; }

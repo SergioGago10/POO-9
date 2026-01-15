@@ -72,10 +72,6 @@ public class Event extends Product {
     public LocalDateTime getCreationDate() {return creationDate;}
     public int getActualParticipants() {return actualParticipants;}
 
-    @Override
-    public boolean addTo(Ticket<?> ticket) {
-        return ticket.addSpecificProduct(this);
-    }
 
     public void setMaxParticipants(int maxParticipants) { this.maxParticipants = maxParticipants; }
     public void setActualParticipants(int actualParticipants) { this.actualParticipants = actualParticipants; }

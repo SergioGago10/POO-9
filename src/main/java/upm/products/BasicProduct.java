@@ -32,10 +32,5 @@ public class BasicProduct extends Product {
         sb.append(",price:").append(String.format("%.2f", price)).append("}");
         return sb.toString();
     }
-    @Override
-    public boolean addTo(Ticket<?> ticket) {
-        // Al pasar 'this', el ticket recibe un objeto de tipo BasicProduct
-        return ticket.addSpecificProduct(this);
-    }
 }
 
