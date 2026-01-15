@@ -1,13 +1,13 @@
 package upm.users;
 
  import upm.CLI;
+ import upm.Utilities;
  import upm.tickets.management.TicketManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
- import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 public class UserManager {
     private static UserManager instance;
@@ -111,10 +111,9 @@ public class UserManager {
     }
 
     public String generateRandomIdentifier() {
-        Random random = new Random();
         int number;
         do {
-            number = 1_000_000 + random.nextInt(9_000_000);
+            number = Utilities.randomNumGen(7);
         } while (idExists("UW" + number));
         return "UW" + number;
     }

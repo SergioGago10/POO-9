@@ -12,34 +12,29 @@ public class CashAddCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        boolean applied = false;
         if (args.length < 4) {
             CLI.printErrorNextLine("Error -> Format must be: cash add [<identifier>] \"<name>\" <email>");
-            return false;
+            return true;
         }
 
         String identifier;
         String rawName;
-        String email = "";
+        String email;
         UserManager userManager=UserManager.getInstance();
         int i = 2;
 
         if (args[i].startsWith("\"") && args[i].endsWith("\"")) {
             identifier = userManager.generateRandomIdentifier();
-            rawName = args[i];
-            i++;
-            email = args[i];
+            rawName = args[i++];
         } else {
-            identifier = args[i];
-            i++;
-            rawName = args[i];
-            i++;
+            identifier = args[i++];
+            rawName = args[i++];
             if (i >= args.length) {
                 CLI.printErrorNextLine("Error -> Format must be: cash add [<identifier>] \"<name>\" <email>");
                 return true;
             }
-            email = args[i];
         }
+        email = args[i];
 
         if (!(rawName.startsWith("\"") && rawName.endsWith("\""))) {
             CLI.printErrorNextLine("Error -> The name must be enclosed in quotes.");
@@ -64,22 +59,23 @@ public class CashAddCommand extends Command {
 
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 CLI.printErrorNextLine("Error -> Invalid email format.");
-                return false;
+                return true;
             }
 
             Cash cash = new Cash(identifier, name, email);
 
-            if (userManager.addCash(cash)) {
-                CLI.printNextLine(cash.toString());
-                CLI.printNextLine("cash add: ok");
-                applied = true;
-            } else {
+            if (!userManager.addCash(cash)) {
                 CLI.printErrorNextLine("Error -> Cashier couldn't be added.");
+                return true;
+
             }
+
+            CLI.printNextLine(cash.toString());
+            CLI.printNextLine("cash add: ok");
         } catch (Exception ex) {
             CLI.printErrorNextLine("Error -> Invalid parameters.");
         }
 
-        return applied;
+        return true;
     }
 }
