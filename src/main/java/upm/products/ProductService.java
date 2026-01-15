@@ -49,6 +49,11 @@ public class ProductService implements Item {
     }
 
     @Override
+    public void setCategoryFromCLI(String value) {
+        setCategory(ServiceCategory.valueOf(value));
+    }
+
+    @Override
     public boolean addTo(Ticket<?> ticket) {
         // Al pasar 'this', el ticket recibe un objeto de tipo ProductService
         return ticket.addSpecificService(this);

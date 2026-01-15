@@ -25,7 +25,7 @@ public class ClientListCommand extends Command {
 
         clientsList.sort(Comparator.comparing(Client::getName));
 
-        CLI.print("Clients:");
+        CLI.printNextLine("Clients:");
         for (Client client : clientsList) {
             CLI.printNextLine("  " + client.toString());
         }

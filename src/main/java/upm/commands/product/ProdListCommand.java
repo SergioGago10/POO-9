@@ -21,21 +21,25 @@ public class ProdListCommand extends Command {
             CLI.printErrorNextLine("Error -> format must be: prod list");
             return true;
         }
+
         ProductManager productManager=ProductManager.getInstance();
         List<Product> catalog = productManager.getCatalogProducts();
         List<ProductService> services=productManager.getCatalogServices();
-        if (catalog.isEmpty()&& services.isEmpty()){
+
+        if (catalog.isEmpty() && services.isEmpty()) {
             CLI.printErrorNextLine("Error -> Catalog is empty");
-        }else {
-            CLI.print("Catalog:");
-            for (Item product : catalog) {
-                CLI.printNextLine(product.toString());
-            }
-            for (ProductService service : services) {
-                CLI.printNextLine(service.toString());
-            }
-            CLI.printNextLine("prod list: ok");
+            return true;
         }
+
+        CLI.print("Catalog:");
+        for (Item product : catalog) {
+            CLI.printNextLine(product.toString());
+        }
+        for (ProductService service : services) {
+            CLI.printNextLine(service.toString());
+        }
+
+        CLI.printNextLine("prod list: ok");
         return true;
     }
 }

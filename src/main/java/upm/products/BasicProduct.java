@@ -23,6 +23,11 @@ public class BasicProduct extends Product {
     }
 
     @Override
+    public void setCategoryFromCLI(String value) {
+        setCategory(Category.valueOf(value));
+    }
+
+    @Override
     public String toString(){
         StringBuilder sb= new StringBuilder();
         sb.append("  {class:Product");

@@ -42,23 +42,22 @@ public class Utilities {
     public static boolean isValidProd(String id, String name, double price) {
         boolean resul = true;
         int idNum;
-        double priceNum;
         try {
             idNum = Integer.parseInt(id);
         } catch (NumberFormatException ex) {
-            CLI.print("Id must be a number");
+            CLI.printErrorNextLine("Error -> Product id must be a number");
             return false;
         }
         if (idNum < 0) {
-            CLI.print("Id must be positive.");
+            CLI.printErrorNextLine("Error -> Product id must be positive.");
             return false;
         }
         if (price < 0) {
-            CLI.print("Price must be positive.");
+            CLI.printErrorNextLine("Error -> Product price must be positive.");
             return false;
         }
         if (name.isBlank() || name.length() > ProductManager.MAX_CHAR_NAME) {
-            CLI.print("Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
+            CLI.printErrorNextLine("Error -> Product name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
             return false;
         }
         return resul;

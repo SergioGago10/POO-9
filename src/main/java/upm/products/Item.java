@@ -21,5 +21,7 @@ import upm.tickets.core.Ticket;
 public interface Item {
     String getId();
     boolean addTo(Ticket<?> ticket);
-
+    default void setCategoryFromCLI(String value) {
+        throw new UnsupportedOperationException("Error -> That type of product doesn't have category.");
+    }
 }
