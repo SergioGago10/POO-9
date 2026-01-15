@@ -6,7 +6,6 @@ import upm.users.Client;
 import upm.users.UserManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 public class ClientListCommand extends Command {
@@ -24,14 +23,14 @@ public class ClientListCommand extends Command {
             return true;
         }
 
-        Collections.sort(clientsList, Comparator.comparing(Client::getName));
+        clientsList.sort(Comparator.comparing(Client::getName));
 
         CLI.print("Clients:");
         for (Client client : clientsList) {
-            CLI.print("  " + client.toString());
+            CLI.printNextLine("  " + client.toString());
         }
 
-        CLI.print("Client list: ok.");
+        CLI.printNextLine("Client list: ok.");
         return true;
     }
 }

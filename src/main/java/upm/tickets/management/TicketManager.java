@@ -58,6 +58,10 @@ public class TicketManager {
         ticketsList.add(ticket);
         return ticket;
     }
+    public void setTicketsList(List<Ticket<?>> tickets) {
+        this.ticketsList.clear();
+        if (tickets != null) this.ticketsList.addAll(tickets);
+    }
 
     public void ticketCashRemover(Cash cashier){
         UserManager clientSearch = UserManager.getInstance();
@@ -68,7 +72,7 @@ public class TicketManager {
             boolean found = false;
             while (!found && clientIt.hasNext()) { //borramos el ticket del cliente que lo creo
                 User user = clientIt.next();
-                found = user.getTickets().remove(currentTicket);
+                found = user.removeTicket(currentTicket);
             }
         }
     }

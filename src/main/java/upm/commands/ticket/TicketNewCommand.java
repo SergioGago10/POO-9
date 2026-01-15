@@ -18,7 +18,7 @@ public class TicketNewCommand extends Command {
     public boolean apply(String[] args) {
 
         if (args.length < 4 || args.length > 6) {
-            System.out.println("Usage: ticket new [<id>] <cashId> <userId> -[c|p|s] (default -p option) ");
+            CLI.printErrorNextLine("Error -> format must be: ticket new [<id>] <cashId> <userId> -[c|p|s] (default -p option) ");
             return false;
         }
 
@@ -53,17 +53,17 @@ public class TicketNewCommand extends Command {
 
         UserManager userManager=UserManager.getInstance();
         if (!userManager.idExists(cashId)) {
-            CLI.print("Cashier ID does not exist: " + cashId);
+            CLI.printErrorNextLine("Error -> Cashier ID does not exist: " + cashId);
             return false;
         }
 
         if (!userManager.idExists(userId)) {
-            CLI.print("Client DNI does not exist: " + userId);
+            CLI.printErrorNextLine("Error -> Client DNI does not exist: " + userId);
             return false;
         }
 
         if(!isOptionValid(option)){
-            CLI.print("Option provided does not exist: " + option);
+            CLI.printErrorNextLine("Error -> Option provided does not exist: " + option);
             return false;
         }
 
@@ -72,10 +72,10 @@ public class TicketNewCommand extends Command {
         //el NIF empieza por una letra, pero no termina en una
         User user = userManager.getUserByID(userId);
         if(user.getId().matches(".*[A-Za-z]$") && !option.contentEquals("-p")){
-            CLI.print("An user can not create a ticket of type '-c' or '-s' only company users are able to.");
+            CLI.printErrorNextLine("Error -> An user can not create a ticket of type '-c' or '-s' only company users are able to.");
             return false;
         } else if(!user.getId().matches(".*[A-Za-z]$") && option.contentEquals("-p")){
-            CLI.print("A company user can not create a ticket of type '-p' only users are able to.");
+            CLI.printErrorNextLine("Error -> A company user can not create a ticket of type '-p' only users are able to.");
             return false;
         }
 
@@ -93,10 +93,10 @@ public class TicketNewCommand extends Command {
             cashier.addTicket(ticket);
             client.addTicket(ticket);
             ticketManager.getFormatter().printCurrentTicket(ticket);
-            CLI.print("ticket new: ok");
+            CLI.printNextLine("ticket new: ok");
             return true;
         }catch (ClassCastException ex){
-            CLI.print("First id must be a cash id and second id must be a client DNI.");
+            CLI.printErrorNextLine("Error -> First id must be a cash id and second id must be a client DNI.");
             return false;
         }
 

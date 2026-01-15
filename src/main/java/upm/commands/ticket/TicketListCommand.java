@@ -1,5 +1,6 @@
 package upm.commands.ticket;
 
+import upm.CLI;
 import upm.commands.core.Command;
 import upm.tickets.management.TicketManager;
 
@@ -13,14 +14,14 @@ public class TicketListCommand extends Command {
     public boolean apply(String[] args) {
         try{
             if(args.length!=2){
-                System.err.println("Usage: ticket list");
+                CLI.printErrorNextLine("Error -> format must be: ticket list");
             }else{
                 TicketManager ticketManager=TicketManager.getInstance();
                 ticketManager.getFormatter().printListTickets(ticketManager);
-                System.out.println("ticket list: ok");
+                CLI.printNextLine("ticket list: ok");
             }
         } catch (Exception e) {
-            System.err.println("Error printing all tickets: " + e.getMessage());
+            CLI.printErrorNextLine("Error -> tickets could not be printed: " + e.getMessage());
         }
         return true;
     }

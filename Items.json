@@ -1,0 +1,20 @@
+{
+  "products" : [ {
+    "type" : "BasicProduct",
+    "id" : "1",
+    "name" : "Troteras y danceras",
+    "price" : 12.0,
+    "category" : "BOOK"
+  } ],
+  "services" : [ {
+    "type" : "service",
+    "id" : "1",
+    "category" : "TRANSPORT",
+    "maxDate" : "2026-01-14T17:23:13"
+  }, {
+    "type" : "service",
+    "id" : "2",
+    "category" : "INSURANCE",
+    "maxDate" : "2026-01-14T17:23:13"
+  } ]
+}

@@ -20,18 +20,18 @@ public class CashListCommand extends Command {
         ArrayList<Cash> list = new ArrayList<>(userManager.getCash());
 
         if (list.isEmpty()) {
-            CLI.print("No cashiers found.");
+            CLI.printNextLine("No cashiers found.");
             return true;
         }
 
-        Collections.sort(list, Comparator.comparing(Cash::getName));
+        list.sort(Comparator.comparing(Cash::getName));
 
-        CLI.print("Cashiers:");
+        CLI.printNextLine("Cashiers:");
         for (Cash cash : list) {
-            CLI.print("  " + cash.toString());
+            CLI.printNextLine(cash.toString());
         }
 
-        CLI.print("cash list: ok");
+        CLI.printNextLine("cash list: ok");
         return true;
     }
 }

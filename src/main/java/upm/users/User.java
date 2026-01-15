@@ -1,8 +1,8 @@
 package upm.users;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import upm.CLI;
+import upm.*;
 import upm.products.Item;
 import upm.tickets.core.Ticket;
 
@@ -34,8 +34,8 @@ public abstract class User {
 
     public User(){}
 
-    public List<Ticket<?>> getTickets() {
-        return new ArrayList<>(tickets);
+    public boolean removeTicket(Ticket<? extends Item> ticket) {
+        return tickets.remove(ticket);
     }
 
     public void addTicket(Ticket<?> ticket) {
@@ -46,11 +46,9 @@ public abstract class User {
         }
     }
 
-    public String getId() {return id;}
-
-    public String getName() {return name;}
-
-    public String getEmail() {return email;}
+    public List<Ticket<? extends Item>> getTickets() {
+        return tickets;
+    }
 
     public void setTickets(List<Ticket<? extends Item>> tickets) {
         this.tickets = tickets;
@@ -67,4 +65,6 @@ public abstract class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public abstract String getId();
 }

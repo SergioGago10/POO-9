@@ -12,7 +12,9 @@ public class Event extends Product {
     private LocalDateTime plannedDate;
     private TypeEvent typeEvent;
 
-
+    public Event() {
+        // Jackson
+    }
     public Event(String id, String name, double pricePerson, LocalDateTime creationDate, LocalDateTime plannedDate,
                  int maxParticipants, TypeEvent typeEvent) {
         this.creationDate = creationDate;
@@ -74,4 +76,13 @@ public class Event extends Product {
     public boolean addTo(Ticket<?> ticket) {
         return ticket.addSpecificProduct(this);
     }
+
+    public void setMaxParticipants(int maxParticipants) { this.maxParticipants = maxParticipants; }
+    public void setActualParticipants(int actualParticipants) { this.actualParticipants = actualParticipants; }
+    public void setCreationDate(LocalDateTime creationDate) { this.creationDate = creationDate; }
+    public void setPlannedDate(LocalDateTime plannedDate) { this.plannedDate = plannedDate; }
+    public void setTypeEvent(TypeEvent typeEvent) { this.typeEvent = typeEvent; }
+    public void setId(String id) { this.id = id; }
+    public void setPrice(double price) { this.price = price; } // ya tienes setPrice en Product
+    public void setName(String name) { this.name = name; }     // ya tienes setName en Product
 }

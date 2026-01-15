@@ -13,6 +13,9 @@ public class CommonTicket extends Ticket<Item> {
     public CommonTicket(String ticketID) {
         super(ticketID);
     }
+    public CommonTicket() {
+        super();
+    }
 
     @Override
     public TicketContent getSortedContent() {

@@ -47,11 +47,11 @@ public class SystemState {
         this.services = services;
     }
 
-    public void setClients(ArrayList<upm.users.Client> clients) {
+    public void setClients(List<upm.users.Client> clients) {
         this.clients = clients;
     }
 
-    public void setCash(ArrayList<upm.users.Cash> cash) {
+    public void setCash(List<upm.users.Cash> cash) {
         this.cash = cash;
     }
 
