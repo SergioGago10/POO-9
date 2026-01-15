@@ -16,7 +16,7 @@ public class ClientAddCommand extends Command {
         UserManager userManager = UserManager.getInstance();
 
         if (args.length < 6) {
-            CLI.printErrorNextLine("Error -> Format must be: client add \"<name>\" <DNI> <email> <cashId>");
+            CLI.printErrorNextLine("Error -> Format must be: client add \"<nombre>\" (<DNI>|<NIF>) <email> <cashId>");
             return true;
         }
 
@@ -40,6 +40,13 @@ public class ClientAddCommand extends Command {
             String email = args[4];
             String cashierId = args[5];
             TypeClient type;
+
+            if(!isNifNumValid(identificator)){
+                CLI.printErrorNextLine("Error -> the NIF/DNI you entered is invalid.");
+                CLI.printErrorNextLine("Check this page for more information: https://es.wikipedia.org/wiki/N%C3%BAmero_de_identificaci%C3%B3n_fiscal");
+                return true;
+            }
+
 
             if (!email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
                 CLI.printErrorNextLine("Error -> Invalid email format.");
@@ -72,6 +79,30 @@ public class ClientAddCommand extends Command {
 
         return true;
     }
+
+
+    private static boolean isNifNumValid(String nif){
+        //Si el largo del NIF es diferente a 9, acaba
+        if (nif.length()!=9){
+            return false;
+        }
+
+        String secuenciaLetrasNIF = "TRWAGMYFPDXBNJZSQVHLCKE";
+        nif = nif.toUpperCase();
+
+        //Posición inicial: 0 (primero en la cadena de texto).
+        //Longitud: cadena de texto menos última posición. Así obtenemos solo el número.
+        String numeroNIF = nif.substring(0, nif.length()-1);
+
+        //Si es un NIE reemplazamos letra inicial por su valor numérico.
+        numeroNIF = numeroNIF.replace("X", "0").replace("Y", "1").replace("Z", "2");
+
+        //Obtenemos la letra con un char que nos servirá también para el índice de las secuenciaLetrasNIF
+        char letraNIF = nif.charAt(8);
+        int i = Integer.parseInt(numeroNIF) % 23;
+        return letraNIF == secuenciaLetrasNIF.charAt(i);
+    }
+
 }
 
 

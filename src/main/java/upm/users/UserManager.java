@@ -41,6 +41,7 @@ public class UserManager {
         if (client == null) return false;
         for (Client c : clientsList) {
             if (c.getId().equals(client.getId())) {
+                CLI.printErrorNextLine("Error -> The client with id: " + client.getId() +  " is already in the clients list.");
                 return false;
             }
         }
@@ -49,12 +50,12 @@ public class UserManager {
 
     public boolean addCash(Cash cash) {
         if (cash == null) {
-            CLI.printNextLine("Cashier couldn't be created");
+            CLI.printNextLine("Error -> Cashier couldn't be created.");
             return false;
         }
         for (Cash c : cashList) {
             if (c.getId().equals(cash.getId())) {
-                CLI.printNextLine("Cashier already exist");
+                CLI.printNextLine("Error -> The cashier already exists");
                 return false;
             }
         }
