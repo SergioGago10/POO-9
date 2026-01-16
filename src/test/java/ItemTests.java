@@ -223,6 +223,7 @@ public class ItemTests {
 
     @Test
     public void createService() {
+        ProductManager.getInstance().setCatalogServices(new ArrayList<>());
         ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 2035-12-24 TRANSPORT";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -284,6 +285,7 @@ public class ItemTests {
     @Test
     public void prodListEmpty(){
         ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProductManager.getInstance().setCatalogServices(new ArrayList<>());
         ProdCommands prodCommands = new ProdCommands();
         String input = "prod list";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
