@@ -1,10 +1,9 @@
 package upm.products;
 
-import upm.CLI;
-import upm.tickets.core.Ticket;
+
+import upm.tickets.itemsaddition.ItemAdditionVisitor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -64,6 +63,11 @@ public class CustomizableProduct extends BasicProduct {
         }
         sb.append("]}");
         return sb.toString();
+    }
+
+    @Override
+    public boolean accept(ItemAdditionVisitor visitor, String[] args) {
+        return visitor.add(this, args);
     }
 
 

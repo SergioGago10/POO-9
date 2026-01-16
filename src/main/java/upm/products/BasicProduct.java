@@ -1,6 +1,6 @@
 package upm.products;
 
-import upm.tickets.core.Ticket;
+import upm.tickets.itemsaddition.ItemAdditionVisitor;
 
 public class BasicProduct extends Product {
     protected Category category;
@@ -37,5 +37,11 @@ public class BasicProduct extends Product {
         sb.append(",price:").append(String.format("%.2f", price)).append("}");
         return sb.toString();
     }
+
+    @Override
+    public boolean accept(ItemAdditionVisitor visitor, String[] args) {
+        return visitor.add(this, args);
+    }
+
 }
 

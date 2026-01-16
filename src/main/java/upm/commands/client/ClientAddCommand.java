@@ -41,7 +41,7 @@ public class ClientAddCommand extends Command {
             String cashierId = args[5];
             TypeClient type;
 
-            if(!isNifNumValid(identificator)){
+            if(!isNifValid(identificator)){
                 CLI.printErrorNextLine("Error -> the NIF/DNI you entered is invalid.");
                 CLI.printErrorNextLine("Check this page for more information: https://es.wikipedia.org/wiki/N%C3%BAmero_de_identificaci%C3%B3n_fiscal");
                 return true;
@@ -81,26 +81,78 @@ public class ClientAddCommand extends Command {
     }
 
 
-    private static boolean isNifNumValid(String nif){
-        //Si el largo del NIF es diferente a 9, acaba
-        if (nif.length()!=9){
-            return false;
+    public static boolean isNifValid(String nif) {
+        if (nif == null || nif.length() != 9) return false;
+
+        nif = nif.toUpperCase();
+        char firstChar = nif.charAt(0);
+
+        // DNI o NIE (Personas físicas)
+        // Empieza por número o por X, Y, Z
+        if (Character.isDigit(firstChar) || "XYZ".indexOf(firstChar) != -1) {
+            return validateDNIorNIE(nif);
         }
 
+        // Personas Jurídicas (Empresas - Antiguo CIF)
+        // Empieza por A, B, C, D, E, F, G, H, J, P, Q, R, S, U, V, N, W
+        if ("ABCDEFGHJPQRSUVNW".indexOf(firstChar) != -1) {
+            return validateCIF(nif);
+        }
+
+        return false;
+    }
+
+    private static boolean validateDNIorNIE(String nif) {
         String secuenciaLetrasNIF = "TRWAGMYFPDXBNJZSQVHLCKE";
-        nif = nif.toUpperCase();
+        String numeroNIF = nif.substring(0, 8)
+                .replace("X", "0")
+                .replace("Y", "1")
+                .replace("Z", "2");
 
-        //Posición inicial: 0 (primero en la cadena de texto).
-        //Longitud: cadena de texto menos última posición. Así obtenemos solo el número.
-        String numeroNIF = nif.substring(0, nif.length()-1);
+        try {
+            int num = Integer.parseInt(numeroNIF);
+            char letraEsperada = secuenciaLetrasNIF.charAt(num % 23);
+            return nif.charAt(8) == letraEsperada;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
-        //Si es un NIE reemplazamos letra inicial por su valor numérico.
-        numeroNIF = numeroNIF.replace("X", "0").replace("Y", "1").replace("Z", "2");
+    private static boolean validateCIF(String cif) {
+        try {
+            String digits = cif.substring(1, 8);
+            int sumaPares = 0;
+            int sumaImpares = 0;
 
-        //Obtenemos la letra con un char que nos servirá también para el índice de las secuenciaLetrasNIF
-        char letraNIF = nif.charAt(8);
-        int i = Integer.parseInt(numeroNIF) % 23;
-        return letraNIF == secuenciaLetrasNIF.charAt(i);
+            for (int i = 0; i < digits.length(); i++) {
+                int n = Character.getNumericValue(digits.charAt(i));
+                if ((i + 1) % 2 == 0) {
+                    sumaPares += n;
+                } else {
+                    int multi = n * 2;
+                    sumaImpares += (multi > 9) ? (multi - 9) : multi;
+                }
+            }
+
+            int total = sumaPares + sumaImpares;
+            int unidad = total % 10;
+            int digitoControlEsperado = (unidad == 0) ? 0 : (10 - unidad);
+
+            char lastChar = cif.charAt(8);
+
+            // El dígito de control puede ser un número o una letra según el tipo de empresa
+            if (Character.isDigit(lastChar)) {
+                return Character.getNumericValue(lastChar) == digitoControlEsperado;
+            } else {
+                // Conversión de número a letra (1=A, 2=B, etc.)
+                char letraControlEsperada = (char) ('A' + (digitoControlEsperado - 1));
+                // Nota: Algunas entidades usan J para el 0
+                if (digitoControlEsperado == 0) letraControlEsperada = 'J';
+                return lastChar == letraControlEsperada;
+            }
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

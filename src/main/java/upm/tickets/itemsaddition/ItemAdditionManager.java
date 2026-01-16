@@ -1,12 +1,12 @@
 package upm.tickets.itemsaddition;
 
-import upm.products.ProductManager;
+import upm.products.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemAdditionManager {
-    private final List<ItemAdditionStrategy<?>> handlers = new ArrayList<>();
+    private final List<ItemAdditionStrategy> handlers = new ArrayList<>();
 
     public ItemAdditionManager() {
         handlers.add(new AddEventProduct());
@@ -19,22 +19,17 @@ public class ItemAdditionManager {
      *
      * @param args [ticketId, itemId, amount(if they had), texts(if they had)]
      */
-    public boolean process(String[] args) {
-      try{
-          ProductManager productManager = ProductManager.getInstance();
-          for (ItemAdditionStrategy<?> handler : handlers) {
-              if (handler.canHandle(productManager.getIProduct(args[1]))) {
-                  // Intentamos añadirlo las veces que quantity pida
-                  // y gestionará sus propios errores lógicos (poner más prods de los que se puedan meter, ...)
-                  if(handler.canBeAdded(args)) return handler.addMultipleTimes(args);
-              }
-          }
-          // Si nadie dio true en canHandle, no existe el comando para este producto
-          return false;
-      } catch (Exception e){
-          //En caso de algun fallo, daremos false porque no se pudo meter el producto al ticket
-        return false;
-      }
-    }
+    public boolean process(String[] args, Item item) {
+        if (item == null) return false;
 
+        for (ItemAdditionStrategy handler : handlers) {
+            // Usamos el patron Visitor/Double-Dispatcher.
+            // Si el handler tiene el código para ese item, lo ejecuta y devuelve true.
+            // Si no, devuelve false y seguimos al siguiente.
+            if (item.accept(handler, args)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

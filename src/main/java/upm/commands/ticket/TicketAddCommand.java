@@ -91,7 +91,8 @@ public class TicketAddCommand extends Command {
             String[] argsDTO = argsDT.toArray(new String[0]);
 
             ItemAdditionManager additionManager = new ItemAdditionManager();
-            boolean handled = additionManager.process(argsDTO);
+            Item item = productManager.getIProduct(itemId);
+            boolean handled = additionManager.process(argsDTO, item);
             boolean isTicketFull = ticketAModificar.getItemsList().size()
                     >= ticketAModificar.getTicketMetadata().getMAX_PRODS_IN_TICKET();
 
