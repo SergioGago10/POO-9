@@ -33,8 +33,8 @@ public class TicketNewCommand extends Command {
             cashId = args[2];
             userId = args[3];
             option = "-p";
-        }else if(args.length == 5){
-            if(args[4].startsWith("-")){
+        }else if(args.length == 5) {
+            if(args[4].startsWith("-")) {
                 cashId = args[2];
                 userId = args[3];
                 option = args[4];
@@ -44,7 +44,7 @@ public class TicketNewCommand extends Command {
                 userId = args[4];
                 option = "-p";
             }
-        } else{
+        } else {
             ticketId = args[2];
             cashId = args[3];
             userId = args[4];

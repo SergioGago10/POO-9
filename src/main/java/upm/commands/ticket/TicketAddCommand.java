@@ -92,8 +92,10 @@ public class TicketAddCommand extends Command {
 
             ItemAdditionManager additionManager = new ItemAdditionManager();
             boolean handled = additionManager.process(argsDTO);
+            boolean isTicketFull = ticketAModificar.getItemsList().size()
+                    >= ticketAModificar.getTicketMetadata().getMAX_PRODS_IN_TICKET();
 
-            if(!handled){
+            if(!handled && !isTicketFull){
                 CLI.printErrorNextLine("Error -> Product with id " + itemId + " has an invalid type, it can't be added " +
                         "(remember that you can not add services to an only product ticket and viceversa).");
                 return true;

@@ -61,7 +61,7 @@ public class App {
                             break; // ya hay un comando que ha ejecutado esta línea
                         }
                     } catch (Exception e) {
-                        CLI.printError("Error: " + e.getMessage());
+                        CLI.printErrorNextLine("Error: " + e.getMessage());
                         handled = true; // consideramos la línea “gestionada” aunque sea con error
                         break;
                     }

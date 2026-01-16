@@ -1,26 +1,10 @@
 package upm;
 
-import upm.products.BasicProduct;
 import upm.products.ProductManager;
 
 import java.util.Random;
 
 public class Utilities {
-
-    public static void arrayShifterToLeft(BasicProduct[] product) {
-        for (int i = 0; i < product.length - 1; i++) {
-            if (product[i] == null) {
-                for (int j = i; j < product.length - 1; j++) {
-                    product[j] = product[j + 1];
-                }
-                product[product.length - 1] = null;
-            }
-        }
-    }
-
-    public static String generarId() {
-        return "UW" + randomNumGen(7);
-    }
 
     public static int randomNumGen(int howManyDigits) {
         return switch (howManyDigits) {

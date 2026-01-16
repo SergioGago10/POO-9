@@ -50,12 +50,12 @@ public class UserManager {
 
     public boolean addCash(Cash cash) {
         if (cash == null) {
-            CLI.printNextLine("Error -> Cashier couldn't be created.");
+            CLI.printErrorNextLine("Error -> Cashier couldn't be created.");
             return false;
         }
         for (Cash c : cashList) {
             if (c.getId().equals(cash.getId())) {
-                CLI.printNextLine("Error -> The cashier already exists");
+                CLI.printErrorNextLine("Error -> The cashier already exists.");
                 return false;
             }
         }

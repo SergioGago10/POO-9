@@ -42,7 +42,7 @@ public abstract class User {
         if (!tickets.contains(ticket)) {
             tickets.add(ticket);
         } else {
-            CLI.print("That ticket already exists.");
+            CLI.printErrorNextLine("Error -> That ticket already exists.");
         }
     }
 
@@ -60,10 +60,6 @@ public abstract class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public abstract String getId();
