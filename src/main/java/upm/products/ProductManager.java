@@ -119,7 +119,7 @@ public class ProductManager {
         return false;
     }
 
-    public int indexOfIProduct(String id) {
+    public int indexOfItem(String id) {
         if (id.endsWith("S")) {
             for (int i = 0; i < catalogServices.size(); i++) {
                 if (catalogServices.get(i).getId().equals(id)) {
@@ -136,9 +136,10 @@ public class ProductManager {
         return -1;
     }
 
+
     @JsonIgnore
     public boolean idExists(String id) {
-        return this.indexOfIProduct(id) != -1;
+        return this.indexOfItem(id) != -1;
     }
 
     @JsonIgnore
