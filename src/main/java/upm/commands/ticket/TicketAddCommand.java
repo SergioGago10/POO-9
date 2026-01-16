@@ -102,14 +102,15 @@ public class TicketAddCommand extends Command {
                 return true;
             }
 
-
             if (!ticketAModificar.getItemsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
                 //Ticket vacio que ahora no lo es, debe ser open y no empty
                 ticketAModificar.setEstado(TicketState.OPEN);
             }
 
-            ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
-            CLI.printNextLine("ticket add: ok");
+            if(handled){
+                ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
+                CLI.printNextLine("ticket add: ok");
+            }
         } catch (NumberFormatException e) {
             CLI.printErrorNextLine("Error -> amount must be an integer.");
         } catch (Exception e) {
