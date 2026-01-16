@@ -19,7 +19,7 @@ public final class PersistenceService {
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    private PersistenceService() {}
+    public PersistenceService() {}
 
     public static void main(String[] args){
         pruebasLoad();

@@ -7,12 +7,14 @@ import upm.commands.common.CommandHelp;
 import upm.commands.core.Command;
 import upm.commands.product.ProdCommands;
 import upm.commands.ticket.TicketCommands;
+import upm.json.PersistenceService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class App {
+
+    private final PersistenceService persistence = new PersistenceService();
 
     public static void main(String[] args) {
         App app = new App();
@@ -22,6 +24,9 @@ public class App {
     }
 
     private void init() {
+        // Si tu PersistenceService tiene load/read, actívalo:
+        // persistence.load();
+
         CLI.printNextLine("Welcome to the ticket module App.");
     }
 
@@ -43,41 +48,48 @@ public class App {
         while (running) {
             CLI.print("tUPM> ");
             String[] userInput = cli.nextLine();
+
             if (userInput[0].isEmpty()) {
-                // Ignoramos líneas vacías
+                continue; // ignoramos líneas vacías
+            }
+
+            if (userInput[0].equals("exit")) {
+                running = false;
                 continue;
             }
-            if (userInput[0].equals("exit"))
-                running = false;
-            else {
-                boolean handled = false; // indica si algún comando ha gestionado la entrada
 
-                for (Command command : commands) {
-                    try {
-                        if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
-                            handled = true;
-                            break; // ya hay un comando que ha ejecutado esta línea
-                        }
-                    } catch (Exception e) {
-                        CLI.printError("Error: " + e.getMessage());
-                        handled = true; // consideramos la línea “gestionada” aunque sea con error
+            boolean handled = false;
+
+            for (Command command : commands) {
+                try {
+                    if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
+                        handled = true;
                         break;
                     }
+                } catch (Exception e) {
+                    CLI.printError("Error: " + e.getMessage());
+                    handled = true;
+                    break;
                 }
-
-                if (!handled) {
-                    CLI.printErrorNextLine("Command not found. Type 'help' to see the command list.");
-                }
-
-                CLI.printNextLine("");
             }
+
+            if (!handled) {
+                CLI.printErrorNextLine("Command not found. Type 'help' to see the command list.");
+            }
+
+            CLI.printNextLine("");
         }
     }
 
     private void close() {
-        CLI.print("Closing application.\nGoodbye!");
-        CLI.closeSc();
-        System.exit(0);
+        try {
+            persistence.save();
+        } catch (Exception e) {
+            CLI.printErrorNextLine("Error saving persistence: " + e.getMessage());
+        } finally {
+            CLI.print("Closing application.\nGoodbye!");
+            CLI.closeSc();
+        }
     }
-
 }
+
