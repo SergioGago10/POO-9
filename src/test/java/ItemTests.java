@@ -51,7 +51,7 @@ public class ItemTests {
         String input = "prod add -1 \"Libro POO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Id must be positive.", outContent.toString().trim());
+        Assertions.assertEquals("[31mError -> Id must be positive.\u001B[0m", outContent.toString().trim());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class ItemTests {
         String input = "prod add 1 \"Libro POO\" BOOK -25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Price must be positive.", outContent.toString().trim());
+        Assertions.assertEquals("[31mError -> Price must be positive.\u001B[0m", outContent.toString().trim());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class ItemTests {
                 "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME,
+        Assertions.assertEquals("[31mError -> Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME+"\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -84,7 +84,7 @@ public class ItemTests {
         String input = "prod add 1 \"Libro POO\" LIBRO 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC",
+        Assertions.assertEquals("[31mError -> Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -94,7 +94,7 @@ public class ItemTests {
         String input = "prod add A \"Libro POO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Id must be a number",
+        Assertions.assertEquals("[31mError -> Id must be a number\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -104,7 +104,7 @@ public class ItemTests {
         String input = "prod add 1 \"Libro POO\" BOOK Ñ";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Price must be double",
+        Assertions.assertEquals("[31mError -> Price must be double\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -114,7 +114,7 @@ public class ItemTests {
         String input = "prod add 1 \"Libro POO\" BOOK 25 A";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Max personalization must be integer",
+        Assertions.assertEquals("[31mError -> Max personalization must be integer\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -124,8 +124,8 @@ public class ItemTests {
         String input = "prod add";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Format must be: prod add ([<id>] \"<name>\" <category> <price> [<maxPers>]) || " +
-                        "(\"<expiration:yyyy-MM-dd>\" <category> )",
+        Assertions.assertEquals("[31mError -> Format must be: prod add ([<id>] \"<name>\" <category> <price> [<maxPers>]) || " +
+                        "(\"<expiration:yyyy-MM-dd>\" <category> )\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -135,7 +135,7 @@ public class ItemTests {
         String input = "prod add 1 Libro POO BOOK 25 A";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Name must be between quotes (\" \")",
+        Assertions.assertEquals("[31mError -> Name must be between quotes (\" \")\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -165,7 +165,7 @@ public class ItemTests {
         String input = "prod addFood 23459 \"Restaurante Asador\" 50 2025-12-21 40";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("The food should be planned at least 3 days before",
+        Assertions.assertEquals("[31mError -> The food should be planned at least 3 days before\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -175,7 +175,7 @@ public class ItemTests {
         String input = "prod addMeeting 23456 \"Reunion Rotonda\" 12 2025-12-21 100";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("The meeting should be planned at least 12 hours before",
+        Assertions.assertEquals("[31mError -> The meeting should be planned at least 12 hours before\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -185,7 +185,7 @@ public class ItemTests {
         String input = "prod addMeeting 23456 \"Reunion Rotonda\" 12 21-12-2025 100";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Expiration date must have the next format: yyyy-mm-dd",
+        Assertions.assertEquals("[31mError -> Expiration date must have the next format: yyyy-mm-dd\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -195,7 +195,7 @@ public class ItemTests {
         String input = "prod addFood 23459 \"Restaurante Asador\" 50 21-12-2025 40";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Expiration date must have the next format: yyyy-mm-dd",
+        Assertions.assertEquals("[31mError -> Expiration date must have the next format: yyyy-mm-dd\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -205,7 +205,7 @@ public class ItemTests {
         String input = "prod addMeeting 23456 \"Reunion Rotonda\" 12 2025-12-21 A";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Max people must be an integer number.",
+        Assertions.assertEquals("[31mError -> Max people must be an integer number.\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -215,7 +215,7 @@ public class ItemTests {
         String input = "prod addFood 23459 \"Restaurante Asador\" 50 2025-12-21 A";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Max people must be an integer number.",
+        Assertions.assertEquals("[31mError -> Max people must be an integer number.\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -240,7 +240,7 @@ public class ItemTests {
         String input = "prod add 2025-12-24 TRANSPORT";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("The service must have a date that has not passed.",
+        Assertions.assertEquals("[31mError -> The service must have a date that has not passed.\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -250,7 +250,7 @@ public class ItemTests {
         String input = "prod add 24-12 TRANSPORT";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Expiration date must have the next format: yyyy-mm-dd",
+        Assertions.assertEquals("[31mError -> Expiration date must have the next format: yyyy-mm-dd\u001B[0m",
                 outContent.toString().trim());
     }
 
