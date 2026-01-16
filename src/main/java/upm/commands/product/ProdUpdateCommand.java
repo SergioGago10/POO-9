@@ -22,17 +22,39 @@ public class ProdUpdateCommand extends Command {
                         case "NAME":
                             if (args[4].length() > ProductManager.MAX_CHAR_NAME)
                                 CLI.printErrorNextLine("Error -> Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
-                            Product productToChange = (Product) (product);
-                            productToChange.setName("'" + args[4].trim().replaceAll("^([\"'])|([\"'])$", "") + "'");
-                            applied = true;
+                            else {
+                                Product productToChange;
+                                try {
+                                    productToChange = (Product) (product);
+                                }catch (ClassCastException exc){
+                                    CLI.printErrorNextLine("Error -> This product does not have name");
+                                    return false;
+                                }
+                                productToChange.setName("'" + args[4].trim().replaceAll("^([\"'])|([\"'])$", "") + "'");
+                                applied = true;
+                            }
                             break;
                         case "PRICE":
-                            Product productToChange2 = (Product) (product);
-                            if (Double.parseDouble(args[4]) < 0)
+                            Product productToChange2;
+                            try {
+                                productToChange2 = (Product) (product);
+                            } catch (ClassCastException exc){
+                                CLI.printErrorNextLine("Error -> This product does not have price");
+                                return false;
+                            }
+                            double newPrice;
+                            try {
+                                newPrice = Double.parseDouble(args[4]);
+                            } catch (NumberFormatException exc) {
+                                CLI.printErrorNextLine("Error -> Price must be a number");
+                                return false;
+                            }
+                            if (newPrice < 0) {
                                 CLI.printErrorNextLine("Error -> Price must be positive");
-                            else
-                                productToChange2.setPrice(Double.parseDouble(args[4]));
-                            applied = true;
+                            } else {
+                                productToChange2.setPrice(newPrice);
+                                applied = true;
+                            }
                             break;
                         case "CATEGORY":
                             if (product instanceof BasicProduct) {
@@ -42,7 +64,7 @@ public class ProdUpdateCommand extends Command {
                                 if (product instanceof ProductService) {
                                     ((ProductService) product).setCategory(ServiceCategory.valueOf(args[4]));
                                     applied = true;
-                                }else{
+                                } else {
                                     CLI.printErrorNextLine("Error -> That type of product doesn't have category.");
                                 }
                             }
@@ -56,6 +78,8 @@ public class ProdUpdateCommand extends Command {
                 CLI.printErrorNextLine("Error -> Category must be: MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC in Basic/Custom Products," +
                         "or: INSURANCE, TRANSPORT or SHOW in Services");
             }
+        } else {
+            CLI.printErrorNextLine("Error -> Format must be: prod update <id> NAME|CATEGORY|PRICE <value>");
         }
         return applied;
     }
