@@ -1,13 +1,14 @@
 package upm.commands.product;
 
 import upm.CLI;
+import upm.Utilities;
 import upm.commands.core.Command;
-import upm.products.ProductManager;
 import upm.products.Event;
 import upm.products.Product;
+import upm.products.ProductManager;
 import upm.products.TypeEvent;
-import upm.Utilities;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -19,23 +20,36 @@ public class ProdAddMeetingCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length < 6) {
-            CLI.printErrorNextLine("Error -> Format must be: " +
+            CLI.print("Format must be: " +
                     "prod addMeeting [<id>] \"<name>\" <price> < expiration: yyyy-MM-dd> <\n max_people >");
         } else {
             try {
                 int i = 2;
                 String id;
+                String name;
+                double price;
                 Product product;
-                ProductManager productManager=ProductManager.getInstance();
+                int maxPeople;
+                ProductManager productManager = ProductManager.getInstance();
                 if (args[i].contains("\"")) {
                     id = productManager.generateNewProductId();
                 } else {
                     id = args[i];
                     i++;
                 }
-                String name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
+                if (args[i].contains("\""))
+                    name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
+                else {
+                    CLI.print("Name must be between quotes (\" \")");
+                    return false;
+                }
                 i++;
-                double price = Double.parseDouble(args[i]);
+                try {
+                    price = Double.parseDouble(args[i]);
+                } catch (NumberFormatException ex) {
+                    CLI.print("Price must be double");
+                    return false;
+                }
                 i++;
                 String[] dateStr = args[i].split("-");
                 int expirationYear = Integer.parseInt(dateStr[0]);
@@ -43,9 +57,14 @@ public class ProdAddMeetingCommand extends Command {
                 int expirationDay = Integer.parseInt(dateStr[2]);
                 LocalDateTime date = LocalDate.of(expirationYear, expirationMonth, expirationDay).atStartOfDay();
                 i++;
-                int maxPeople = Integer.parseInt(args[i]);
+                try {
+                    maxPeople = Integer.parseInt(args[i]);
+                } catch (NumberFormatException exc) {
+                    CLI.print("Max people must be an integer number.");
+                    return false;
+                }
                 if (maxPeople > 100) {
-                    CLI.printErrorNextLine("Error processing ->prod addMeeting ->Error adding product");
+                    CLI.print("Error processing ->prod addMeeting ->Error adding product");
                     return true;
                 }
                 i++;
@@ -60,25 +79,25 @@ public class ProdAddMeetingCommand extends Command {
                         LocalDateTime creationDate = LocalDateTime.of(creationYear, creationMonth, creationDay,
                                 creationHour, creationMinute);
                         if (creationDate.plusHours(12).isAfter(date)) {
-                            CLI.printErrorNextLine("Error -> The meeting should be planned at least 12 hours before");
+                            CLI.print("The meeting should be planned at least 12 hours before");
                             return true;
                         }
                         product = new Event(id, name, price, creationDate, date, maxPeople, TypeEvent.MEETING);
                     } else {
                         if (LocalDateTime.now().plusHours(12).isAfter(date)) {
-                            CLI.printErrorNextLine("Error -> The meeting should be planned at least 12 hours before");
+                            CLI.print("The meeting should be planned at least 12 hours before");
                             return true;
                         }
                         product = new Event(id, name, price, date, maxPeople, TypeEvent.MEETING);
                     }
                     if (productManager.addProduct(product)) {
-                        CLI.printNextLine(product.toString());
-                        CLI.printNextLine("prod addMeeting: ok");
+                        CLI.print(product.toString());
+                        CLI.print("prod addMeeting: ok");
                     }
                 }
 
-            } catch (NumberFormatException ex) {
-                CLI.printErrorNextLine("Error -> Invalid NumberFormat" + ex);
+            } catch (NumberFormatException | DateTimeException | ArrayIndexOutOfBoundsException ex) {
+                CLI.print("Expiration date must have the next format: yyyy-mm-dd");
                 return true;
             }
         }
