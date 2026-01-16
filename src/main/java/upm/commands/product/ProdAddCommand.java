@@ -19,7 +19,7 @@ public class ProdAddCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length < 4) {
-            CLI.print("Format must be: prod add ([<id>] \"<name>\" <category> <price> [<maxPers>]) || " +
+            CLI.printErrorNextLine("Error -> Format must be: prod add ([<id>] \"<name>\" <category> <price> [<maxPers>]) || " +
                     "(\"<expiration:yyyy-MM-dd>\" <category> )");
         } else {
             try {
@@ -37,7 +37,7 @@ public class ProdAddCommand extends Command {
                         int expirationDay = Integer.parseInt(dateStr[2]);
                         date = LocalDate.of(expirationYear, expirationMonth, expirationDay).atStartOfDay();
                     } catch (NumberFormatException | DateTimeException | ArrayIndexOutOfBoundsException exc) {
-                        CLI.print("Expiration date must have the next format: yyyy-mm-dd");
+                        CLI.printErrorNextLine("Error -> Expiration date must have the next format: yyyy-mm-dd");
                         return false;
                     }
                     serviceCategory = ServiceCategory.valueOf(args[3]);
@@ -48,7 +48,7 @@ public class ProdAddCommand extends Command {
                         CLI.print("prod add:ok");
                         return true;
                     } else {
-                        CLI.print("The service must have a date that has not passed.");
+                        CLI.printErrorNextLine("Error -> The service must have a date that has not passed.");
                     }
                 } else {
                     int i = 2;
@@ -65,21 +65,21 @@ public class ProdAddCommand extends Command {
                     if (args[i].contains("\""))
                         name = "'" + args[i].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
                     else {
-                        CLI.print("Name must be between quotes (\" \")");
+                        CLI.printErrorNextLine("Error -> Name must be between quotes (\" \")");
                         return false;
                     }
                     i++;
                     try {
                         category = Category.valueOf(args[i]);
                     } catch (IllegalArgumentException exc) {
-                        CLI.print("Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
+                        CLI.printErrorNextLine("Error -> Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
                         return false;
                     }
                     i++;
                     try {
                         price = Double.parseDouble(args[i]);
                     } catch (NumberFormatException ex) {
-                        CLI.print("Price must be double");
+                        CLI.printErrorNextLine("Error -> Price must be double");
                         return false;
                     }
                     i++;
@@ -91,13 +91,13 @@ public class ProdAddCommand extends Command {
                             product = new BasicProduct(id, name, category, price);
                         if (productManager.addProduct(product)) {
                             productManager.getCatalogProducts().sort(Comparator.comparingInt(p -> Integer.parseInt(p.getId())));
-                            CLI.print(product.toString());
-                            CLI.print("prod add:ok");
+                            CLI.printNextLine(product.toString());
+                            CLI.printNextLine("prod add:ok");
                         }
                     }
                 }
             } catch (NumberFormatException ex) {
-                CLI.print("Max personalization must be integer");
+                CLI.printErrorNextLine("Error -> Max personalization must be integer");
             }
         }
         return true;
