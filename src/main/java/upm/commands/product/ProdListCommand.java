@@ -17,7 +17,7 @@ public class ProdListCommand extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        if (args.length < 2) {
+        if (args.length != 2) {
             CLI.printErrorNextLine("Error -> format must be: prod list");
             return true;
         }

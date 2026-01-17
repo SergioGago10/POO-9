@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemTests {
@@ -31,6 +32,7 @@ public class ItemTests {
 
     @Test
     public void createBasicProduct() {
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
         ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 1 \"Libro POO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -221,6 +223,7 @@ public class ItemTests {
 
     @Test
     public void createService() {
+        ProductManager.getInstance().setCatalogServices(new ArrayList<>());
         ProdCommands prodCommands = new ProdCommands();
         String input = "prod add 2035-12-24 TRANSPORT";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -253,6 +256,268 @@ public class ItemTests {
         Assertions.assertEquals("[31mError -> Expiration date must have the next format: yyyy-mm-dd\u001B[0m",
                 outContent.toString().trim());
     }
+
+    @Test
+    public void prodListCorrect(){
+        ProductManager.getInstance().setCatalogServices(new ArrayList<>());
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        BasicProduct basicProduct=new BasicProduct("10", "'Libro POO'", Category.BOOK, 25);
+        ProductManager.getInstance().addProduct(basicProduct);
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod list";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("Catalog:  {class:Product,id: 10,name:'Libro POO',Category:BOOK,price:25,00}\r\n" +
+                        "prod list: ok",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodListTooMuchParameters(){
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod list xdddddddddd";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> format must be: prod list\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodListEmpty(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProductManager.getInstance().setCatalogServices(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod list";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> Catalog is empty\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodRemoveCorrectWithProduct(){
+        BasicProduct basicProduct=new BasicProduct("10", "'Libro POO'", Category.BOOK, 25);
+        ProductManager.getInstance().addProduct(basicProduct);
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod remove 10";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("{class:Product,id: 10,name:'Libro POO',Category:BOOK,price:25,00}\r\n" +
+                        "prod remove: ok",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodRemoveCorrectWithService(){
+        ProductService service=new ProductService("1S",ServiceCategory.TRANSPORT,
+                LocalDate.of(2035, 12, 24).atStartOfDay());
+        ProductManager.getInstance().addService(service);
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod remove 1S";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("{class:ProductService, id: 1S, category:TRANSPORT, expiration:lun dic 24 00:00:00 CET 2035}\r\n" +
+                        "prod remove: ok",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodRemoveBadWritten(){
+        BasicProduct basicProduct=new BasicProduct("10", "'Libro POO'", Category.BOOK, 25);
+        ProductManager.getInstance().addProduct(basicProduct);
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod remove 10 67";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> Format must be: prod remove <id>\u001B[0m",
+                outContent.toString().trim());
+    }
+
+
+    @Test
+    public void prodRemoveProdDoesntExist(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod remove 10";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> The product with the id: 10 couldn't be removed. Product not found.\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodRemoveServiceDoesntExist(){
+        ProductManager.getInstance().setCatalogServices(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        String input = "prod remove 1S";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> The product with the id: 1S couldn't be removed. " +
+                        "Product not found.\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdateCorrect(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        BasicProduct basicProduct=new BasicProduct("1", "'Libro POO'", Category.BOOK, 25);
+        ProductManager.getInstance().addProduct(basicProduct);
+        String input = "prod update 1 NAME \"Libro POO V2\"";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("{class:Product,id: 1,name:'Libro POO V2',Category:BOOK,price:25,00}\r\n" +
+                        "prod update: ok",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdatePriceNegative(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        BasicProduct basicProduct=new BasicProduct("1", "'Libro POO'", Category.BOOK, 25);
+        ProductManager.getInstance().addProduct(basicProduct);
+        String input = "prod update 1 PRICE -20";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> Price must be positive\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdatePriceChar(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        BasicProduct basicProduct=new BasicProduct("1", "'Libro POO'", Category.BOOK, 25);
+        ProductManager.getInstance().addProduct(basicProduct);
+        String input = "prod update 1 PRICE A";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> Price must be a number\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdateCategoryProdCorrect(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        BasicProduct basicProduct=new BasicProduct("1", "'Libro POO'", Category.BOOK, 25);
+        ProductManager.getInstance().addProduct(basicProduct);
+        String input = "prod update 1 CATEGORY MERCH";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("{class:Product,id: 1,name:'Libro POO',Category:MERCH,price:25,00}\r\n" +
+                        "prod update: ok",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdateCategoryProdButServiceCategory(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        BasicProduct basicProduct=new BasicProduct("1", "'Libro POO'", Category.BOOK, 25);
+        ProductManager.getInstance().addProduct(basicProduct);
+        String input = "prod update 1 CATEGORY INSURANCE";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> Category must be: MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC in Basic/Custom Products," +
+                        "or: INSURANCE, TRANSPORT or SHOW in Services\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdateCategoryServiceCorrect(){
+        ProductManager.getInstance().setCatalogServices(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        ProductService service=new ProductService("1S",ServiceCategory.TRANSPORT,
+                LocalDate.of(2035, 12, 24).atStartOfDay());
+        ProductManager.getInstance().addService(service);
+        String input = "prod update 1S CATEGORY INSURANCE";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("{class:ProductService, id: 1S, category:INSURANCE, expiration:lun dic 24 00:00:00 CET 2035}\r\n" +
+                        "prod update: ok",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdateCategoryServiceButProdCategory(){
+        ProductManager.getInstance().setCatalogServices(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        ProductService service=new ProductService("1S",ServiceCategory.TRANSPORT,
+                LocalDate.of(2035, 12, 24).atStartOfDay());
+        ProductManager.getInstance().addService(service);
+        String input = "prod update 1S CATEGORY MERCH";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> Category must be: MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC in Basic/Custom Products," +
+                        "or: INSURANCE, TRANSPORT or SHOW in Services\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdateCategoryToNotCategoryProd(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        LocalDateTime date = LocalDate.of(2030, 12, 21).atStartOfDay();
+        Event event=new Event("23459", "'Restaurante Asador'", 50, date,
+                40, TypeEvent.FOOD);
+        ProductManager.getInstance().addProduct(event);
+        String input = "prod update 23459 CATEGORY MERCH";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> That type of product doesn't have category.\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdatePriceToAService(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        ProductService service=new ProductService("1S",ServiceCategory.TRANSPORT,
+                LocalDate.of(2035, 12, 24).atStartOfDay());
+        ProductManager.getInstance().addService(service);
+        String input = "prod update 1S PRICE 25";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> This product does not have price\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdateNameToLong(){
+        ProductManager.getInstance().setCatalogProducts(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        BasicProduct basicProduct=new BasicProduct("1", "'Libro POO'", Category.BOOK, 25);
+        ProductManager.getInstance().addProduct(basicProduct);
+        String input = "prod update 1 NAME aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> Name length must be between 0 and "+ProductManager.MAX_CHAR_NAME+"\u001B[0m",
+                outContent.toString().trim());
+    }
+
+    @Test
+    public void prodUpdateNameToAService(){
+        ProductManager.getInstance().setCatalogServices(new ArrayList<>());
+        ProdCommands prodCommands = new ProdCommands();
+        ProductService service=new ProductService("1S",ServiceCategory.TRANSPORT,
+                LocalDate.of(2035, 12, 24).atStartOfDay());
+        ProductManager.getInstance().addService(service);
+        String input = "prod update 1S NAME nombre";
+        String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+        prodCommands.apply(args);
+        Assertions.assertEquals("[31mError -> This product does not have name\u001B[0m",
+                outContent.toString().trim());
+    }
+
+
+
+
+
+
 
 
 
