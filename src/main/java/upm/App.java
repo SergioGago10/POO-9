@@ -53,9 +53,9 @@ public class App {
                 continue; // ignoramos líneas vacías
             }
 
-            if (userInput[0].equals("exit")) {
+            if (userInput[0].equals("exit")){
                 running = false;
-            else {
+            } else {
                 boolean handled = false; // indica si algún comando ha gestionado la entrada
 
                 for (Command command : commands) {
@@ -72,18 +72,13 @@ public class App {
                         handled = true; // consideramos la línea “gestionada” aunque sea con error
                         break;
                     }
-                } catch (Exception e) {
-                    CLI.printError("Error: " + e.getMessage());
-                    handled = true;
-                    break;
                 }
-            }
+                if (!handled) {
+                    CLI.printErrorNextLine("Command not found. Type 'help' to see the command list.");
+                }
 
-            if (!handled) {
-                CLI.printErrorNextLine("Command not found. Type 'help' to see the command list.");
+                CLI.printNextLine("");
             }
-
-            CLI.printNextLine("");
         }
     }
 
