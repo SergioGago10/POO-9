@@ -3,6 +3,7 @@ package upm.products;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import upm.tickets.core.Ticket;
+import upm.tickets.itemsaddition.ItemAdditionVisitor;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,9 +50,19 @@ public class ProductService implements Item {
     }
 
     @Override
+    public void setCategoryFromCLI(String value) {
+        setCategory(ServiceCategory.valueOf(value));
+    }
+
+    @Override
     public boolean addTo(Ticket<?> ticket) {
         // Al pasar 'this', el ticket recibe un objeto de tipo ProductService
         return ticket.addSpecificService(this);
+    }
+
+    @Override
+    public boolean accept(ItemAdditionVisitor visitor, String[] args) {
+        return visitor.add(this, args);
     }
 
     public ServiceCategory getCategory() {

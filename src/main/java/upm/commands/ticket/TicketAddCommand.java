@@ -35,7 +35,7 @@ public class TicketAddCommand extends Command {
             String ticketId = args[2];
             String cashId = args[3];
             String itemId = args[4];
-            String amount;
+            String amount = null;
             ProductManager productManager = ProductManager.getInstance();
             TicketManager ticketManager = TicketManager.getInstance();
             // Validación del item
@@ -59,62 +59,55 @@ public class TicketAddCommand extends Command {
                 return true;
             }
 
-            if(ticketAModificar.getEstado()== TicketState.CLOSE){
+            if(ticketAModificar.getEstado() == TicketState.CLOSE) {
                 CLI.printErrorNextLine("Error -> Ticket with id: " + ticketId + " is closed, and no products can be added to it.");
                 return true;
+            }
+
+            //Si tenemos un length mayor a 4, tenemos un producto o evento, por lo que pillamos el amount
+            if(args.length > 5) {
+                amount = args[5];
             }
 
             //esto significa que tenemos customizaciones, o, más argumentos basura que daremos error en caso de ser asi ya que el
             //comando está mal
             String[] texts = null;
-            if(args.length > 6){
+            if(args.length > 6) {
                 // Arrays.toString(Arrays.copyOfRange(args,6,args.length)) nos da desde --p hasta donde se hayan terminado las customizaciones
                 texts = parseCustomizations(Arrays.copyOfRange(args,6,args.length));
                 if(texts == null) return true;
             }
 
-            //Identificamos si el comando es de servicios o de productos y metemos el item al ticket
-            Item itemToAdd = productManager.getIProduct(itemId);
-            List<String> argsNeededHelper = new ArrayList<>();
-            if(itemToAdd instanceof BasicProduct || itemToAdd instanceof Event){
-                amount = args[5];
-                argsNeededHelper.add(ticketId);
-                argsNeededHelper.add(itemId);
-                argsNeededHelper.add(amount);
-                if(texts != null) {
-                    argsNeededHelper.addAll(Arrays.asList(texts));
-                }
-                //Lo convertimos a String[]
-                String[] argsNeeded = argsNeededHelper.toArray(new String[0]);
-                ItemAdditionManager additionManager = new ItemAdditionManager();
 
-                boolean handled = additionManager.process(argsNeeded);
+            List<String> argsDT = new ArrayList<>();
+            argsDT.add(ticketId);
+            argsDT.add(itemId);
+            if(amount != null) {
+                argsDT.add(amount);
+            }
+            if(texts != null) {
+                argsDT.addAll(Arrays.asList(texts));
+            }
+            String[] argsDTO = argsDT.toArray(new String[0]);
 
-                if(!handled){
-                    CLI.printErrorNextLine("Error -> Product with id " + itemId + " has an invalid type, it can't be added " +
-                            "(remember that you can not add services to an only product ticket and viceversa).");
-                    return true;
-                }
-                if (!ticketAModificar.getItemsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
-                    //Ticket vacio que ahora no lo es, debe ser open y no empty
-                    ticketAModificar.setEstado(TicketState.OPEN);
-                }
-                ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
-                CLI.printNextLine("ticket add: ok");
-            } else {
-                ItemAdditionManager additionManager = new ItemAdditionManager();
-                amount = "1"; // solo vamos a poner un producto de servicio, no se pueden poner más
-                String[] argsNeeded = new String[]{ticketId,itemId,amount};
-                boolean handled = additionManager.process(argsNeeded);
-                if(!handled){
-                    CLI.printErrorNextLine("Error -> Product with id " + itemId + " has an invalid type, it can't be added " +
-                            "(remember that you can not add services to an only product ticket and viceversa).");
-                    return true;
-                }
-                if (!ticketAModificar.getItemsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
-                    //Ticket vacio que ahora no lo es, debe ser open y no empty
-                    ticketAModificar.setEstado(TicketState.OPEN);
-                }
+            ItemAdditionManager additionManager = new ItemAdditionManager();
+            Item item = productManager.getIProduct(itemId);
+            boolean handled = additionManager.process(argsDTO, item);
+            boolean isTicketFull = ticketAModificar.getItemsList().size()
+                    >= ticketAModificar.getTicketMetadata().getMAX_PRODS_IN_TICKET();
+
+            if(!handled && !isTicketFull){
+                CLI.printErrorNextLine("Error -> Product with id " + itemId + " has an invalid type, it can't be added " +
+                        "(remember that you can not add services to an only product ticket and viceversa).");
+                return true;
+            }
+
+            if (!ticketAModificar.getItemsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
+                //Ticket vacio que ahora no lo es, debe ser open y no empty
+                ticketAModificar.setEstado(TicketState.OPEN);
+            }
+
+            if(handled){
                 ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
                 CLI.printNextLine("ticket add: ok");
             }

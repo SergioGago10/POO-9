@@ -19,7 +19,7 @@ public class TicketNewCommand extends Command {
 
         if (args.length < 4 || args.length > 6) {
             CLI.printErrorNextLine("Error -> format must be: ticket new [<id>] <cashId> <userId> -[c|p|s] (default -p option) ");
-            return false;
+            return true;
         }
 
         // Inicializamos todos los valores
@@ -33,8 +33,8 @@ public class TicketNewCommand extends Command {
             cashId = args[2];
             userId = args[3];
             option = "-p";
-        }else if(args.length == 5){
-            if(args[4].startsWith("-")){
+        }else if(args.length == 5) {
+            if(args[4].startsWith("-")) {
                 cashId = args[2];
                 userId = args[3];
                 option = args[4];
@@ -44,7 +44,7 @@ public class TicketNewCommand extends Command {
                 userId = args[4];
                 option = "-p";
             }
-        } else{
+        } else {
             ticketId = args[2];
             cashId = args[3];
             userId = args[4];
@@ -54,17 +54,17 @@ public class TicketNewCommand extends Command {
         UserManager userManager=UserManager.getInstance();
         if (!userManager.idExists(cashId)) {
             CLI.printErrorNextLine("Error -> Cashier ID does not exist: " + cashId);
-            return false;
+            return true;
         }
 
         if (!userManager.idExists(userId)) {
             CLI.printErrorNextLine("Error -> Client DNI does not exist: " + userId);
-            return false;
+            return true;
         }
 
         if(!isOptionValid(option)){
             CLI.printErrorNextLine("Error -> Option provided does not exist: " + option);
-            return false;
+            return true;
         }
 
         //Determinamos si el user es empresa o usuario normal, poniendo las restricciones convenientes.
@@ -73,14 +73,13 @@ public class TicketNewCommand extends Command {
         User user = userManager.getUserByID(userId);
         if(user.getId().matches(".*[A-Za-z]$") && !option.contentEquals("-p")){
             CLI.printErrorNextLine("Error -> An user can not create a ticket of type '-c' or '-s' only company users are able to.");
-            return false;
+            return true;
         } else if(!user.getId().matches(".*[A-Za-z]$") && option.contentEquals("-p")){
             CLI.printErrorNextLine("Error -> A company user can not create a ticket of type '-p' only users are able to.");
-            return false;
+            return true;
         }
 
         try {
-
             Cash cashier = (Cash) userManager.getUserByID(cashId);
             Client client = (Client) userManager.getUserByID(userId);
             TicketManager ticketManager=TicketManager.getInstance();
@@ -94,12 +93,10 @@ public class TicketNewCommand extends Command {
             client.addTicket(ticket);
             ticketManager.getFormatter().printCurrentTicket(ticket);
             CLI.printNextLine("ticket new: ok");
-            return true;
         }catch (ClassCastException ex){
             CLI.printErrorNextLine("Error -> First id must be a cash id and second id must be a client DNI.");
-            return false;
         }
-
+        return true;
     }
 
     private boolean isOptionValid(String option){

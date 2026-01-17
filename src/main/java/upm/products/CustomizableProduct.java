@@ -1,5 +1,8 @@
 package upm.products;
 
+
+import upm.tickets.itemsaddition.ItemAdditionVisitor;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,6 +64,12 @@ public class CustomizableProduct extends BasicProduct {
         sb.append("]}");
         return sb.toString();
     }
+
+    @Override
+    public boolean accept(ItemAdditionVisitor visitor, String[] args) {
+        return visitor.add(this, args);
+    }
+
 
     public void setMaxCustomTexts(int maxCustomTexts) {
         this.maxCustomTexts = maxCustomTexts;

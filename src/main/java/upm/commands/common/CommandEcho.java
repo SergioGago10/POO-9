@@ -13,27 +13,19 @@ public class CommandEcho extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        // Validaciones básicas
         if (args == null || args.length < 2) {
+            CLI.printErrorNextLine("Error -> Format must be: echo \"<text>\"");
             return true;
         }
 
-        // El primer token debe ser "echo"
-        if (!args[0].equalsIgnoreCase("echo")) {
-            return true;
-        }
-
-        // Segundo argumento: texto con comillas
         String rawText = args[1];
 
-        // Quitamos las comillas: "texto" → texto
         if (rawText.length() >= 2 && rawText.startsWith("\"") && rawText.endsWith("\"")) {
             String text = rawText.substring(1, rawText.length() - 1);
             CLI.printNextLine(text);
-            return true;
+        } else {
+         CLI.printErrorNextLine("Error -> Format must be: echo \"<text>\"");
         }
-
-        // Si no viene con comillas, comando mal formado
         return true;
     }
 

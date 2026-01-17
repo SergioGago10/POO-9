@@ -1,6 +1,6 @@
 package upm.products;
 
-import upm.tickets.core.Ticket;
+import upm.tickets.itemsaddition.ItemAdditionVisitor;
 
 import java.time.LocalDateTime;
 
@@ -47,6 +47,12 @@ public class Event extends Product {
         sb.append(", max people allowed:").append(maxParticipants).append("}");
         return sb.toString();
     }
+
+    @Override
+    public boolean accept(ItemAdditionVisitor visitor, String[] args) {
+        return visitor.add(this, args);
+    }
+
 
     public String toTicketString() {
         StringBuilder sb = new StringBuilder();

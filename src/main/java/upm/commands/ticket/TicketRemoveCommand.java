@@ -10,7 +10,7 @@ import upm.tickets.management.TicketManager;
 
 public class TicketRemoveCommand  extends Command {
 
-    public TicketRemoveCommand(){
+    public TicketRemoveCommand() {
         super("remove");
     }
 
@@ -18,36 +18,42 @@ public class TicketRemoveCommand  extends Command {
     public boolean apply(String[] args) {
         if (args.length != 5) {
             CLI.printErrorNextLine("Error -> format must be: ticket remove <ticketId> <cashId> <prodId>");
-        } else {
-            try {
-                String ticketId = args[2];
-                String cashId = args[3];
-                ProductManager productManager=ProductManager.getInstance();
-                TicketManager ticketManager=TicketManager.getInstance();
-                String prodId = args[4];
-                if (productManager.idExists(prodId)) {
-                    Ticket<?> ticketAModificar = ticketManager.getTicketById(ticketId); //Si es null es que no existe dicho ticketId!
-                    if(ticketAModificar == null){
-                        CLI.printErrorNextLine("Error -> Ticket with id: " + ticketId + " does not exist.");
-                    } else {
-                        Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
-                        if(!cashUser.getTickets().contains(ticketAModificar)){
-                            CLI.printErrorNextLine("Error -> Ticket: " + ticketId + " does not belong to cashier " + cashId);
-                        }else {
-                            ticketAModificar.removeProductFromTicket(prodId);
-                            ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
-                            CLI.printNextLine("ticket remove: ok");
-                        }
-                    }
-                } else
-                    CLI.printErrorNextLine("Error -> Product with the id: " + prodId + " was not found.");
+            return true;
+        }
+        try {
+            String ticketId = args[2];
+            String cashId = args[3];
+            ProductManager productManager=ProductManager.getInstance();
+            TicketManager ticketManager=TicketManager.getInstance();
+            String prodId = args[4];
+
+            if(!productManager.idExists(prodId)) {
+                CLI.printErrorNextLine("Error -> Product with id: " + prodId + " does not exist.");
+                return true;
+            }
+
+            Ticket<?> ticketAModificar = ticketManager.getTicketById(ticketId);
+
+            if(ticketAModificar == null) {
+                CLI.printErrorNextLine("Error -> Ticket with id: " + ticketId + " does not exist.");
+                return true;
+            }
+
+            Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
+
+            if(!cashUser.getTickets().contains(ticketAModificar)) {
+                CLI.printErrorNextLine("Error -> Ticket: " + ticketId + " does not belong to cashier " + cashId);
+                return true;
+            }
+
+            ticketAModificar.removeProductFromTicket(prodId);
+            ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
+            CLI.printNextLine("ticket remove: ok");
             } catch (NumberFormatException e) {
                 CLI.printErrorNextLine("Error -> prodId must be an integer.");
             } catch (Exception e) {
                 CLI.printErrorNextLine("Error -> product could not be removed from the ticket: " + e.getMessage());
             }
-        }
         return true;
     }
-
 }

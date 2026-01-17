@@ -27,11 +27,21 @@ public class CLI {
         return line.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
     }
 
-    public static void printNextLine(String message) {System.out.println(message);}
-    public static void print(String message) {System.out.print(message);}
-    public static void printFormat(String format, Object ... args) {System.out.printf(format, args);}
-    public static void printError(String message) {System.out.print(RED + message + RESET);}
-    public static void printErrorNextLine(String message) {System.out.println(RED + message + RESET);}
+    public static void printNextLine(String message) {
+        System.out.println(message);
+    }
+    public static void print(String message) {
+        System.out.print(message);
+    }
+    public static void printFormat(String format, Object ... args) {
+        System.out.printf(format, args);
+    }
+    public static void printError(String message) {
+        System.out.print(RED + message + RESET);
+    }
+    public static void printErrorNextLine(String message) {
+        System.out.println(RED + message + RESET);
+    }
 
     public static Scanner createScanner(String[] args) {
         Scanner scanner;

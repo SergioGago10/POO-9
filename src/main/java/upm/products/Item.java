@@ -3,6 +3,7 @@ package upm.products;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import upm.tickets.core.Ticket;
+import upm.tickets.itemsaddition.ItemAdditionVisitor;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -21,5 +22,8 @@ import upm.tickets.core.Ticket;
 public interface Item {
     String getId();
     boolean addTo(Ticket<?> ticket);
-
+    boolean accept(ItemAdditionVisitor visitor, String[] args);
+    default void setCategoryFromCLI(String value) {
+        throw new UnsupportedOperationException("Error -> That type of product doesn't have a category.");
+    }
 }
