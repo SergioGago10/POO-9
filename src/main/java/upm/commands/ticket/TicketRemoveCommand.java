@@ -3,6 +3,7 @@ package upm.commands.ticket;
 import upm.CLI;
 import upm.commands.core.Command;
 import upm.products.ProductManager;
+import upm.tickets.format.TicketFormatter;
 import upm.users.Cash;
 import upm.users.UserManager;
 import upm.tickets.core.Ticket;
@@ -46,8 +47,9 @@ public class TicketRemoveCommand  extends Command {
                 return true;
             }
 
+            TicketFormatter ticketFormatter = new TicketFormatter();
             ticketAModificar.removeProductFromTicket(prodId);
-            ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
+            ticketFormatter.printCurrentTicket(ticketAModificar);
             CLI.printNextLine("ticket remove: ok");
             } catch (NumberFormatException e) {
                 CLI.printErrorNextLine("Error -> prodId must be an integer.");

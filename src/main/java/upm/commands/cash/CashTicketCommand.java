@@ -2,9 +2,9 @@ package upm.commands.cash;
 
 import upm.CLI;
 import upm.commands.core.Command;
+import upm.tickets.format.TicketFormatter;
 import upm.users.Cash;
 import upm.users.UserManager;
-import upm.tickets.management.TicketManager;
 
 public class CashTicketCommand extends Command {
 
@@ -29,8 +29,8 @@ public class CashTicketCommand extends Command {
                 return true;
             }
 
-            TicketManager ticketManager=TicketManager.getInstance();
-            ticketManager.getFormatter().printTicketsByCash(cashIdentifier);
+            TicketFormatter ticketFormatter = new TicketFormatter();
+            ticketFormatter.printTicketsByCash(cashIdentifier);
             CLI.printNextLine("cash tickets: ok");
             return true;
         } catch (ClassCastException ex) {

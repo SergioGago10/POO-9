@@ -8,7 +8,6 @@ import upm.users.UserManager;
 import upm.Utilities;
 import upm.tickets.core.TicketFactory;
 import upm.tickets.core.Ticket;
-import upm.tickets.format.TicketFormatter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,14 +16,11 @@ import java.util.*;
 public class TicketManager {
     private List<Ticket<?>> ticketsList;
     private static TicketManager instance;
-    private final TicketFormatter ticketFormatter;
 
     private TicketManager() {
         ticketsList = new ArrayList<>();
-        this.ticketFormatter = new TicketFormatter();
     }
 
-    public TicketFormatter getFormatter() {return ticketFormatter;}
     @JsonIgnore
     public List<Ticket<?>> getTicketsList(){return new ArrayList<>(ticketsList);}
     public Ticket<?> getTicketById(String ticketId) {

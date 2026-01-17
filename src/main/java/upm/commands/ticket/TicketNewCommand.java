@@ -2,6 +2,7 @@ package upm.commands.ticket;
 
 import upm.CLI;
 import upm.commands.core.Command;
+import upm.tickets.format.TicketFormatter;
 import upm.users.*;
 import upm.tickets.core.Ticket;
 import upm.tickets.management.TicketManager;
@@ -91,7 +92,8 @@ public class TicketNewCommand extends Command {
 
             cashier.addTicket(ticket);
             client.addTicket(ticket);
-            ticketManager.getFormatter().printCurrentTicket(ticket);
+            TicketFormatter ticketFormatter = new TicketFormatter();
+            ticketFormatter.printCurrentTicket(ticket);
             CLI.printNextLine("ticket new: ok");
         }catch (ClassCastException ex){
             CLI.printErrorNextLine("Error -> First id must be a cash id and second id must be a client DNI.");

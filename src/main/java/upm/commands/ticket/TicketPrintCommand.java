@@ -2,6 +2,7 @@ package upm.commands.ticket;
 
 import upm.CLI;
 import upm.commands.core.Command;
+import upm.tickets.format.TicketFormatter;
 import upm.users.Cash;
 import upm.users.UserManager;
 import upm.tickets.core.Ticket;
@@ -42,7 +43,8 @@ public class TicketPrintCommand extends Command {
                 ticketAMostrar.closeTicket();
             }
 
-            ticketManager.getFormatter().printFinalTicket(ticketAMostrar);
+            TicketFormatter ticketFormatter = new TicketFormatter();
+            ticketFormatter.printFinalTicket(ticketAMostrar);
             CLI.printNextLine("ticket print: ok");
         } catch (Exception e) {
             CLI.printErrorNextLine("Error -> Ticket could not be printed: " + e.getMessage());

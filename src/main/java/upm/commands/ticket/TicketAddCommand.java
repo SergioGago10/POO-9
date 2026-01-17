@@ -3,6 +3,7 @@ package upm.commands.ticket;
 import upm.CLI;
 import upm.commands.core.Command;
 import upm.products.*;
+import upm.tickets.format.TicketFormatter;
 import upm.users.Cash;
 import upm.users.UserManager;
 import upm.tickets.core.Ticket;
@@ -108,7 +109,8 @@ public class TicketAddCommand extends Command {
             }
 
             if(handled){
-                ticketManager.getFormatter().printCurrentTicket(ticketAModificar);
+                TicketFormatter ticketFormatter = new TicketFormatter();
+                ticketFormatter.printCurrentTicket(ticketAModificar);
                 CLI.printNextLine("ticket add: ok");
             }
         } catch (NumberFormatException e) {
