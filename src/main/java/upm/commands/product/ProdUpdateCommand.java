@@ -58,7 +58,7 @@ public class ProdUpdateCommand extends Command {
             CLI.printNextLine(product.toString());
             CLI.printNextLine("prod update: ok");
         } catch (IllegalArgumentException ignored) {
-            CLI.print("Error -> Category must be: MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC in Basic/Custom Products," +
+            CLI.printErrorNextLine("Error -> Category must be: MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC in Basic/Custom Products," +
                     "or: INSURANCE, TRANSPORT or SHOW in Services");
         }
         return true;

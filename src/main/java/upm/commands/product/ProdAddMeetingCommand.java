@@ -1,13 +1,14 @@
 package upm.commands.product;
 
 import upm.CLI;
+import upm.Utilities;
 import upm.commands.core.Command;
-import upm.products.ProductManager;
 import upm.products.Event;
 import upm.products.Product;
+import upm.products.ProductManager;
 import upm.products.TypeEvent;
-import upm.Utilities;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

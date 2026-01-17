@@ -1,10 +1,11 @@
 package upm.commands.product;
 
 import upm.CLI;
+import upm.Utilities;
 import upm.commands.core.Command;
 import upm.products.*;
-import upm.Utilities;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;

@@ -72,7 +72,6 @@ public class Event extends Product {
     public LocalDateTime getCreationDate() {return creationDate;}
     public int getActualParticipants() {return actualParticipants;}
 
-
     public void setMaxParticipants(int maxParticipants) { this.maxParticipants = maxParticipants; }
     public void setActualParticipants(int actualParticipants) { this.actualParticipants = actualParticipants; }
     public void setCreationDate(LocalDateTime creationDate) { this.creationDate = creationDate; }
