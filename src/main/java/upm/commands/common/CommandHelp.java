@@ -13,12 +13,8 @@ public class CommandHelp extends Command {
 
     @Override
     public boolean apply(String[] args) {
-        if (args == null || args.length == 0) {
-            return true;
-        }
-
-        //  "help" sin más argumentos
-        if (args.length != 1 || !args[0].equalsIgnoreCase(text)) {
+        if (args == null || args.length != 1) {
+            CLI.printErrorNextLine("Error -> Format must be: help");
             return true;
         }
 

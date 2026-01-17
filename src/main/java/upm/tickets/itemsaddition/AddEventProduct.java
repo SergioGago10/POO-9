@@ -19,7 +19,7 @@ public class AddEventProduct extends ItemAdditionStrategy<Event> {
     public boolean canBeAdded(String[] args) {
         Event eventProd = (Event) this.productManager.getIProduct(args[1]);
         if(doesThisProdExistinTicket(this.ticketManager.getTicketById(args[0]),eventProd)){
-            CLI.print("This product (Food/Meeting) is already in the ticket. It can not be added again.");
+            CLI.printErrorNextLine("Error -> This product (Food/Meeting) is already in the ticket. It can not be added again.");
             return false;
         }
         return isDateValid(eventProd);
@@ -34,12 +34,12 @@ public class AddEventProduct extends ItemAdditionStrategy<Event> {
         LocalDateTime planned = product.getPlannedDate();
         if (product.getTypeEvent().equals(TypeEvent.FOOD)) {
             if (planned.isBefore(now.plusDays(3))) {
-                CLI.print("Foods must be planned at least 3 days before.");
+                CLI.printErrorNextLine("Error -> Foods must be planned at least 3 days before.");
                 return false;
             }
         } else {
             if (planned.isBefore(now.plusHours(12))) {
-                CLI.print("Meetings must be planned at least 12 hours before.");
+                CLI.printErrorNextLine("Error -> Meetings must be planned at least 12 hours before.");
                 return false;
             }
         }
@@ -55,8 +55,13 @@ public class AddEventProduct extends ItemAdditionStrategy<Event> {
         Event product = (Event) this.productManager.getIProduct(args[1]);
         int quantity = Integer.parseInt(args[2]);
         if(!isTheAmountValid(quantity,product)){
-            CLI.print("The amount of people that will attend the event exceeds the limit.");
+            CLI.printErrorNextLine("Error -> The amount of people that will attend the event exceeds the limit.");
             return  false;
+        }
+        boolean isDateValid = product.getPlannedDate().isAfter(LocalDateTime.now());
+        if(!isDateValid){
+            CLI.printErrorNextLine("Error -> You can't add an event that has expired.");
+         return false;
         }
 
         double actualPrice = product.getPrice()*quantity;
@@ -65,7 +70,7 @@ public class AddEventProduct extends ItemAdditionStrategy<Event> {
 
         boolean wasTheEventAdded = ticket.tryToAdd(eventAux);
         if (!wasTheEventAdded) {
-            CLI.print("The event could not be added, the max number of products has been reached.");
+            CLI.printErrorNextLine("Error -> The event could not be added, the max number of products has been reached.");
         }
         return wasTheEventAdded;
     }

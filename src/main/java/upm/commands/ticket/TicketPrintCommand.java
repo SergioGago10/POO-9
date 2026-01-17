@@ -10,35 +10,40 @@ import upm.tickets.core.TicketState;
 
 public class TicketPrintCommand extends Command {
 
-    public TicketPrintCommand(){
+    public TicketPrintCommand() {
         super("print");
     }
 
     @Override
     public boolean apply(String[] args) {
+        if(args.length != 4) {
+            CLI.printErrorNextLine("Error -> format must be: ticket print <ticketId> <cashId>");
+            return true;
+        }
         try {
-            if(args.length!= 4){
-                CLI.printErrorNextLine("Error -> format must be: ticket print <ticketId> <cashId>");
-            } else{
-                String ticketId = args[2];
-                String cashId = args[3];
-                TicketManager ticketManager=TicketManager.getInstance();
-                Ticket<?> ticketAMostrar = ticketManager.getTicketById(ticketId);
-                if(ticketAMostrar != null){
-                    Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
-                    if(!cashUser.getTickets().contains(ticketAMostrar)){
-                        CLI.printErrorNextLine("Error -> Ticket " + ticketId + " does not belong to cashier " + cashId);
-                    } else{
-                        if(ticketAMostrar.getEstado() != TicketState.EMPTY){
-                            ticketAMostrar.closeTicket();
-                        }
-                        ticketManager.getFormatter().printFinalTicket(ticketAMostrar);
-                        CLI.printNextLine("ticket print: ok");
-                    }
-                } else{
-                    CLI.printErrorNextLine("Error -> Ticket with id: " + ticketId + " does not exist.");
-                }
+            String ticketId = args[2];
+            String cashId = args[3];
+            TicketManager ticketManager=TicketManager.getInstance();
+            Ticket<?> ticketAMostrar = ticketManager.getTicketById(ticketId);
+
+            if(ticketAMostrar == null) {
+                CLI.printErrorNextLine("Error -> Ticket with id: " + ticketId + " does not exist.");
+                return true;
             }
+
+            Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
+
+            if(!cashUser.getTickets().contains(ticketAMostrar)) {
+                CLI.printErrorNextLine("Error -> Ticket " + ticketId + " does not belong to cashier " + cashId);
+                return true;
+            }
+
+            if(ticketAMostrar.getEstado() != TicketState.EMPTY){
+                ticketAMostrar.closeTicket();
+            }
+
+            ticketManager.getFormatter().printFinalTicket(ticketAMostrar);
+            CLI.printNextLine("ticket print: ok");
         } catch (Exception e) {
             CLI.printErrorNextLine("Error -> Ticket could not be printed: " + e.getMessage());
         }

@@ -1,6 +1,5 @@
 package upm;
 
-import upm.products.BasicProduct;
 import upm.products.ProductManager;
 
 import java.util.Random;
@@ -13,12 +12,12 @@ public class Utilities {
             // return 1 + new Random().nextInt(9); // 1 a 9
             case 2 -> 10 + new Random().nextInt(90); // 10 a 99 - 2 dig
             case 3 -> 100 + new Random().nextInt(900); // 100 a 999 - 3 dig
-            case 4 -> 1000 + new Random().nextInt(9000); // 1000 a 99999 - 4 dig
-            case 5 -> 10000 + new Random().nextInt(90000); // 10000 a 99999 - 5 dig
-            case 6 -> 100000 + new Random().nextInt(900000); // 100000 a 999999 - 6 dig
-            case 7 -> 1000000 + new Random().nextInt(9000000); // 1000000 a 9999999 - 7 dig
-            case 8 -> 10000000 + new Random().nextInt(90000000); // 10000000 a 99999999 - 8 dig
-            case 9 -> 100000000 + new Random().nextInt(900000000); // 100000000 a 999999999 - 9 dig
+            case 4 -> 1_000 + new Random().nextInt(9_000); // 1000 a 99999 - 4 dig
+            case 5 -> 10_000 + new Random().nextInt(90_000); // 10000 a 99999 - 5 dig
+            case 6 -> 100_000 + new Random().nextInt(900_000); // 100000 a 999999 - 6 dig
+            case 7 -> 1_000_000 + new Random().nextInt(9_000_000); // 1000000 a 9999999 - 7 dig
+            case 8 -> 10_000_000 + new Random().nextInt(90_000_000); // 10000000 a 99999999 - 8 dig
+            case 9 -> 100_000_000 + new Random().nextInt(900_000_000); // 100000000 a 999999999 - 9 dig
             default -> -1;
         };
     }
@@ -30,19 +29,19 @@ public class Utilities {
         try {
             idNum = Integer.parseInt(id);
         } catch (NumberFormatException ex) {
-            CLI.printErrorNextLine("Error -> Id must be a number");
+            CLI.printErrorNextLine("Error -> Product id must be a number");
             return false;
         }
         if (idNum < 0) {
-            CLI.printErrorNextLine("Error -> Id must be positive.");
+            CLI.printErrorNextLine("Error -> Product id must be positive.");
             return false;
         }
         if (price < 0) {
-            CLI.printErrorNextLine("Error -> Price must be positive.");
+            CLI.printErrorNextLine("Error -> Product price must be positive.");
             return false;
         }
         if (name.isBlank() || name.length() > ProductManager.MAX_CHAR_NAME) {
-            CLI.printErrorNextLine("Error -> Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
+            CLI.printErrorNextLine("Error -> Product name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
             return false;
         }
         return resul;

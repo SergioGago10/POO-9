@@ -24,11 +24,11 @@ public class AddServiceProduct extends ItemAdditionStrategy<ProductService> {
         boolean isDateValid = service.getMaxDate().isAfter(LocalDateTime.now());
         boolean isServiceInTicket = ticket.getItemsList().contains(service);
         if(isServiceInTicket){
-            CLI.print("The service is already in the ticket.");
+            CLI.printErrorNextLine("Error -> The service is already in the ticket.");
             return false;
         }
         if(!isDateValid){
-            CLI.print("The service date has expired.");
+            CLI.printErrorNextLine("Error -> The service date has expired.");
             return false;
         }
         return true;

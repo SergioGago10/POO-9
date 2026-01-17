@@ -55,15 +55,21 @@ public class App {
 
             if (userInput[0].equals("exit")) {
                 running = false;
-                continue;
-            }
+            else {
+                boolean handled = false; // indica si algún comando ha gestionado la entrada
 
-            boolean handled = false;
-
-            for (Command command : commands) {
-                try {
-                    if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
-                        handled = true;
+                for (Command command : commands) {
+                    try {
+                        if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
+                            // el booleano handled SIEMPRE será true si se ejecuta un comando
+                            // da igual que sea error, lo importante es que el comando se ha encontrado y ejecutado
+                            // la unica forma de la cual dará false es que el comando no se encuentre
+                            handled = true;
+                            break; // ya hay un comando que ha ejecutado esta línea
+                        }
+                    } catch (Exception e) {
+                        CLI.printErrorNextLine("Error: " + e.getMessage());
+                        handled = true; // consideramos la línea “gestionada” aunque sea con error
                         break;
                     }
                 } catch (Exception e) {

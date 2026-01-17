@@ -6,20 +6,20 @@ import upm.tickets.management.TicketManager;
 
 public class TicketListCommand extends Command {
 
-    public TicketListCommand(){
+    public TicketListCommand() {
         super("list");
     }
 
     @Override
     public boolean apply(String[] args) {
+        if(args.length != 2) {
+            CLI.printErrorNextLine("Error -> format must be: ticket list");
+            return true;
+        }
         try{
-            if(args.length!=2){
-                CLI.printErrorNextLine("Error -> format must be: ticket list");
-            }else{
-                TicketManager ticketManager=TicketManager.getInstance();
-                ticketManager.getFormatter().printListTickets(ticketManager);
-                CLI.printNextLine("ticket list: ok");
-            }
+            TicketManager ticketManager=TicketManager.getInstance();
+            ticketManager.getFormatter().printListTickets(ticketManager);
+            CLI.printNextLine("ticket list: ok");
         } catch (Exception e) {
             CLI.printErrorNextLine("Error -> tickets could not be printed: " + e.getMessage());
         }

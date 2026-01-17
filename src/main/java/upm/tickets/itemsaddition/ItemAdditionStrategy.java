@@ -45,7 +45,9 @@ public abstract class ItemAdditionStrategy<T extends Item>{
         }
 
         if (ticket.getItemsList().size() >= ticket.getTicketMetadata().getMAX_PRODS_IN_TICKET()) {
-            CLI.print("You can't add more products to the ticket. Try to make a new one if needed.");
+            CLI.printErrorNextLine("Warning -> You can't add more products to the ticket, since the limit is: "
+                    + ticket.getTicketMetadata().getMAX_PRODS_IN_TICKET()
+                    + ". Try to make a new one if needed.");
         }
         return addedOnce;
     }

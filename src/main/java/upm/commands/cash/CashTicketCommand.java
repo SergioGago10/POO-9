@@ -23,18 +23,19 @@ public class CashTicketCommand extends Command {
             String cashIdentifier = args[2];
             UserManager userManager=UserManager.getInstance();
             Cash cash = (Cash) userManager.getUserByID(cashIdentifier);
+
             if (cash == null) {
                 CLI.printErrorNextLine("Error -> Cash not found.");
-                return false;
+                return true;
             }
+
             TicketManager ticketManager=TicketManager.getInstance();
             ticketManager.getFormatter().printTicketsByCash(cashIdentifier);
             CLI.printNextLine("cash tickets: ok");
             return true;
-
         } catch (ClassCastException ex) {
             CLI.printErrorNextLine("Error -> Id doesnt belong to a cashier, it belongs to a Client.");
-            return false;
+            return true;
         }
     }
 }

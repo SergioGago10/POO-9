@@ -49,7 +49,7 @@ public class TicketManager {
         while (exists(ticketId)) {
             ticketId = String.valueOf(Utilities.randomNumGen(5));
         }
-        ticketId = ticketId + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm"));
+        ticketId = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm")) + ticketId;
         return newTicket(ticketId,option);
     }
 
@@ -57,10 +57,6 @@ public class TicketManager {
         Ticket<?> ticket = TicketFactory.create(ticketId,option);
         ticketsList.add(ticket);
         return ticket;
-    }
-    public void setTicketsList(List<Ticket<?>> tickets) {
-        this.ticketsList.clear();
-        if (tickets != null) this.ticketsList.addAll(tickets);
     }
 
     public void ticketCashRemover(Cash cashier){

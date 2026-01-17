@@ -1,13 +1,13 @@
 package upm.users;
 
  import upm.CLI;
+ import upm.Utilities;
  import upm.tickets.management.TicketManager;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
- import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 public class UserManager {
     private static UserManager instance;
@@ -41,6 +41,7 @@ public class UserManager {
         if (client == null) return false;
         for (Client c : clientsList) {
             if (c.getId().equals(client.getId())) {
+                CLI.printErrorNextLine("Error -> The client with id: " + client.getId() +  " is already in the clients list.");
                 return false;
             }
         }
@@ -49,12 +50,12 @@ public class UserManager {
 
     public boolean addCash(Cash cash) {
         if (cash == null) {
-            CLI.printNextLine("Cashier couldn't be created");
+            CLI.printErrorNextLine("Error -> Cashier couldn't be created.");
             return false;
         }
         for (Cash c : cashList) {
             if (c.getId().equals(cash.getId())) {
-                CLI.printNextLine("Cashier already exist");
+                CLI.printErrorNextLine("Error -> The cashier already exists.");
                 return false;
             }
         }
@@ -111,10 +112,9 @@ public class UserManager {
     }
 
     public String generateRandomIdentifier() {
-        Random random = new Random();
         int number;
         do {
-            number = 1_000_000 + random.nextInt(9_000_000);
+            number = Utilities.randomNumGen(7);
         } while (idExists("UW" + number));
         return "UW" + number;
     }
