@@ -43,7 +43,10 @@ public abstract class Ticket<T extends Item>{
     public boolean addSpecificService(ProductService s) { return false; }
 
     protected boolean internalAdd(T item) {
-        if (this.itemsList.size() >= MAX_PRODUCTOS) return false;
+        if (this.itemsList.size() >= MAX_PRODUCTOS){
+            CLI.printErrorNextLine("Warning -> You can't add more products to the ticket. Try to make a new one if needed.");
+            return false;
+        }
         return itemsList.add(item);
     }
 

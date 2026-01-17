@@ -2,54 +2,42 @@ package upm.tickets.itemsaddition;
 
 import upm.CLI;
 import upm.products.CustomizableProduct;
-import upm.products.Item;
 import upm.tickets.core.Ticket;
+import upm.tickets.management.TicketManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddCustomProduct extends ItemAdditionStrategy<CustomizableProduct> {
+public class AddCustomProduct extends ItemAdditionStrategy{
     private CustomizableProduct prodCustAux;
-
-    @Override
-    public boolean canHandle(Item product){
-        return product instanceof CustomizableProduct;
-    }
+    private TicketManager ticketManager = TicketManager.getInstance();
 
     /**
      * @param args [ticketId, itemId, amount, texts(if they had)]
      */
     @Override
-    public boolean canBeAdded(String[] args) {
-        CustomizableProduct product = (CustomizableProduct) this.productManager.getIProduct(args[1]);
+    public boolean add(CustomizableProduct custom, String[] args) {
         List<String> textsToAdd = null;
         if(args.length > 3){
             textsToAdd = new ArrayList<>(Arrays.asList(Arrays.copyOfRange(args, 3, args.length)));
         }
-        if(textsToAdd != null && textsToAdd.size() > product.getMaxCustomTexts()){
-            CLI.print("Too many custom texts for this product. Max allowed: " + product.getMaxCustomTexts());
+        if(textsToAdd != null && textsToAdd.size() > custom.getMaxCustomTexts()){
+            CLI.printErrorNextLine("Error -> Too many custom texts for this product. Max allowed: " + custom.getMaxCustomTexts());
             return false;
         }
         //Creamos una copia del producto original, ya que no queremos modificarlo y asignarlo con personalizaciones.
         this.prodCustAux = new CustomizableProduct(
-                product.getId(),
-                product.getName(),
-                product.getCategory(),
-                product.getPrice(),
-                product.getMaxCustomTexts()
+                custom.getId(),
+                custom.getName(),
+                custom.getCategory(),
+                custom.getPrice(),
+                custom.getMaxCustomTexts()
         );
         this.prodCustAux.setCustomTexts(textsToAdd);
         double finalPrice = this.prodCustAux.calculateFinalPrice();
         this.prodCustAux.setPrice(finalPrice);
-        return true;
-    }
 
-    /**
-     * @param args [ticketId, itemId, amount, texts(if they had)]
-     */
-    @Override
-    protected boolean addMultipleTimes(String[] args) {
         Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
         int quantity = Integer.parseInt(args[2]);
         boolean canAddMore = true;
@@ -61,10 +49,6 @@ public class AddCustomProduct extends ItemAdditionStrategy<CustomizableProduct> 
             if (canAddMore) {
                 addedAtLeastOne = true;
             }
-        }
-
-        if (ticket.getItemsList().size() >= ticket.getTicketMetadata().getMAX_PRODS_IN_TICKET()) {
-            CLI.print("You can't add more products to the ticket. Try to make a new one if needed.");
         }
         return addedAtLeastOne;
     }
