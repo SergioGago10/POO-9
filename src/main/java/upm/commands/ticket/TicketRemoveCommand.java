@@ -52,7 +52,7 @@ public class TicketRemoveCommand  extends Command {
             ticketAModificar.removeProductFromTicket(prodId);
 
             //Si el ticket pasa de tener productos a tener 0, será empty de nuevo
-            if(ticketAModificar.getItemsList().isEmpty()){
+            if(ticketAModificar.getItemsList().isEmpty()) {
                 ticketAModificar.setEstado(TicketState.EMPTY);
             }
 
