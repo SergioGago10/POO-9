@@ -15,7 +15,7 @@ public class CashTicketCommand extends Command {
     @Override
     public boolean apply(String[] args) {
         if (args.length < 3) {
-            CLI.printErrorNextLine("Error -> Format must be: cash list");
+            CLI.printErrorNextLine("Error -> Format must be: cash tickets <id>");
             return false;
         }
 
