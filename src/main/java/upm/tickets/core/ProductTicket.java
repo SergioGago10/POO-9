@@ -1,5 +1,6 @@
 package upm.tickets.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import upm.products.Product;
 
 import java.util.Collections;
@@ -14,6 +15,8 @@ public class ProductTicket extends Ticket<Product> {
     public ProductTicket() {
         super(); // Jackson
     }
+
+    @JsonIgnore
     @Override
     public TicketContent getSortedContent() {
         List<Product> sorted = itemsList.stream()

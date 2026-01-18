@@ -1,5 +1,6 @@
 package upm.tickets.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import upm.products.ProductService;
 
 import java.util.Collections;
@@ -21,6 +22,7 @@ public class ServiceTicket extends Ticket<ProductService>{
         renderer.renderPrices(this);
     }
 
+    @JsonIgnore
     @Override
     public TicketContent getSortedContent() {
         List<ProductService> sorted = itemsList.stream()

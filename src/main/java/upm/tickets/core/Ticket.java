@@ -7,8 +7,21 @@ import upm.tickets.format.TicketFormatter;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ProductTicket.class, name = "product"),
+        @JsonSubTypes.Type(value = ServiceTicket.class, name = "service"),
+        @JsonSubTypes.Type(value = CommonTicket.class, name = "combined")
+})
+
 public abstract class Ticket<T extends Item>{
-    private final static int MAX_PRODUCTOS = 100;
     protected List<T> itemsList = new ArrayList<>();
     private TicketMetadata ticketMetadata;
     private TicketState estado;
@@ -16,7 +29,7 @@ public abstract class Ticket<T extends Item>{
     public abstract TicketContent getSortedContent();
 
     public Ticket(String ticketID) {
-        this.ticketMetadata = new TicketMetadata(ticketID, MAX_PRODUCTOS);
+        this.ticketMetadata = new TicketMetadata(ticketID);
         this.estado = TicketState.EMPTY;
     }
 
@@ -43,7 +56,7 @@ public abstract class Ticket<T extends Item>{
     public boolean addSpecificService(ProductService s) { return false; }
 
     protected boolean internalAdd(T item) {
-        if (this.itemsList.size() >= MAX_PRODUCTOS){
+        if (this.itemsList.size() >= ticketMetadata.getMAX_PRODS_IN_TICKET()){
             CLI.printErrorNextLine("Warning -> You can't add more products to the ticket. Try to make a new one if needed.");
             return false;
         }

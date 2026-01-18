@@ -1,5 +1,6 @@
 package upm.tickets.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import upm.products.Item;
 import upm.products.Product;
 import upm.products.ProductService;
@@ -17,6 +18,7 @@ public class CommonTicket extends Ticket<Item> {
         super();
     }
 
+    @JsonIgnore
     @Override
     public TicketContent getSortedContent() {
         List<Product> prods = itemsList.stream()

@@ -523,15 +523,6 @@ public class ItemTests {
         Assertions.assertEquals("[31mError -> This item has not name\u001B[0m",
                 outContent.toString().trim());
     }
-
-
-
-
-
-
-
-
-
 }
 
 
