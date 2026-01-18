@@ -1,0 +1,68 @@
+{
+  "products" : [ {
+    "type" : "BasicProduct",
+    "id" : "1",
+    "name" : "'Libro'",
+    "price" : 10.0,
+    "category" : "BOOK"
+  } ],
+  "services" : [ ],
+  "clients" : [ {
+    "type" : "client",
+    "id" : "00000000T",
+    "name" : "Pepe",
+    "email" : "pepe@mail.com",
+    "tickets" : [ {
+      "type" : "product",
+      "itemsList" : [ {
+        "type" : "BasicProduct",
+        "id" : "1",
+        "name" : "'Libro'",
+        "price" : 10.0,
+        "category" : "BOOK"
+      } ],
+      "ticketMetadata" : {
+        "ticketID" : "T1",
+        "printedID" : "T1-26-01-18-21:21"
+      },
+      "estado" : "CLOSE"
+    } ],
+    "cashId" : "00000W",
+    "typeClient" : "CLIENT"
+  } ],
+  "cash" : [ {
+    "type" : "cashier",
+    "id" : "00000W",
+    "name" : "Saul",
+    "tickets" : [ {
+      "type" : "product",
+      "itemsList" : [ {
+        "type" : "BasicProduct",
+        "id" : "1",
+        "name" : "'Libro'",
+        "price" : 10.0,
+        "category" : "BOOK"
+      } ],
+      "ticketMetadata" : {
+        "ticketID" : "T1",
+        "printedID" : "T1-26-01-18-21:21"
+      },
+      "estado" : "CLOSE"
+    } ]
+  } ],
+  "tickets" : [ {
+    "type" : "product",
+    "itemsList" : [ {
+      "type" : "BasicProduct",
+      "id" : "1",
+      "name" : "'Libro'",
+      "price" : 10.0,
+      "category" : "BOOK"
+    } ],
+    "ticketMetadata" : {
+      "ticketID" : "T1",
+      "printedID" : "T1-26-01-18-21:21"
+    },
+    "estado" : "CLOSE"
+  } ]
+}

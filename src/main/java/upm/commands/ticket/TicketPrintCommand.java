@@ -9,6 +9,9 @@ import upm.tickets.core.Ticket;
 import upm.tickets.management.TicketManager;
 import upm.tickets.core.TicketState;
 
+import java.util.List;
+import java.util.Objects;
+
 public class TicketPrintCommand extends Command {
 
     public TicketPrintCommand() {
@@ -24,7 +27,8 @@ public class TicketPrintCommand extends Command {
         try {
             String ticketId = args[2];
             String cashId = args[3];
-            TicketManager ticketManager=TicketManager.getInstance();
+
+            TicketManager ticketManager = TicketManager.getInstance();
             Ticket<?> ticketAMostrar = ticketManager.getTicketById(ticketId);
 
             if(ticketAMostrar == null) {
@@ -33,8 +37,12 @@ public class TicketPrintCommand extends Command {
             }
 
             Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
+            if (cashUser == null) {
+                CLI.printErrorNextLine("Error -> Cashier with id: " + cashId + " does not exist.");
+                return true;
+            }
 
-            if(!cashUser.getTickets().contains(ticketAMostrar)) {
+            if (!containsTicketId(cashUser.getTickets(), ticketAMostrar)) {
                 CLI.printErrorNextLine("Error -> Ticket " + ticketId + " does not belong to cashier " + cashId);
                 return true;
             }
@@ -52,4 +60,22 @@ public class TicketPrintCommand extends Command {
         return true;
     }
 
+    private boolean containsTicketId(List<?> tickets, Ticket<?> target) {
+        String targetId = safeTicketId(target);
+        if (targetId == null) return false;
+        if (tickets == null) return false;
+
+        for (Object o : tickets) {
+            if (o instanceof Ticket<?> t) {
+                if (Objects.equals(safeTicketId(t), targetId)) return true;
+            }
+        }
+        return false;
+    }
+
+    private String safeTicketId(Ticket<?> t) {
+        if (t == null) return null;
+        if (t.getTicketMetadata() == null) return null;
+        return t.getTicketMetadata().getTicketID();
+    }
 }

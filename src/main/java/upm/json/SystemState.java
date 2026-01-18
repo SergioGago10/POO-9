@@ -10,7 +10,7 @@ import upm.users.Cash;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL) //para que no se lea lo que es null (por si guardamos un JSON en el que no haya de todo)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SystemState {
 
     private List<Product> products = new ArrayList<>();
@@ -27,11 +27,11 @@ public class SystemState {
         return services;
     }
 
-    public List<upm.users.Client> getClients() {
+    public List<Client> getClients() {
         return clients;
     }
 
-    public List<upm.users.Cash> getCash() {
+    public List<Cash> getCash() {
         return cash;
     }
 
@@ -47,11 +47,11 @@ public class SystemState {
         this.services = services;
     }
 
-    public void setClients(List<upm.users.Client> clients) {
+    public void setClients(List<Client> clients) {
         this.clients = clients;
     }
 
-    public void setCash(List<upm.users.Cash> cash) {
+    public void setCash(List<Cash> cash) {
         this.cash = cash;
     }
 
@@ -59,4 +59,3 @@ public class SystemState {
         this.tickets = tickets;
     }
 }
-

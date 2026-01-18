@@ -1,13 +1,13 @@
 package upm.tickets.management;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import upm.Utilities;
+import upm.tickets.core.Ticket;
+import upm.tickets.core.TicketFactory;
 import upm.users.Cash;
 import upm.users.Client;
 import upm.users.User;
 import upm.users.UserManager;
-import upm.Utilities;
-import upm.tickets.core.TicketFactory;
-import upm.tickets.core.Ticket;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,12 +32,22 @@ public class TicketManager {
         return instance;
     }
 
+    public void setTicketsList(List<Ticket<?>> tickets) {
+        ticketsList.clear();
+        if (tickets == null) return;
+
+        Map<String, Ticket<?>> byId = new LinkedHashMap<>();
+        for (Ticket<?> t : tickets) {
+            String id = safeTicketId(t);
+            if (id == null || id.isBlank()) continue;
+            byId.putIfAbsent(id, t);
+        }
+        ticketsList.addAll(byId.values());
+    }
+
     public boolean exists(String ticketId) {
         if (ticketId == null) return false;
-        return ticketsList.stream().anyMatch(t -> {
-            String id = safeTicketId(t);
-            return ticketId.equals(id);
-        });
+        return ticketsList.stream().anyMatch(t -> ticketId.equals(safeTicketId(t)));
     }
 
     public Ticket<?> getTicketById(String ticketId) {
@@ -58,7 +68,6 @@ public class TicketManager {
                 .collect(Collectors.toList());
 
         if (matches.isEmpty()) return null;
-
         if (matches.size() == 1) return matches.get(0);
 
         matches.sort(Comparator.comparingInt(t -> safeTicketId(t).length()));
@@ -91,10 +100,16 @@ public class TicketManager {
         if (cashier == null) return;
 
         UserManager clientSearch = UserManager.getInstance();
-        List<Ticket<?>> cashTickets = cashier.getTickets();
+        List<Ticket<?>> cashTickets = (List) cashier.getTickets();
 
         for (Ticket<?> currentTicket : new ArrayList<>(cashTickets)) {
-            ticketsList.remove(currentTicket);
+            String id = safeTicketId(currentTicket);
+            if (id != null) {
+                ticketsList.removeIf(t -> id.equals(safeTicketId(t)));
+            } else {
+                ticketsList.remove(currentTicket);
+            }
+
             Iterator<Client> clientIt = clientSearch.getClients().iterator();
             boolean found = false;
             while (!found && clientIt.hasNext()) {

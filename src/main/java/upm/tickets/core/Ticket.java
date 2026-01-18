@@ -32,16 +32,20 @@ public abstract class Ticket<T extends Item> {
         this.estado = TicketState.EMPTY;
     }
 
-    public Ticket() {}
+    public Ticket() {
+        this.ticketMetadata = new TicketMetadata();
+        this.estado = TicketState.EMPTY;
+    }
 
     public TicketMetadata getTicketMetadata() { return ticketMetadata; }
+    public void setTicketMetadata(TicketMetadata ticketMetadata) { this.ticketMetadata = ticketMetadata; }
+
     public TicketState getEstado() { return estado; }
+    public void setEstado(TicketState estado) { this.estado = estado; }
 
     public List<T> getItemsList() {
         return Collections.unmodifiableList(itemsList);
     }
-
-    public void setEstado(TicketState estado) { this.estado = estado; }
 
     public abstract void accept(TicketRenderer renderer);
 
@@ -53,7 +57,7 @@ public abstract class Ticket<T extends Item> {
     public boolean addSpecificService(ProductService s) { return false; }
 
     protected boolean internalAdd(T item) {
-        if (this.itemsList.size() >= ticketMetadata.getMAX_PRODS_IN_TICKET()) {
+        if (ticketMetadata != null && this.itemsList.size() >= ticketMetadata.getMAX_PRODS_IN_TICKET()) {
             CLI.printErrorNextLine("Warning -> You can't add more products to the ticket. Try to make a new one if needed.");
             return false;
         }

@@ -14,6 +14,7 @@ import upm.tickets.management.TicketManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class TicketAddCommand extends Command {
 
@@ -37,15 +38,15 @@ public class TicketAddCommand extends Command {
             String cashId = args[3];
             String itemId = args[4];
             String amount = null;
+
             ProductManager productManager = ProductManager.getInstance();
             TicketManager ticketManager = TicketManager.getInstance();
-            // Validación del item
+
             if (!productManager.idExists(itemId)) {
                 CLI.printErrorNextLine("Error -> itemId must be an id contained in the catalog. Type 'prod list' to see all the catalog.");
                 return true;
             }
 
-            // Buscar ticket
             Ticket<? extends Item> ticketAModificar = ticketManager.getTicketById(ticketId);
 
             if (ticketAModificar == null) {
@@ -53,9 +54,13 @@ public class TicketAddCommand extends Command {
                 return true;
             }
 
-            // Comprobar que pertenece al mismo cashId
             Cash cashUser = (Cash) UserManager.getInstance().getUserByID(cashId);
-            if (!cashUser.getTickets().contains(ticketAModificar)) {
+            if (cashUser == null) {
+                CLI.printErrorNextLine("Error -> Cashier with id: " + cashId + " does not exist.");
+                return true;
+            }
+
+            if (!containsTicketId(cashUser.getTickets(), ticketAModificar)) {
                 CLI.printErrorNextLine("Error -> Ticket with id: " + ticketId + " does not belong to cashier " + cashId);
                 return true;
             }
@@ -65,20 +70,15 @@ public class TicketAddCommand extends Command {
                 return true;
             }
 
-            //Si tenemos un length mayor a 4, tenemos un producto o evento, por lo que pillamos el amount
             if(args.length > 5) {
                 amount = args[5];
             }
 
-            //esto significa que tenemos customizaciones, o, más argumentos basura que daremos error en caso de ser asi ya que el
-            //comando está mal
             String[] texts = null;
             if(args.length > 6) {
-                // Arrays.toString(Arrays.copyOfRange(args,6,args.length)) nos da desde --p hasta donde se hayan terminado las customizaciones
                 texts = parseCustomizations(Arrays.copyOfRange(args,6,args.length));
                 if(texts == null) return true;
             }
-
 
             List<String> argsDT = new ArrayList<>();
             argsDT.add(ticketId);
@@ -94,6 +94,7 @@ public class TicketAddCommand extends Command {
             ItemAdditionManager additionManager = new ItemAdditionManager();
             Item item = productManager.getIProduct(itemId);
             boolean handled = additionManager.process(argsDTO, item);
+
             boolean isTicketFull = ticketAModificar.getItemsList().size()
                     >= ticketAModificar.getTicketMetadata().getMAX_PRODS_IN_TICKET();
 
@@ -107,7 +108,6 @@ public class TicketAddCommand extends Command {
             }
 
             if (!ticketAModificar.getItemsList().isEmpty() && ticketAModificar.getEstado() == TicketState.EMPTY) {
-                //Ticket vacio que ahora no lo es, debe ser open y no empty
                 ticketAModificar.setEstado(TicketState.OPEN);
             }
 
@@ -125,11 +125,6 @@ public class TicketAddCommand extends Command {
         return true;
     }
 
-    /**
-     *
-     * @param args personalizaciones si están en buen orden
-     * @return null si no tiene personalizaciones o arraylist con las personalizaciones
-     */
     private String[] parseCustomizations(String[] args) {
         ArrayList<String> customizations = new ArrayList<>();
         boolean correctFormat = true;
@@ -146,5 +141,24 @@ public class TicketAddCommand extends Command {
         }
 
         return correctFormat ? customizations.toArray(new String[0]) : null;
+    }
+
+    private boolean containsTicketId(List<?> tickets, Ticket<?> target) {
+        String targetId = safeTicketId(target);
+        if (targetId == null) return false;
+        if (tickets == null) return false;
+
+        for (Object o : tickets) {
+            if (o instanceof Ticket<?> t) {
+                if (Objects.equals(safeTicketId(t), targetId)) return true;
+            }
+        }
+        return false;
+    }
+
+    private String safeTicketId(Ticket<?> t) {
+        if (t == null) return null;
+        if (t.getTicketMetadata() == null) return null;
+        return t.getTicketMetadata().getTicketID();
     }
 }

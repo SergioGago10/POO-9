@@ -32,14 +32,15 @@ public class App {
             if (userDecision == 'Y') {
                 persistence.load();
                 correctDecision = true;
-            } else if (!(userDecision == 'N')) {
-                CLI.printErrorNextLine("Invalid option. Please enter Y or N.");
-            } else {
+            } else if (userDecision == 'N') {
+                PersistenceService.reset(true);
                 correctDecision = true;
+            } else {
+                CLI.printErrorNextLine("Invalid option. Please enter Y or N.");
             }
         }
 
-        Locale.setDefault(Locale.ENGLISH); //Iniciamos y ponemos la app en inglés.
+        Locale.setDefault(Locale.ENGLISH);
         CLI.printNextLine("Welcome to the ticket module App.");
     }
 
@@ -48,7 +49,6 @@ public class App {
         boolean running = true;
         CLI.printNextLine("Ticket module. Type 'help' to see commands.");
 
-        // 1) Lista de comandos
         List<Command> commands = new ArrayList<>();
         commands.add(new CashCommands());
         commands.add(new ProdCommands());
@@ -57,33 +57,29 @@ public class App {
         commands.add(new ClientCommands());
         commands.add(new TicketCommands());
 
-        // 2) Bucle principal de CLI
         while (running) {
             try{
                 CLI.print("tUPM> ");
                 String[] userInput = cli.nextLine();
 
                 if (userInput[0].isEmpty()) {
-                    continue; // ignoramos líneas vacías
+                    continue;
                 }
 
                 if (userInput[0].equals("exit")){
                     running = false;
                 } else {
-                    boolean handled = false; // indica si algún comando ha gestionado la entrada
+                    boolean handled = false;
 
                     for (Command command : commands) {
                         try {
                             if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
-                                // el booleano handled SIEMPRE será true si se ejecuta un comando
-                                // da igual que sea error, lo importante es que el comando se ha encontrado y ejecutado
-                                // la unica forma de la cual dará false es que el comando no se encuentre
                                 handled = true;
-                                break; // ya hay un comando que ha ejecutado esta línea
+                                break;
                             }
                         } catch (Exception e) {
                             CLI.printErrorNextLine("Error: " + e.getMessage());
-                            handled = true; // consideramos la línea “gestionada” aunque sea con error
+                            handled = true;
                             break;
                         }
                     }
@@ -118,6 +114,4 @@ public class App {
             CLI.closeSc();
         }
     }
-
 }
-
