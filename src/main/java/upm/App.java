@@ -26,7 +26,7 @@ public class App {
 
     private void init() {
         // Si tu PersistenceService tiene load/read, actívalo:
-        // persistence.load();
+        persistence.load();
         Locale.setDefault(Locale.ENGLISH); //Iniciamos y ponemos la app en inglés.
         CLI.printNextLine("Welcome to the ticket module App.");
     }
