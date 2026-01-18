@@ -3,6 +3,7 @@ package upm.commands.ticket;
 import upm.CLI;
 import upm.commands.core.Command;
 import upm.products.ProductManager;
+import upm.tickets.core.TicketState;
 import upm.tickets.format.TicketFormatter;
 import upm.users.Cash;
 import upm.users.UserManager;
@@ -49,6 +50,12 @@ public class TicketRemoveCommand  extends Command {
 
             TicketFormatter ticketFormatter = new TicketFormatter();
             ticketAModificar.removeProductFromTicket(prodId);
+
+            //Si el ticket pasa de tener productos a tener 0, será empty de nuevo
+            if(ticketAModificar.getItemsList().isEmpty()){
+                ticketAModificar.setEstado(TicketState.EMPTY);
+            }
+
             ticketFormatter.printCurrentTicket(ticketAModificar);
             CLI.printNextLine("ticket remove: ok");
             } catch (NumberFormatException e) {

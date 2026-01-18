@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class AddCustomProduct extends ItemAdditionStrategy{
-    private CustomizableProduct prodCustAux;
     private TicketManager ticketManager = TicketManager.getInstance();
 
     /**
@@ -27,16 +26,16 @@ public class AddCustomProduct extends ItemAdditionStrategy{
             return false;
         }
         //Creamos una copia del producto original, ya que no queremos modificarlo y asignarlo con personalizaciones.
-        this.prodCustAux = new CustomizableProduct(
+        CustomizableProduct prodCustAux = new CustomizableProduct(
                 custom.getId(),
                 custom.getName(),
                 custom.getCategory(),
                 custom.getPrice(),
                 custom.getMaxCustomTexts()
         );
-        this.prodCustAux.setCustomTexts(textsToAdd);
-        double finalPrice = this.prodCustAux.calculateFinalPrice();
-        this.prodCustAux.setPrice(finalPrice);
+        prodCustAux.setCustomTexts(textsToAdd);
+        double finalPrice = prodCustAux.calculateFinalPrice();
+        prodCustAux.setPrice(finalPrice);
 
         Ticket<?> ticket = this.ticketManager.getTicketById(args[0]);
         int quantity = Integer.parseInt(args[2]);
@@ -44,7 +43,7 @@ public class AddCustomProduct extends ItemAdditionStrategy{
         boolean addedAtLeastOne = false;
 
         for (int i = 0; i < quantity && canAddMore; i++) {
-            canAddMore = ticket.tryToAdd(this.prodCustAux);
+            canAddMore = ticket.tryToAdd(prodCustAux);
 
             if (canAddMore) {
                 addedAtLeastOne = true;

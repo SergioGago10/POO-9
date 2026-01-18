@@ -5,6 +5,11 @@ import upm.products.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Esta clase utiliza el patron Chain of Responsibility
+ * por si cabía alguna duda, ya que se menciona en el código
+ * Visitor, aquí no se aplica visitor.
+ */
 public class ItemAdditionManager {
     private final List<ItemAdditionStrategy> handlers = new ArrayList<>();
 
