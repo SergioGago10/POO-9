@@ -2,7 +2,9 @@ package upm.commands.product;
 
 import upm.CLI;
 import upm.commands.core.Command;
-import upm.products.*;
+import upm.products.Item;
+import upm.products.Product;
+import upm.products.ProductManager;
 
 public class ProdUpdateCommand extends Command {
     public ProdUpdateCommand() {
@@ -27,29 +29,45 @@ public class ProdUpdateCommand extends Command {
 
             switch (args[3].toUpperCase()) {
                 case "NAME":
-                    if (args[4].length() > ProductManager.MAX_CHAR_NAME){
+                    if (args[4].length() > ProductManager.MAX_CHAR_NAME) {
                         CLI.printErrorNextLine("Error -> Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME);
                         return true;
                     }
-                    Product productToChange = (Product) (product);
+                    Product productToChange;
+                    try {
+                        productToChange = (Product) (product);
+                    } catch (ClassCastException exc) {
+                        CLI.printErrorNextLine("Error -> This item has not name");
+                        return false;
+                    }
                     productToChange.setName("'" + args[4].trim().replaceAll("^([\"'])|([\"'])$", "") + "'");
                     break;
                 case "PRICE":
-                    Product productToChange2 = (Product) (product);
-                    if (Double.parseDouble(args[4]) < 0){
+                    Product productToChange2;
+                    Double price;
+                    try {
+                        productToChange2 = (Product) (product);
+                    } catch (ClassCastException exc) {
+                        CLI.printErrorNextLine("Error -> This product has not price");
+                        return false;
+                    }
+                    try {
+                        price = Double.parseDouble(args[4]);
+                    } catch (NumberFormatException exc) {
+                        CLI.printErrorNextLine("Error -> Price must be a number");
+                        return false;
+                    }
+                    if (price < 0) {
                         CLI.printErrorNextLine("Error -> Price must be positive");
                         return true;
                     }
-                    productToChange2.setPrice(Double.parseDouble(args[4]));
+                    productToChange2.setPrice(price);
                     break;
                 case "CATEGORY":
                     try {
                         product.setCategoryFromCLI(args[4]);
                     } catch (UnsupportedOperationException e) {
                         CLI.printErrorNextLine(e.getMessage());
-                        return true;
-                    } catch (IllegalArgumentException e) {
-                        CLI.printErrorNextLine("Error -> Invalid category value.");
                         return true;
                     }
                     break;

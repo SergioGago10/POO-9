@@ -53,7 +53,7 @@ public class ItemTests {
         String input = "prod add -1 \"Libro POO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> Id must be positive.\u001B[0m", outContent.toString().trim());
+        Assertions.assertEquals("[31mError -> Product id must be positive.\u001B[0m", outContent.toString().trim());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class ItemTests {
         String input = "prod add 1 \"Libro POO\" BOOK -25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> Price must be positive.\u001B[0m", outContent.toString().trim());
+        Assertions.assertEquals("[31mError -> Product price must be positive.\u001B[0m", outContent.toString().trim());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class ItemTests {
                 "OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> Name length must be between 0 and " + ProductManager.MAX_CHAR_NAME+"\u001B[0m",
+        Assertions.assertEquals("[31mError -> Name length must be lower than " + ProductManager.MAX_CHAR_NAME+"\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -96,7 +96,7 @@ public class ItemTests {
         String input = "prod add A \"Libro POO\" BOOK 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> Id must be a number\u001B[0m",
+        Assertions.assertEquals("[31mError -> Product id must be a number\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -137,7 +137,7 @@ public class ItemTests {
         String input = "prod add 1 Libro POO BOOK 25 A";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> Name must be between quotes (\" \")\u001B[0m",
+        Assertions.assertEquals("[31mError -> Name must be between quotes ('' or \" \")\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -341,7 +341,7 @@ public class ItemTests {
         String input = "prod remove 10";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> The product with the id: 10 couldn't be removed. Product not found.\u001B[0m",
+        Assertions.assertEquals("[31mError -> The product with the id:10 does not exist.\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -352,8 +352,7 @@ public class ItemTests {
         String input = "prod remove 1S";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> The product with the id: 1S couldn't be removed. " +
-                        "Product not found.\u001B[0m",
+        Assertions.assertEquals("[31mError -> The product with the id:1S does not exist.\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -466,7 +465,7 @@ public class ItemTests {
         String input = "prod update 23459 CATEGORY MERCH";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> That type of product doesn't have category.\u001B[0m",
+        Assertions.assertEquals("[31mError -> That type of product doesn't have a category.\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -480,7 +479,7 @@ public class ItemTests {
         String input = "prod update 1S PRICE 25";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> This product does not have price\u001B[0m",
+        Assertions.assertEquals("[31mError -> This product has not price\u001B[0m",
                 outContent.toString().trim());
     }
 
@@ -509,7 +508,7 @@ public class ItemTests {
         String input = "prod update 1S NAME nombre";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("[31mError -> This product does not have name\u001B[0m",
+        Assertions.assertEquals("[31mError -> This item has not name\u001B[0m",
                 outContent.toString().trim());
     }
 

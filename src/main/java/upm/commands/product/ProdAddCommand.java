@@ -32,11 +32,21 @@ public class ProdAddCommand extends Command {
             if (args.length == 4) {
                 id = productManager.generateNewServiceId();
                 String[] dateStr = args[2].split("-");
-                int expirationYear = Integer.parseInt(dateStr[0]);
-                int expirationMonth = Integer.parseInt(dateStr[1]);
-                int expirationDay = Integer.parseInt(dateStr[2]);
-                LocalDateTime date = LocalDate.of(expirationYear, expirationMonth, expirationDay).atStartOfDay();
-                serviceCategory = ServiceCategory.valueOf(args[3]);
+                LocalDateTime date;
+                try {
+                    int expirationYear = Integer.parseInt(dateStr[0]);
+                    int expirationMonth = Integer.parseInt(dateStr[1]);
+                    int expirationDay = Integer.parseInt(dateStr[2]);
+                     date= LocalDate.of(expirationYear, expirationMonth, expirationDay).atStartOfDay();
+                    serviceCategory = ServiceCategory.valueOf(args[3]);
+                }catch (NumberFormatException | DateTimeException | ArrayIndexOutOfBoundsException exc){
+                    CLI.printErrorNextLine("Error -> Expiration date must have the next format: yyyy-mm-dd");
+                    return true;
+                }catch (IllegalArgumentException exc){
+                    CLI.printErrorNextLine("Error -> Service category must be INSURANCE, TRANSPORT OR SHOW");
+                    return true;
+                }
+
 
                 if (date.isBefore(LocalDateTime.now())) {
                     CLI.printErrorNextLine("Error -> The service must have a date that has not passed.");
@@ -58,15 +68,25 @@ public class ProdAddCommand extends Command {
 
             //[i++] elige el valor de i, y luego lo incrementa
             id = args[i].contains("\"")? productManager.generateNewProductId() : args[i++];
-
+            if ((!args[i].startsWith("\"") && !args[i].endsWith("\"")) &&
+                    (!args[i].startsWith("'") && !args[i].endsWith("'"))){
+                CLI.printErrorNextLine("Error -> Name must be between quotes ('' or \" \")");
+                return true;
+            }
             name = "'" + args[i++].trim().replaceAll("^([\"'])|([\"'])$", "") + "'";
             if (name.length() > ProductManager.MAX_CHAR_NAME) {
-                CLI.printErrorNextLine("Error -> name length must be lower than" + ProductManager.MAX_CHAR_NAME);
+                CLI.printErrorNextLine("Error -> Name length must be lower than " + ProductManager.MAX_CHAR_NAME);
                 return true;
             }
 
             category = Category.valueOf(args[i++]);
-            price = Double.parseDouble(args[i++]);
+            try {
+                price = Double.parseDouble(args[i++]);
+            }catch (NumberFormatException exc){
+                CLI.printErrorNextLine("Error -> Price must be double");
+                return true;
+            }
+
 
             if(!Utilities.isValidProd(id, name, price)){
                 //Los mensajes de error ya se gestionan en isValidProd, por lo que no será necesario poner nuevos aquí
@@ -87,7 +107,7 @@ public class ProdAddCommand extends Command {
             }
 
         } catch (NumberFormatException ex) {
-            CLI.printErrorNextLine("Error -> Max personalization must be integer and price must be double");
+            CLI.printErrorNextLine("Error -> Max personalization must be integer");
         } catch (IllegalArgumentException exc) {
             CLI.printErrorNextLine("Error -> Category must be MERCH, STATIONERY, CLOTHES, BOOK or ELECTRONIC");
         }
