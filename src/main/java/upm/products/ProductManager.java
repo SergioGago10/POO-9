@@ -36,10 +36,10 @@ public class ProductManager {
                 catalogProducts.add(product);
                 added = true;
             } else {
-                CLI.print("Product or Event with id: " + product.getId() + " already exist.");
+                CLI.printErrorNextLine("Error -> Product or Event with id: " + product.getId() + " already exist.");
             }
         } else {
-            CLI.print("Maximum products reached.");
+            CLI.printErrorNextLine("Error -> Maximum products reached.");
         }
         return added;
     }
