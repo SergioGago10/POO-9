@@ -20,8 +20,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = ServiceTicket.class, name = "service"),
         @JsonSubTypes.Type(value = CommonTicket.class, name = "combined")
 })
-
-public abstract class Ticket<T extends Item>{
+public abstract class Ticket<T extends Item> {
     protected List<T> itemsList = new ArrayList<>();
     private TicketMetadata ticketMetadata;
     private TicketState estado;
@@ -33,46 +32,46 @@ public abstract class Ticket<T extends Item>{
         this.estado = TicketState.EMPTY;
     }
 
-    //Para el json
     public Ticket() {}
 
+    public TicketMetadata getTicketMetadata() { return ticketMetadata; }
+    public TicketState getEstado() { return estado; }
 
-    public TicketMetadata getTicketMetadata() {return ticketMetadata;}
-    public TicketState getEstado(){return estado;}
     public List<T> getItemsList() {
-        return Collections.unmodifiableList(itemsList); //No queremos que se modifique el ticket, por lo que pasamos una copia solo para lectura
+        return Collections.unmodifiableList(itemsList);
     }
 
-    public void setEstado(TicketState estado) {this.estado = estado;}
+    public void setEstado(TicketState estado) { this.estado = estado; }
 
     public abstract void accept(TicketRenderer renderer);
 
-
     public boolean tryToAdd(Item item) {
-    return item.addTo(this);
+        return item.addTo(this);
     }
 
     public boolean addSpecificProduct(Product p) { return false; }
     public boolean addSpecificService(ProductService s) { return false; }
 
     protected boolean internalAdd(T item) {
-        if (this.itemsList.size() >= ticketMetadata.getMAX_PRODS_IN_TICKET()){
+        if (this.itemsList.size() >= ticketMetadata.getMAX_PRODS_IN_TICKET()) {
             CLI.printErrorNextLine("Warning -> You can't add more products to the ticket. Try to make a new one if needed.");
             return false;
         }
         return itemsList.add(item);
     }
 
-    public void closeTicket(){
-        if (estado != TicketState.CLOSE){
+    public void closeTicket() {
+        if (estado != TicketState.CLOSE) {
             estado = TicketState.CLOSE;
-            String ticketIDFinal = TicketFormatter.ticketIDFinalFormat(this,LocalDateTime.now());
-            this.getTicketMetadata().setTicketID(ticketIDFinal);
+            String printed = TicketFormatter.ticketIDFinalFormat(this, LocalDateTime.now());
+            if (ticketMetadata != null) {
+                ticketMetadata.setPrintedID(printed);
+            }
         }
     }
 
     public void removeProductFromTicket(String productID) {
-        if(estado != TicketState.CLOSE){
+        if (estado != TicketState.CLOSE) {
             Iterator<T> it = itemsList.iterator();
             while (it.hasNext()) {
                 Item p = it.next();
@@ -80,7 +79,7 @@ public abstract class Ticket<T extends Item>{
                     it.remove();
                 }
             }
-            if(itemsList.isEmpty()){
+            if (itemsList.isEmpty()) {
                 estado = TicketState.EMPTY;
             }
         } else {

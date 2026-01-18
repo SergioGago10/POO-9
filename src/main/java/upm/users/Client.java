@@ -1,29 +1,33 @@
 package upm.users;
 
-public class Client extends upm.users.User {
+public class Client extends User {
+
     private String cashId;
     private TypeClient typeClient;
     private String dni;
 
     public Client(String name, String dni, String email, String cashId, TypeClient typeClient) {
-        super(name, email, dni); // id del User == dni
+        super(name, email, dni);
         this.dni = dni;
         this.cashId = cashId;
         this.typeClient = typeClient;
     }
 
-    public Client(){}
-
-    public String toString() {
-        return String.format("%s{identifier='%s', name=%s, email: %s, cash: %s}", typeClient, id, name, email, cashId);
+    public Client() {
+        super();
     }
 
-    public TypeClient getTypeClient() {
-        return typeClient;
+    @Override
+    public String getId() {
+        if (dni != null && !dni.isBlank()) {
+            return dni;
+        }
+        return id;
     }
 
-    public void setType(TypeClient type) {
-        this.typeClient = type;
+    public void setDni(String dni) {
+        this.dni = dni;
+        this.id = dni;
     }
 
     public String getCashId() {
@@ -34,12 +38,25 @@ public class Client extends upm.users.User {
         this.cashId = cashId;
     }
 
+    public TypeClient getTypeClient() {
+        return typeClient;
+    }
+
+    public void setTypeClient(TypeClient typeClient) {
+        this.typeClient = typeClient;
+    }
+
     public String getName() {
         return name;
     }
+
     public String getEmail() {
         return email;
     }
+
     @Override
-    public String getId() {return dni;}
+    public String toString() {
+        return String.format("%s{identifier='%s', name=%s, email: %s, cash: %s}",
+                typeClient, getId(), name, email, cashId);
+    }
 }

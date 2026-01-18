@@ -48,8 +48,12 @@ public class TicketFormatter implements TicketRenderer {
 
         Map<Product, Double> hasDiscount = catCalc.discountPerProduct(ticket);
 
+        String idToPrint = ticket.getTicketMetadata().getPrintedID();
+        if (idToPrint == null || idToPrint.isBlank()) {
+            idToPrint = ticket.getTicketMetadata().getTicketID();
+        }
+        CLI.printNextLine("Ticket: " + idToPrint);
 
-        CLI.printNextLine("Ticket: " + ticket.getTicketMetadata().getTicketID());
 
         if (!content.getServices().isEmpty()) {
             printServices(content.getServices());
