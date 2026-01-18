@@ -100,6 +100,8 @@ public class App {
                     CLI.printErrorNextLine("An error has ocurred while running the app: " + e.getMessage());
                     running = false;
                 }
+            } finally {
+                persistence.save();
             }
         }
     }
