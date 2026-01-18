@@ -31,7 +31,7 @@ public class ProdListCommand extends Command {
             return true;
         }
 
-        CLI.print("Catalog:");
+        CLI.printNextLine("Catalog:");
         for (Item product : catalog) {
             CLI.printNextLine(product.toString());
         }
