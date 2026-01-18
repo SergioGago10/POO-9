@@ -267,9 +267,11 @@ public class ItemTests {
         String input = "prod list";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("Catalog:  {class:Product,id: 10,name:'Libro POO',Category:BOOK,price:25,00}\r\n" +
-                        "prod list: ok",
-                outContent.toString().trim());
+        String expected = ("Catalog:  {class:Product,id: 10,name:'Libro POO',Category:BOOK,price:25.00}\n" +
+                "prod list: ok").replaceAll("\\R", "\n");
+        String actual = outContent.toString().trim().replaceAll("\\R", "\n");
+
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -302,9 +304,11 @@ public class ItemTests {
         String input = "prod remove 10";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("{class:Product,id: 10,name:'Libro POO',Category:BOOK,price:25,00}\r\n" +
-                        "prod remove: ok",
-                outContent.toString().trim());
+        String expected = ("{class:Product,id: 10,name:'Libro POO',Category:BOOK,price:25.00}\r\n" +
+                "prod remove: ok").replaceAll("\\R", "\n");
+        String actual = outContent.toString().trim().replaceAll("\\R", "\n");
+
+        Assertions.assertEquals(expected,actual);
     }
 
     @Test
@@ -316,9 +320,11 @@ public class ItemTests {
         String input = "prod remove 1S";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("{class:ProductService, id: 1S, category:TRANSPORT, expiration:lun dic 24 00:00:00 CET 2035}\r\n" +
-                        "prod remove: ok",
-                outContent.toString().trim());
+        String expected = ("{class:ProductService, id: 1S, category:TRANSPORT, expiration:Mon Dec 24 00:00:00 CET 2035}\r\n" +
+                "prod remove: ok").replaceAll("\\R", "\n");
+        String actual = outContent.toString().trim().replaceAll("\\R", "\n");
+
+        Assertions.assertEquals(expected,actual);
     }
 
     @Test
@@ -365,9 +371,11 @@ public class ItemTests {
         String input = "prod update 1 NAME \"Libro POO V2\"";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("{class:Product,id: 1,name:'Libro POO V2',Category:BOOK,price:25,00}\r\n" +
-                        "prod update: ok",
-                outContent.toString().trim());
+        String expected = ("{class:Product,id: 1,name:'Libro POO V2',Category:BOOK,price:25.00}\r\n" +
+                "prod update: ok").replaceAll("\\R", "\n");
+        String actual = outContent.toString().trim().replaceAll("\\R", "\n");
+
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -405,9 +413,11 @@ public class ItemTests {
         String input = "prod update 1 CATEGORY MERCH";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("{class:Product,id: 1,name:'Libro POO',Category:MERCH,price:25,00}\r\n" +
-                        "prod update: ok",
-                outContent.toString().trim());
+        String expected = ("{class:Product,id: 1,name:'Libro POO',Category:MERCH,price:25.00}\r\n" +
+                "prod update: ok").replaceAll("\\R", "\n");
+        String actual = outContent.toString().trim().replaceAll("\\R", "\n");
+
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -434,9 +444,11 @@ public class ItemTests {
         String input = "prod update 1S CATEGORY INSURANCE";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        Assertions.assertEquals("{class:ProductService, id: 1S, category:INSURANCE, expiration:lun dic 24 00:00:00 CET 2035}\r\n" +
-                        "prod update: ok",
-                outContent.toString().trim());
+        String expected = ("{class:ProductService, id: 1S, category:INSURANCE, expiration:Mon Dec 24 00:00:00 CET 2035}\r\n" +
+                "prod update: ok").replaceAll("\\R", "\n");
+        String actual = outContent.toString().trim().replaceAll("\\R", "\n");
+
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
