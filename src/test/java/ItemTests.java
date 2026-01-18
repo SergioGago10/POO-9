@@ -267,7 +267,7 @@ public class ItemTests {
         String input = "prod list";
         String[] args = input.split(" +(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
         prodCommands.apply(args);
-        String expected = ("Catalog:  {class:Product,id: 10,name:'Libro POO',Category:BOOK,price:25.00}\n" +
+        String expected = ("Catalog:\n  {class:Product,id: 10,name:'Libro POO',Category:BOOK,price:25.00}\n" +
                 "prod list: ok").replaceAll("\\R", "\n");
         String actual = outContent.toString().trim().replaceAll("\\R", "\n");
 
