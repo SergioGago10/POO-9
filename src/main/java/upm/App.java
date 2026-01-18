@@ -11,6 +11,7 @@ import upm.json.PersistenceService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class App {
 
@@ -26,7 +27,7 @@ public class App {
     private void init() {
         // Si tu PersistenceService tiene load/read, actívalo:
         // persistence.load();
-
+        Locale.setDefault(Locale.ENGLISH); //Iniciamos y ponemos la app en inglés.
         CLI.printNextLine("Welcome to the ticket module App.");
     }
 
