@@ -67,7 +67,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>etsisi.upm.App</mainClass>
+                                    <mainClass>upm.App</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
