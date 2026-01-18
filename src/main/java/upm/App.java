@@ -9,9 +9,7 @@ import upm.commands.product.ProdCommands;
 import upm.commands.ticket.TicketCommands;
 import upm.json.PersistenceService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class App {
 
@@ -25,8 +23,22 @@ public class App {
     }
 
     private void init() {
-        // Si tu PersistenceService tiene load/read, actívalo:
-        persistence.load();
+        CLI.printNextLine("Welcome to the TiendaUPM app, will you load a JSON file? [Y/N]");
+        Scanner scanner = new Scanner(System.in);
+        boolean correctDecision = false;
+
+        while(!correctDecision){
+            char userDecision = scanner.next().toUpperCase().charAt(0);
+            if (userDecision == 'Y') {
+                persistence.load();
+                correctDecision = true;
+            } else if (!(userDecision == 'N')) {
+                CLI.printErrorNextLine("Invalid option. Please enter Y or N.");
+            } else {
+                correctDecision = true;
+            }
+        }
+
         Locale.setDefault(Locale.ENGLISH); //Iniciamos y ponemos la app en inglés.
         CLI.printNextLine("Welcome to the ticket module App.");
     }
@@ -47,38 +59,51 @@ public class App {
 
         // 2) Bucle principal de CLI
         while (running) {
-            CLI.print("tUPM> ");
-            String[] userInput = cli.nextLine();
+            try{
+                CLI.print("tUPM> ");
+                String[] userInput = cli.nextLine();
 
-            if (userInput[0].isEmpty()) {
-                continue; // ignoramos líneas vacías
-            }
+                if (userInput[0].isEmpty()) {
+                    continue; // ignoramos líneas vacías
+                }
 
-            if (userInput[0].equals("exit")){
-                running = false;
-            } else {
-                boolean handled = false; // indica si algún comando ha gestionado la entrada
+                if (userInput[0].equals("exit")){
+                    running = false;
+                } else {
+                    boolean handled = false; // indica si algún comando ha gestionado la entrada
 
-                for (Command command : commands) {
-                    try {
-                        if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
-                            // el booleano handled SIEMPRE será true si se ejecuta un comando
-                            // da igual que sea error, lo importante es que el comando se ha encontrado y ejecutado
-                            // la unica forma de la cual dará false es que el comando no se encuentre
-                            handled = true;
-                            break; // ya hay un comando que ha ejecutado esta línea
+                    for (Command command : commands) {
+                        try {
+                            if (userInput[0].equals(command.getText()) && command.apply(userInput)) {
+                                // el booleano handled SIEMPRE será true si se ejecuta un comando
+                                // da igual que sea error, lo importante es que el comando se ha encontrado y ejecutado
+                                // la unica forma de la cual dará false es que el comando no se encuentre
+                                handled = true;
+                                break; // ya hay un comando que ha ejecutado esta línea
+                            }
+                        } catch (Exception e) {
+                            CLI.printErrorNextLine("Error: " + e.getMessage());
+                            handled = true; // consideramos la línea “gestionada” aunque sea con error
+                            break;
                         }
-                    } catch (Exception e) {
-                        CLI.printErrorNextLine("Error: " + e.getMessage());
-                        handled = true; // consideramos la línea “gestionada” aunque sea con error
-                        break;
                     }
-                }
-                if (!handled) {
-                    CLI.printErrorNextLine("Command not found. Type 'help' to see the command list.");
-                }
+                    if (!handled) {
+                        CLI.printErrorNextLine("Command not found. Type 'help' to see the command list.");
+                    }
 
-                CLI.printNextLine("");
+                    CLI.printNextLine("");
+                }
+            } catch (NoSuchElementException e){
+                if(!cli.isInteractive()){
+                    CLI.printNextLine("");
+                    CLI.printErrorNextLine("The .txt has ended without an \"exit\" on his final line.");
+                    CLI.printErrorNextLine("Switching to interactive mode. ");
+                    CLI.printNextLine("");
+                    cli.switchToInteractive();
+                } else {
+                    CLI.printErrorNextLine("An error has ocurred while running the app: " + e.getMessage());
+                    running = false;
+                }
             }
         }
     }
@@ -93,5 +118,6 @@ public class App {
             CLI.closeSc();
         }
     }
+
 }
 

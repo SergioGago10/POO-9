@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class CLI {
     private static Scanner sc;
-    private final boolean isInteractive;
+    private boolean isInteractive;
     private static final String RED = "\u001B[31m";
     private static final String RESET = "\u001B[0m";
 
@@ -15,6 +15,15 @@ public class CLI {
         this.isInteractive = (args.length == 0);
         CLI.sc = createScanner(args);
         sc.useLocale(Locale.US);
+    }
+
+    public boolean isInteractive() {
+        return isInteractive;
+    }
+
+    public void switchToInteractive() {
+        sc = new Scanner(System.in);
+        this.isInteractive = true;
     }
 
     public String[] nextLine() {

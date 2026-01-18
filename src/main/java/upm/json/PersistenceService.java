@@ -91,7 +91,7 @@ public final class PersistenceService {
             loadStateIntoManagers(state);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error loading system state", e);
+            CLI.printErrorNextLine("Error -> JSON not found or with unreadable format");
         }
     }
 
